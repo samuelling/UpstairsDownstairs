@@ -19,6 +19,10 @@ Does making a central task harder pull attention inward, raising activity in the
 5. **Fovea vs periphery, using each subject's own pRF eccentricity.** Foveal V1–V3 rise with load (p = .003–.007). Peripheral V1–V3 trend down, significantly only in V2 (p = .039, not FDR-significant). This matches the template-based split.
 6. **Load-function models.** Flat, linear, saturating-exponential and Naka-Rushton models were fit vertex-wise and on ROI averages, then compared with AICc. A load function decisively beats flat in IPS0–IPS4/5, SPL1, FEF, LO and dorsal attention A (summed ΔAICc 33–64). The shape is linear, not compressive, over 10–46%. Simulation shows 7 load levels can detect a load function but can't reliably separate compressive from linear, and never select Naka-Rushton.
 
+7. **Hemispheric effects.** Load effects are larger on the right in the dorsal attention network (R − L +0.32%, t(7) = 2.6, p = .035, 6 of 8 subjects) and the control network (p = .017). This tracks a generally stronger right-hemisphere response, not a right-specific load effect. Default mode shows no asymmetry. In the dashboard, a hemisphere control (Both / Left / Right / Right vs Left) switches sections 3–6, and `?hemi=lh|rh|diff` links straight to a view.
+
+**Headline:** harder central judgments drive the dorsal attention network up, linearly with load and more strongly on the right. Foveal visual cortex rises with load, while the predicted peripheral suppression is weak.
+
 **Correction (2026-11-21):** the first version reported flat behavior for S12 and S13. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed changes as correct. Scored properly, they behave like the other subjects. No fMRI result changed.
 
 ## Caveats
@@ -34,6 +38,7 @@ Does making a central task harder pull attention inward, raising activity in the
   - `roi_load_betas.py`: atlas ROI betas and slope statistics.
   - `prf_to_fsaverage.sh`: resamples subject pRF eccentricity, R² and V1–V3 labels to fsaverage (FreeSurfer 6).
   - `load_models.py`: fits flat, linear, saturating-exponential and Naka-Rushton models vertex-wise and on ROI averages, with AICc.
+  - `hemi_stats.py`: per-hemisphere load slopes, paired right-minus-left tests, per-hemisphere model fits, and right-vs-left composites.
   - `model_recovery_and_prf_stats.py`: model-recovery simulation and pRF-ROI slope statistics.
   - `build_data.py`: builds `dashboard/data.js` from `data/` (stdlib only).
 

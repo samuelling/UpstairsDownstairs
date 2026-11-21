@@ -105,6 +105,21 @@ td.hl { font-weight: 600; color: var(--text-primary); }
 .row-g { cursor: default; outline: none; }
 .row-g.click { cursor: pointer; }
 .row-g:hover rect.hit, .row-g:focus rect.hit, .row-g.sel rect.hit { fill: var(--wash); }
+.headline { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 16px; }
+.headline h2 { font-size: 18px; margin: 0 0 10px; }
+.headline ul { margin: 0; padding-left: 18px; font-size: 14px; color: var(--text-secondary); }
+.headline li { margin-bottom: 6px; }
+.headline li b { color: var(--text-primary); }
+.headline .caveat { font-size: 13px; color: var(--text-muted); margin: 8px 0 0; }
+.filters { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 0; margin: 0 0 6px; background: var(--page); }
+.filters .lbl { font-size: 13px; color: var(--text-secondary); }
+.filters .scope { font-size: 12px; color: var(--text-muted); }
+.seg { display: inline-flex; }
+.seg button { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); padding: 6px 12px; font-size: 13px; cursor: pointer; border-radius: 0; margin-left: -1px; }
+.seg button:first-child { border-radius: 8px 0 0 8px; margin-left: 0; }
+.seg button:last-child { border-radius: 0 8px 8px 0; }
+.seg button[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); position: relative; }
+.hemi-tag { font-weight: 400; color: var(--text-secondary); font-size: 14px; }
 .notes { font-size: 13px; color: var(--text-secondary); }
 .notes li { margin-bottom: 6px; }
 .notes strong { color: var(--text-primary); }
@@ -126,6 +141,17 @@ code { font-size: 12px; }
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Dark</button>
   </header>
 
+  <section class="headline" aria-label="Main findings">
+    <h2>Headline: harder central judgments drive the dorsal attention network up, linearly with load, and more strongly on the right</h2>
+    <ul>
+      <li><b>The dorsal attention network scales with load.</b> Every IPS, SPL and FEF ROI rises as the majority judgment gets harder: IPS2 gains +1.16% signal from 10% to 46% (t(7) = 7.1). This replicates in Wang, Glasser and Schaefer parcels. The default mode network goes the other way (t = −4.2).</li>
+      <li><b>The load function is linear, not compressive.</b> A load function beats a flat line decisively in IPS, SPL and FEF (summed ΔAICc 33–64), but no model favors saturation over 10–46%. Seven load levels can't resolve a Naka-Rushton function.</li>
+      <li><b>There's a right-hemisphere bias.</b> The dorsal load effect is about 46% larger on the right (R − L +0.32%, t(7) = 2.6, p = .035, 6 of 8 subjects). This tracks a generally stronger right-hemisphere response, not a right-specific load effect. The control network's load effect is right-sided.</li>
+      <li><b>In visual cortex, the center goes up and the periphery barely goes down.</b> Foveal V1–V3 rise with load (p ≤ .007, using subject pRFs). The peripheral suppression the original hypothesis predicted is weak: only V2 reaches significance (p = .039), and it doesn't survive FDR.</li>
+    </ul>
+    <p class="caveat">Not yet controlled: load is confounded with run position (one ratio per run, in a fixed order). The next step is a refit with run position as a covariate.</p>
+  </section>
+
   <section class="tiles" id="tiles" aria-label="Key numbers"></section>
 
   <section class="card" id="overview">
@@ -137,9 +163,21 @@ code { font-size: 12px; }
       <li><a href="#forest">Across atlases</a>: repeated the slope test in Glasser HCP-MMP1 and Schaefer 400/17 parcels.<span class="t"><b>TL;DR:</b> the same IPS/SPL/FEF increase appears in every atlas. The default mode network goes down with load.</span></li>
       <li><a href="#visual">Fovea vs periphery</a>: split V1–V3 by each subject's own pRF eccentricity (template for S9) into the central-task zone and the noise-annulus zone.<span class="t"><b>TL;DR:</b> foveal V1–V3 go up with load. The periphery goes down, but significantly only in V2. Subject pRFs agree with the template.</span></li>
       <li><a href="#models">Load-function models</a>: fit flat, linear, saturating-exponential and Naka-Rushton models, vertex by vertex and on ROI averages, and compared them with AICc.<span class="t"><b>TL;DR:</b> load functions beat a flat line in IPS, SPL, FEF and LO. Their shape looks linear, not compressive, over 10–46%. Seven load levels can't support a 4-parameter Naka-Rushton.</span></li>
+      <li><a href="#hemis">Hemispheric effects</a>: tested every ROI's load effect separately in each hemisphere, paired right vs left. Composites pool the dorsal attention, control, default and early visual ROIs. The hemisphere control below switches sections 3–6 between Both, Left, Right and Right vs Left.<span class="t"><b>TL;DR:</b> load effects are larger on the right in dorsal attention (+0.32%, p = .035) and control networks (p = .017), in step with a stronger right-hemisphere response overall.</span></li>
     </ol>
-    <div class="notice"><b>Correction (this version):</b> an earlier version said S12 and S13 had flat behavior across load. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed changes as correct. Scored properly, both subjects show the same load effect as everyone else, so the "exclude S12/S13" filter has been removed. No fMRI result changed.</div>
+    <div class="notice"><b>Correction (earlier version):</b> an earlier version said S12 and S13 had flat behavior across load. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed changes as correct. Scored properly, both subjects show the same load effect as everyone else, so the "exclude S12/S13" filter has been removed. No fMRI result changed.</div>
   </section>
+
+  <div class="filters" role="group" aria-label="Hemisphere filter">
+    <span class="lbl">Hemisphere</span>
+    <div class="seg" id="hemiSeg">
+      <button type="button" data-h="both" aria-pressed="true">Both (averaged)</button>
+      <button type="button" data-h="lh" aria-pressed="false">Left</button>
+      <button type="button" data-h="rh" aria-pressed="false">Right</button>
+      <button type="button" data-h="diff" aria-pressed="false">Right vs Left</button>
+    </div>
+    <span class="scope">applies to sections 3–6</span>
+  </div>
 
   <section class="card" id="audit">
     <h2>1 · Data &amp; label audit</h2>
@@ -167,15 +205,16 @@ code { font-size: 12px; }
   </section>
 
   <section class="card" id="ips">
-    <h2>3 · Dorsal attention gradient: IPS0 → FEF</h2>
+    <h2>3 · Dorsal attention gradient: IPS0 → FEF <span class="hemi-tag"></span></h2>
     <p class="did"><b>What was done:</b> responses were averaged within Wang 2015 maximum-probability ROIs, with hemispheres averaged. Each subject's response was regressed on ratio, and the slopes were t-tested across subjects. The "fitted" value is the slope × 0.36, the predicted change from 10% to 46%. Units are roughly % signal change vs fixation. X positions are evenly spaced, but the ratios are not; the fits use the true ratios.</p>
     <div class="tldr"><b>TL;DR:</b> all 7 dorsal ROIs increase with load. The effect is largest in IPS2–IPS3 and smallest in FEF. Most areas peak at 44% and dip slightly at 46%, where subjects miss half of the changes.</div>
     <div class="multiples" id="ipsPanels"></div>
+    <div class="legend" id="ipsLegend"></div>
     <details><summary>Table view</summary><div id="ipsTable"></div></details>
   </section>
 
   <section class="card" id="forest">
-    <h2>4 · Load effect by ROI, across atlases</h2>
+    <h2>4 · Load effect by ROI, across atlases <span class="hemi-tag"></span></h2>
     <p class="did"><b>What was done:</b> the same slope test was run for every ROI in each atlas, with FDR correction within each atlas. A filled dot means q &lt; .05; small dots are individual subjects. Click a row to plot its curve.</p>
     <div class="tldr"><b>TL;DR:</b> the increase in IPS, SPL and FEF holds in Glasser (IPS1, MIP, VIP, 7PL, LIP, FEF, PEF) and Schaefer (dorsal attention SPL and FEF, control PFCd, anterior insula). Default mode A decreases. MT shows no load effect.</div>
     <div class="tabs" id="atlasTabs" role="group" aria-label="Atlas">
@@ -188,24 +227,20 @@ code { font-size: 12px; }
     <div class="grid-2" style="grid-template-columns: 1.35fr 1fr; align-items: start;">
       <div>
         <div id="forestChart"></div>
-        <div class="legend">
-          <span><i class="key-dot" style="background:var(--series-1)"></i>Increase with load (q &lt; .05)</span>
-          <span><i class="key-dot" style="background:var(--neg)"></i>Decrease with load (q &lt; .05)</span>
-          <span><i class="key-ring"></i>Not significant</span>
-        </div>
+        <div class="legend" id="forestLegend"></div>
       </div>
       <div>
         <p class="panel-title" id="detailTitle"></p>
         <p class="panel-stat" id="detailStat"></p>
         <div id="detail"></div>
-        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Group mean ± SEM</span><span><i class="key-line" style="background:var(--context)"></i>Individual subjects</span></div>
+        <div class="legend" id="detailLegend"></div>
       </div>
     </div>
     <details><summary>Table view</summary><div id="forestTable"></div></details>
   </section>
 
   <section class="card" id="visual">
-    <h2>5 · Early visual cortex: fovea vs periphery</h2>
+    <h2>5 · Early visual cortex: fovea vs periphery <span class="hemi-tag"></span></h2>
     <p class="did"><b>What was done:</b> each subject's pRF eccentricity, R² and V1–V3 labels were resampled to fsaverage with FreeSurfer 6. Each area was split into a fovea band (0.5–1.5°, the central task) and a periphery band (3–7.5°, the noise annulus), keeping vertices with pRF R² &gt; 10%. S9 has no pRF data, so the Benson 2014 template within Wang V1–V3 stands in for that subject. The "Template" tab uses the template for everyone.</p>
     <div class="tldr"><b>TL;DR:</b> foveal V1–V3 rise with load (p = .003–.007). Peripheral V1–V3 all trend down, but only V2 reaches p &lt; .05, and it doesn't survive FDR. Subject pRFs reproduce the template result.</div>
     <div class="tabs" id="visTabs" role="group" aria-label="Eccentricity source">
@@ -213,12 +248,12 @@ code { font-size: 12px; }
       <button type="button" data-src="wang2015" aria-pressed="false">Template (Benson 2014)</button>
     </div>
     <div class="multiples three" id="visPanels"></div>
-    <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Fovea 0.5–1.5°</span><span><i class="key-line" style="background:var(--series-2)"></i>Periphery 3–7.5°</span></div>
+    <div class="legend" id="visLegend"></div>
     <details><summary>Table view</summary><div id="visTable"></div></details>
   </section>
 
   <section class="card" id="models">
-    <h2>6 · Load-function models: monotonic vs flat</h2>
+    <h2>6 · Load-function models: monotonic vs flat <span class="hemi-tag"></span></h2>
     <p class="did"><b>What was done:</b> the 7 load levels were refit with four models, with load rescaled to 0–1 across 10%→46%: <b>flat</b> (1 parameter); <b>linear</b> (2); <b>saturating exponential</b> a + s·(1−e<sup>−x/τ</sup>), a compressive function that becomes linear as τ grows (3); and <b>Naka-Rushton</b> a + s·xⁿ/(xⁿ+c50ⁿ) (4). The amplitude s can be negative, so decreases count too. Nonlinear parameters were grid-searched, and amplitude and offset solved by least squares. Models were compared with AICc, which penalizes parameters and matters with only 7 points. The fits ran (a) at every fsaverage vertex in each subject and (b) on each subject's ROI average and on the group-mean curve.</p>
     <div class="tldr"><b>TL;DR:</b> a load function beats a flat line decisively in IPS0–IPS4/5, SPL1, FEF, LO and dorsal attention A (summed ΔAICc 33–64; 5–8 of 8 subjects each). About 60–75% of their vertices prefer a load function, and about 95% increase with load. The winning shape is <b>linear, not compressive</b>: even the group-mean curves choose linear (exponential τ runs to the linear limit). Simulation shows 7 levels can reliably detect a load function, but can't separate compressive from linear unless noise is low, and never select Naka-Rushton.</div>
     <div class="tabs" id="modelTabs" role="group" aria-label="ROI set">
@@ -239,6 +274,7 @@ code { font-size: 12px; }
         <div id="vertBars"></div>
       </div>
     </div>
+    <div class="legend" id="modelHemiLegend"></div>
     <div class="legend">
       <span><i class="key-rect" style="background:var(--null)"></i>Flat</span>
       <span><i class="key-rect" style="background:var(--series-1)"></i>Linear</span>
@@ -248,6 +284,16 @@ code { font-size: 12px; }
     <h3>How well can 7 load levels recover the true model? (simulation, amplitude 1% signal)</h3>
     <div id="recovery"></div>
     <details><summary>Table view (model comparison)</summary><div id="modelTable"></div></details>
+  </section>
+
+  <section class="card" id="hemis">
+    <h2>7 · Hemispheric effects</h2>
+    <p class="did"><b>What was done:</b> each subject's load slope was computed separately for the left and right hemisphere of every ROI. Right vs left was tested with a paired t-test (the hemisphere × load interaction), with FDR within each atlas. Because single ROIs are noisy, composites average each subject's per-ROI effects first. For per-ROI views, use the hemisphere control above.</p>
+    <div class="tldr"><b>TL;DR:</b> load effects are larger on the right in the dorsal attention network (+0.32%, p = .035, 6 of 8 subjects) and the control network (p = .017, where only the right side is significant on its own). Individually, IPS0 (q = .045) and Glasser IP2 (q = .046) survive FDR. Right-hemisphere responses are also about 35% larger overall, and as a fraction of each side's overall response the load effect is similar (0.76 vs 0.82), so this reads as stronger right-hemisphere engagement by the task, not a right-specific load mechanism. Default mode shows no asymmetry, and V1–V3 show only a tiny one.</div>
+    <h3>Load effect by hemisphere (fitted 10% → 46%, % signal), composites</h3>
+    <div id="hemiChart"></div>
+    <div class="legend"><span><i class="key-dot" style="background:var(--series-1)"></i>Left hemisphere</span><span><i class="key-dot" style="background:var(--series-2)"></i>Right hemisphere</span></div>
+    <details><summary>Table view</summary><div id="hemiTable"></div></details>
   </section>
 
   <section class="card notes">
@@ -278,7 +324,7 @@ const SET = "all8";
 const ATLAS_NAME = { wang2015: "Wang 2015", glasser2016: "Glasser HCP-MMP1", schaefer2018: "Schaefer 2018", prf: "subject pRF" };
 const MODELS = ["flat", "linear", "exp", "NR"];
 const MODEL_NAME = { flat: "Flat", linear: "Linear", exp: "Saturating exp", NR: "Naka-Rushton" };
-const state = { atlas: "wang2015", sel: "wang2015|IPS2", vis: "prf", mset: "wang2015" };
+const state = { atlas: "wang2015", sel: "wang2015|IPS2", vis: "prf", mset: "wang2015", hemi: "both" };
 const qTheme = new URLSearchParams(location.search).get("theme");
 if (qTheme === "light" || qTheme === "dark") document.documentElement.dataset.theme = qTheme;
 
@@ -374,6 +420,32 @@ const slopeRow = (atlas, roi) => D.slopes.find(s => s.set === SET && s.atlas ===
 const subjLines = key => D.sets[SET].map(s => curve(key).subjects[s]);
 const domainOf = (keys, pad = 0.5, zero = true) => { let lo = Infinity, hi = -Infinity; for (const k of keys) for (const p of grp(k)) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); } return [zero ? Math.min(0, Math.floor(lo / pad) * pad) : Math.floor(lo / pad) * pad, Math.ceil(hi / pad) * pad]; };
 
+// ---------- hemisphere helpers ----------
+const HEMI_NAME = { both: "both hemispheres", lh: "left hemisphere", rh: "right hemisphere", diff: "right vs left" };
+const hcurve = (key, hm) => (D.hemi.curves[key] || {})[hm];
+const hslope = (atlas, roi, hm) => D.hemi.slopes.find(s => s.atlas === atlas && s.roi === roi && s.hemi === hm);
+// stats row for the current hemisphere mode (diff -> rh-lh paired)
+function statRow(atlas, roi) {
+  if (state.hemi === "both") return slopeRow(atlas, roi);
+  return hslope(atlas, roi, state.hemi === "diff" ? "rh-lh" : state.hemi);
+}
+// series to draw for a key in the current mode
+function seriesFor(key, name, colorVar = "--series-1", bandVar = "--band") {
+  if (state.hemi === "both") return [{ name, color: css(colorVar), band: css(bandVar), pts: grp(key) }];
+  if (state.hemi === "diff") return [
+    { name: "Left", color: css("--series-1"), band: css("--band"), pts: hcurve(key, "lh") },
+    { name: "Right", color: css("--series-2"), band: css("--band-2"), pts: hcurve(key, "rh") }];
+  return [{ name: `${name} (${state.hemi === "lh" ? "L" : "R"})`, color: css(colorVar), band: css(bandVar), pts: hcurve(key, state.hemi) }];
+}
+const domainOfSeries = (ss, pad = 0.5, zero = true) => { let lo = Infinity, hi = -Infinity; for (const s of ss) for (const p of s.pts) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); } return [zero ? Math.min(0, Math.floor(lo / pad) * pad) : Math.floor(lo / pad) * pad, Math.ceil(hi / pad) * pad]; };
+function legend(id, items) {
+  const box = document.getElementById(id); box.replaceChildren();
+  for (const it of items) { const sp = h("span", {}, box); const k = h("i", { class: it.kind || "key-line" }, sp); if (it.color) k.style.background = it.color; sp.appendChild(document.createTextNode(it.label)); }
+}
+const statText = s => state.hemi === "diff"
+  ? `R − L ${fmt(s.slope * LOAD_SPAN)}% · t = ${s.t.toFixed(1)}, p ${fmtP(s.p)}`
+  : `${fmt(s.slope * LOAD_SPAN)}% fitted · t = ${s.t.toFixed(1)}, q ${fmtP(s.q)}`;
+
 // ---------- tiles ----------
 function renderTiles() {
   const box = document.getElementById("tiles"); box.replaceChildren();
@@ -382,12 +454,13 @@ function renderTiles() {
   const nSig = dorsal.filter(s => s.q < 0.05 && s.slope > 0).length;
   const mods = D.models.rois.filter(m => m.atlas === "wang2015" && ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"].includes(m.roi));
   const nLin = mods.filter(m => m.dSummed > 0 && m.bestSummed === "linear").length;
+  const hc = D.hemi.composites[0];
   const tiles = [
     { hero: true, label: "IPS2 load effect (fitted 10% → 46%)", value: fmt(ips2.slope * LOAD_SPAN) + "%", note: `t(${ips2.n - 1}) = ${ips2.t.toFixed(1)}, p ${fmtP(ips2.p)} · signal change vs fixation` },
     { label: "Task score, 30% → 46% ratio", value: `${Math.round(sc[1].m)}% → ${Math.round(sc[6].m)}%`, note: `changes detected ${Math.round(rs[1].m)}% → ${Math.round(rs[6].m)}%` },
     { label: "Dorsal ROIs increasing with load", value: `${nSig} / ${dorsal.length}`, note: "IPS0–IPS4/5, SPL1, FEF · q < .05" },
     { label: "Best load function (dorsal ROIs)", value: `Linear ${nLin} / ${mods.length}`, note: "summed AICc beats flat; compressive not preferred" },
-    { label: "Condition labels verified", value: `${D.behavior.nRuns} / ${D.behavior.nRuns}`, note: "CAM.par vs behavioral ratio" },
+    { label: "Right − left, dorsal load effect", value: fmt(hc.diff) + "%", note: `t(7) = ${hc.t.toFixed(1)}, p ${fmtP(hc.p)} · R > L in ${hc.n_R_gt_L}/8` },
   ];
   for (const t of tiles) { const d = h("div", { class: "tile" + (t.hero ? " hero" : "") }, box); h("div", { class: "label", text: t.label }, d); h("div", { class: "value", text: t.value }, d); h("div", { class: "note", text: t.note }, d); }
   document.getElementById("auditN").textContent = D.behavior.nRuns;
@@ -412,32 +485,57 @@ function renderBeh() {
 const DORSAL = ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"];
 function renderIps() {
   const box = document.getElementById("ipsPanels"); box.replaceChildren();
-  const dom = domainOf(DORSAL.map(r => "wang2015|" + r));
-  for (const r of DORSAL) {
-    const s = slopeRow("wang2015", r), p = h("div", {}, box);
+  const all = DORSAL.map(r => seriesFor("wang2015|" + r, r));
+  const dom = domainOfSeries(all.flat());
+  DORSAL.forEach((r, i) => {
+    const s = statRow("wang2015", r), p = h("div", {}, box);
     h("p", { class: "panel-title", text: r }, p);
-    h("p", { class: "panel-stat", text: `${fmt(s.slope * LOAD_SPAN)}% fitted · t = ${s.t.toFixed(1)}, q ${fmtP(s.q)}` }, p);
-    lineChart(h("div", {}, p), { series: [{ name: r, color: css("--series-1"), band: css("--band"), pts: grp("wang2015|" + r) }], yDomain: dom, W: 240, H: 160, unit: "%", yLabel: "% signal" });
-  }
-  table(document.getElementById("ipsTable"), ["ROI", ...RLAB.map(l => l + "%"), "Fitted effect", "t", "q"],
-    DORSAL.map(r => { const s = slopeRow("wang2015", r); return [r, ...grp("wang2015|" + r).map(p => `${p.m.toFixed(2)} ± ${p.se.toFixed(2)}`), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.q)]; }));
+    h("p", { class: "panel-stat", text: statText(s) }, p);
+    lineChart(h("div", {}, p), { series: all[i], yDomain: dom, W: 240, H: 160, unit: "%", yLabel: "% signal" });
+  });
+  legend("ipsLegend", state.hemi === "diff"
+    ? [{ label: "Left hemisphere ± SEM", color: css("--series-1") }, { label: "Right hemisphere ± SEM", color: css("--series-2") }]
+    : [{ label: `Group mean ± SEM, ${HEMI_NAME[state.hemi]}`, color: css("--series-1") }]);
+  const head = state.hemi === "diff" ? ["ROI", "Left fitted", "t", "Right fitted", "t", "R − L", "t", "p", "q"] : ["ROI", ...RLAB.map(l => l + "%"), "Fitted effect", "t", "q"];
+  table(document.getElementById("ipsTable"), head, DORSAL.map(r => {
+    if (state.hemi === "diff") { const L = hslope("wang2015", r, "lh"), Rr = hslope("wang2015", r, "rh"), d = hslope("wang2015", r, "rh-lh");
+      return [r, fmt(L.slope * LOAD_SPAN), L.t.toFixed(2), fmt(Rr.slope * LOAD_SPAN), Rr.t.toFixed(2), fmt(d.slope * LOAD_SPAN), d.t.toFixed(2), fmtP(d.p), fmtP(d.q)]; }
+    const s = statRow("wang2015", r), pts = seriesFor("wang2015|" + r, r)[0].pts;
+    return [r, ...pts.map(p => `${p.m.toFixed(2)} ± ${p.se.toFixed(2)}`), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.q)];
+  }));
 }
 
 // ---------- visual ----------
 function renderVis() {
   const box = document.getElementById("visPanels"); box.replaceChildren();
   const A = state.vis, areas = ["V1", "V2", "V3"], rows = [];
-  const dom = domainOf(areas.flatMap(a => [`${A}|${a}_fovea`, `${A}|${a}_periph`]), 0.5, false);
-  for (const a of areas) {
-    const f = slopeRow(A, a + "_fovea"), pe = slopeRow(A, a + "_periph"), p = h("div", {}, box);
+  if (state.hemi === "diff") {
+    const panels = areas.flatMap(a => ["fovea", "periph"].map(b => ({ a, b, key: `${A}|${a}_${b}` })));
+    const ss = panels.map(pn => seriesFor(pn.key, pn.b));
+    const dom = domainOfSeries(ss.flat(), 0.5, false);
+    panels.forEach((pn, i) => {
+      const d = hslope(A, `${pn.a}_${pn.b}`, "rh-lh"), p = h("div", {}, box);
+      h("p", { class: "panel-title", text: `${pn.a} ${pn.b === "fovea" ? "fovea" : "periphery"}` }, p);
+      h("p", { class: "panel-stat", text: statText(d) }, p);
+      lineChart(h("div", {}, p), { series: ss[i], yDomain: dom, W: 320, H: 190, unit: "%", endLabels: true, yLabel: "% signal" });
+      const L = hslope(A, `${pn.a}_${pn.b}`, "lh"), Rr = hslope(A, `${pn.a}_${pn.b}`, "rh");
+      rows.push([`${pn.a} ${pn.b}`, fmt(L.slope * LOAD_SPAN), fmtP(L.p), fmt(Rr.slope * LOAD_SPAN), fmtP(Rr.p), fmt(d.slope * LOAD_SPAN), d.t.toFixed(2), fmtP(d.p)]);
+    });
+    legend("visLegend", [{ label: "Left hemisphere", color: css("--series-1") }, { label: "Right hemisphere", color: css("--series-2") }]);
+    table(document.getElementById("visTable"), ["ROI", "Left fitted", "p", "Right fitted", "p", "R − L", "t", "p"], rows);
+    return;
+  }
+  const ser = areas.map(a => [seriesFor(`${A}|${a}_fovea`, "Fovea")[0], seriesFor(`${A}|${a}_periph`, "Periph", "--series-2", "--band-2")[0]]);
+  ser.forEach(pair => { pair[0].name = "Fovea"; pair[1].name = "Periph"; });
+  const dom = domainOfSeries(ser.flat(), 0.5, false);
+  areas.forEach((a, i) => {
+    const f = statRow(A, a + "_fovea"), pe = statRow(A, a + "_periph"), p = h("div", {}, box);
     h("p", { class: "panel-title", text: a }, p);
     h("p", { class: "panel-stat", text: `fovea ${fmt(f.slope * LOAD_SPAN)}% (p ${fmtP(f.p)}) · periph ${fmt(pe.slope * LOAD_SPAN)}% (p ${fmtP(pe.p)})` }, p);
-    lineChart(h("div", {}, p), { series: [
-      { name: "Fovea", color: css("--series-1"), band: css("--band"), pts: grp(`${A}|${a}_fovea`) },
-      { name: "Periph", color: css("--series-2"), band: css("--band-2"), pts: grp(`${A}|${a}_periph`) },
-    ], yDomain: dom, W: 320, H: 210, unit: "%", endLabels: true, yLabel: "% signal" });
-    for (const [b, s] of [["fovea", f], ["periph", pe]]) rows.push([`${a} ${b}`, ...grp(`${A}|${a}_${b}`).map(q => q.m.toFixed(2)), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.p), fmtP(s.q)]);
-  }
+    lineChart(h("div", {}, p), { series: ser[i], yDomain: dom, W: 320, H: 210, unit: "%", endLabels: true, yLabel: "% signal" });
+    for (const [b, s, k] of [["fovea", f, 0], ["periph", pe, 1]]) rows.push([`${a} ${b}`, ...ser[i][k].pts.map(q => q.m.toFixed(2)), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.p), fmtP(s.q)]);
+  });
+  legend("visLegend", [{ label: "Fovea 0.5–1.5°", color: css("--series-1") }, { label: "Periphery 3–7.5°", color: css("--series-2") }]);
   table(document.getElementById("visTable"), ["ROI", ...RLAB.map(l => l + "%"), "Fitted effect", "t", "p", "q"], rows);
 }
 
@@ -447,9 +545,14 @@ function atlasFilter(rows, key) {
   if (key === "schaeferSub") return rows.filter(s => s.atlas === "schaefer2018" && s.roi.includes("_"));
   return rows.filter(s => s.atlas === key);
 }
-const forestRows = () => atlasFilter(D.slopes.filter(s => s.set === SET), state.atlas).slice().sort((a, b) => b.slope - a.slope);
+function forestRows() {
+  const src = state.hemi === "both" ? D.slopes.filter(s => s.set === SET)
+    : D.hemi.slopes.filter(s => s.hemi === (state.hemi === "diff" ? "rh-lh" : state.hemi));
+  return atlasFilter(src, state.atlas).slice().sort((a, b) => b.slope - a.slope);
+}
 function renderForest() {
   const box = document.getElementById("forestChart"); box.replaceChildren();
+  const diff = state.hemi === "diff";
   const rows = forestRows(), rowH = 22, W = 560, M = { t: 18, r: 16, b: 26, l: 150 };
   const H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Load effect by ROI with 95% confidence intervals" }, box);
@@ -461,7 +564,7 @@ function renderForest() {
     el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg);
     text(svg, x(tv), H - 8, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, step < 0.5 ? 2 : 1), { "text-anchor": "middle" });
   }
-  text(svg, M.l + iw, M.t - 6, "% signal change, fitted 10% → 46%", { "text-anchor": "end", "font-size": 10 });
+  text(svg, M.l + iw, M.t - 6, diff ? "right − left load effect (% signal, fitted 10% → 46%)" : `% signal change, fitted 10% → 46% · ${HEMI_NAME[state.hemi]}`, { "text-anchor": "end", "font-size": 10 });
   rows.forEach((r, i) => {
     const cy = M.t + i * rowH + rowH / 2, sig = r.q < 0.05, key = `${r.atlas}|${r.roi}`;
     const color = sig ? (r.slope > 0 ? css("--series-1") : css("--neg")) : css("--text-muted");
@@ -471,98 +574,156 @@ function renderForest() {
     for (const v of Object.values(r.subj)) el("circle", { cx: x(v * LOAD_SPAN), cy, r: 2.5, fill: css("--context") }, g);
     el("line", { x1: x(r.lo * LOAD_SPAN), x2: x(r.hi * LOAD_SPAN), y1: cy, y2: cy, stroke: color, "stroke-width": 2, "stroke-linecap": "round" }, g);
     el("circle", { cx: x(r.slope * LOAD_SPAN), cy, r: 4.5, fill: sig ? color : css("--surface-1"), stroke: sig ? css("--surface-1") : color, "stroke-width": 2 }, g);
-    bindTip(g, r.roi, () => [
-      { label: "Fitted effect", value: fmt(r.slope * LOAD_SPAN) + "%" },
+    bindTip(g, r.roi + (state.hemi === "both" ? "" : ` · ${HEMI_NAME[state.hemi]}`), () => [
+      { label: diff ? "R − L" : "Fitted effect", value: fmt(r.slope * LOAD_SPAN) + "%" },
       { label: "95% CI", value: `${fmt(r.lo * LOAD_SPAN)} to ${fmt(r.hi * LOAD_SPAN)}` },
       { label: `t(${r.n - 1})`, value: r.t.toFixed(2) },
       { label: "p / q (FDR)", value: `${fmtP(r.p)} / ${fmtP(r.q)}` },
-      { label: "Mean Spearman ρ", value: r.rho.toFixed(2) },
     ]);
     const pick = () => { state.sel = key; renderForest(); renderDetail(); };
     g.addEventListener("click", pick);
     g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
   });
-  table(document.getElementById("forestTable"), ["ROI", "Fitted effect (%)", "95% CI", "t", "p", "q (FDR)", "Mean ρ", "Mean β"],
-    rows.map(r => [r.roi, fmt(r.slope * LOAD_SPAN), `${fmt(r.lo * LOAD_SPAN)} to ${fmt(r.hi * LOAD_SPAN)}`, r.t.toFixed(2), fmtP(r.p), fmtP(r.q), r.rho.toFixed(2), r.beta.toFixed(2)]));
+  legend("forestLegend", diff
+    ? [{ kind: "key-dot", color: css("--series-1"), label: "Right > left (q < .05)" }, { kind: "key-dot", color: css("--neg"), label: "Left > right (q < .05)" }, { kind: "key-ring", label: "Not significant" }]
+    : [{ kind: "key-dot", color: css("--series-1"), label: "Increase with load (q < .05)" }, { kind: "key-dot", color: css("--neg"), label: "Decrease with load (q < .05)" }, { kind: "key-ring", label: "Not significant" }]);
+  table(document.getElementById("forestTable"), ["ROI", diff ? "R − L (%)" : "Fitted effect (%)", "95% CI", "t", "p", "q (FDR)"],
+    rows.map(r => [r.roi, fmt(r.slope * LOAD_SPAN), `${fmt(r.lo * LOAD_SPAN)} to ${fmt(r.hi * LOAD_SPAN)}`, r.t.toFixed(2), fmtP(r.p), fmtP(r.q)]));
 }
 function renderDetail() {
-  const key = D.curves[state.sel] ? state.sel : "wang2015|IPS2", [atlas, roi] = key.split("|"), s = slopeRow(atlas, roi);
-  document.getElementById("detailTitle").textContent = `${roi} · ${ATLAS_NAME[atlas] || atlas}`;
-  document.getElementById("detailStat").textContent = `${fmt(s.slope * LOAD_SPAN)}% fitted · t(${s.n - 1}) = ${s.t.toFixed(2)}, p ${fmtP(s.p)}, q ${fmtP(s.q)}`;
-  const ctx = subjLines(key), lo = Math.min(0, ...ctx.flat()), hi = Math.max(...ctx.flat());
-  lineChart(document.getElementById("detail"), { series: [{ name: roi, color: css("--series-1"), band: css("--band"), pts: grp(key), ctx }], yDomain: [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2], W: 380, H: 250, unit: "%", yLabel: "% signal" });
+  const key = D.curves[state.sel] ? state.sel : "wang2015|IPS2", [atlas, roi] = key.split("|"), s = statRow(atlas, roi);
+  document.getElementById("detailTitle").textContent = `${roi} · ${ATLAS_NAME[atlas] || atlas}` + (state.hemi === "both" ? "" : ` · ${HEMI_NAME[state.hemi]}`);
+  document.getElementById("detailStat").textContent = s ? (state.hemi === "diff" ? `R − L ${fmt(s.slope * LOAD_SPAN)}% · t(${s.n - 1}) = ${s.t.toFixed(2)}, p ${fmtP(s.p)}` : `${fmt(s.slope * LOAD_SPAN)}% fitted · t(${s.n - 1}) = ${s.t.toFixed(2)}, p ${fmtP(s.p)}, q ${fmtP(s.q)}`) : "";
+  let series, ctx = null;
+  if (state.hemi === "both") { ctx = subjLines(key); series = [{ name: roi, color: css("--series-1"), band: css("--band"), pts: grp(key), ctx }]; }
+  else series = seriesFor(key, roi);
+  let lo = 0, hi = -Infinity;
+  for (const sr of series) for (const p of sr.pts) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); }
+  if (ctx) { lo = Math.min(lo, ...ctx.flat()); hi = Math.max(hi, ...ctx.flat()); }
+  lineChart(document.getElementById("detail"), { series, yDomain: [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2], W: 380, H: 250, unit: "%", yLabel: "% signal" });
+  legend("detailLegend", state.hemi === "diff" ? [{ label: "Left ± SEM", color: css("--series-1") }, { label: "Right ± SEM", color: css("--series-2") }]
+    : state.hemi === "both" ? [{ label: "Group mean ± SEM", color: css("--series-1") }, { label: "Individual subjects", color: css("--context") }]
+    : [{ label: `Group mean ± SEM, ${HEMI_NAME[state.hemi]}`, color: css("--series-1") }]);
 }
 
 // ---------- models ----------
 function modelRows() {
-  let rows = atlasFilter(D.models.rois, state.mset);
+  let rows;
+  if (state.hemi === "both") rows = atlasFilter(D.models.rois, state.mset).map(r => ({ roi: r.roi, d: r.dSummed, best: r.bestSummed, nLoad: 8 - r.nbest.flat, vert: r.vert, full: r }));
+  else {
+    const get = hm => atlasFilter(D.hemi.slopes.filter(s => s.hemi === hm && s.vert), state.mset);
+    const L = get("lh"), Rr = get("rh"), byR = Object.fromEntries(Rr.map(r => [r.roi, r]));
+    if (state.hemi === "diff") rows = L.filter(l => byR[l.roi]).map(l => ({ roi: l.roi, L: l, R: byR[l.roi], d: Math.max(l.dSummed, byR[l.roi].dSummed) }));
+    else rows = (state.hemi === "lh" ? L : Rr).map(r => ({ roi: r.roi, d: r.dSummed, best: r.best, nLoad: r.nLoad, vert: r.vert }));
+  }
   if (state.mset === "wang2015") rows = rows.filter(r => !/_(fovea|periph)$/.test(r.roi));
-  return rows.slice().sort((a, b) => b.dSummed - a.dSummed);
+  return rows.sort((a, b) => b.d - a.d);
+}
+function segBar(g, x0, iw, cy, th, vert, C) {
+  let acc = 0; const parts = MODELS.map(m => ({ m, v: vert[m] || 0 })).filter(p => p.v > 0.0005);
+  parts.forEach((p, j) => { const xs = x0 + acc * iw, w = p.v * iw; acc += p.v; const gap = j < parts.length - 1 ? 2 : 0;
+    if (w - gap > 0.5) el("rect", { x: xs, y: cy - th / 2, width: Math.max(0.5, w - gap), height: th, rx: (j === 0 || j === parts.length - 1) ? Math.min(3, th / 2) : 0, fill: C[p.m] }, g); });
 }
 function renderModels() {
-  const rows = modelRows(), C = MODEL_COLOR(), rowH = 20;
-  // left: summed dAICc bars
+  const rows = modelRows(), C = MODEL_COLOR(), diff = state.hemi === "diff", rowH = diff ? 26 : 20;
   { const box = document.getElementById("modelBars"); box.replaceChildren();
     const W = 520, M = { t: 16, r: 56, b: 26, l: 110 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Summed AICc evidence for a load function by ROI" }, box);
-    let lo = Math.min(0, ...rows.map(r => r.dSummed)), hi = Math.max(0, ...rows.map(r => r.dSummed));
+    const vals = diff ? rows.flatMap(r => [r.L.dSummed, r.R.dSummed]) : rows.map(r => r.d);
+    let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
     const { ticks } = niceTicks(lo, hi, 5); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
     const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
     for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - 8, String(tv).replace("-", "−"), { "text-anchor": "middle" }); }
-    text(svg, x(hi), M.t - 6, "ΔAICc (flat − best), summed over 8 subjects", { "text-anchor": "end", "font-size": 10 });
+    text(svg, x(hi), M.t - 6, `ΔAICc (flat − best), summed over 8 subjects · ${HEMI_NAME[state.hemi]}`, { "text-anchor": "end", "font-size": 10 });
     rows.forEach((r, i) => {
-      const cy = M.t + i * rowH + rowH / 2, win = r.dSummed > 0 ? r.bestSummed : "flat";
-      const nLoad = 8 - r.nbest.flat;
-      const g = el("g", { class: "row-g", tabindex: 0 }, svg);
+      const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
       el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
       text(g, M.l - 10, cy + 4, r.roi, { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
-      const x0 = x(0), x1 = x(r.dSummed), bw = Math.max(1, Math.abs(x1 - x0)), bx = Math.min(x0, x1), th = 12;
-      const rr = Math.min(4, bw / 2), pos = r.dSummed >= 0;
-      // 4px rounded data-end, square at baseline
+      if (diff) {
+        el("line", { x1: x(r.L.dSummed), x2: x(r.R.dSummed), y1: cy, y2: cy, stroke: css("--axis"), "stroke-width": 2 }, g);
+        el("circle", { cx: x(r.L.dSummed), cy, r: 4.5, fill: css("--series-1"), stroke: css("--surface-1"), "stroke-width": 2 }, g);
+        el("circle", { cx: x(r.R.dSummed), cy, r: 4.5, fill: css("--series-2"), stroke: css("--surface-1"), "stroke-width": 2 }, g);
+        bindTip(g, r.roi, () => [
+          { label: "Left ΔAICc", color: css("--series-1"), value: `${r.L.dSummed.toFixed(1)} (${MODEL_NAME[r.L.best]}, ${r.L.nLoad}/8)` },
+          { label: "Right ΔAICc", color: css("--series-2"), value: `${r.R.dSummed.toFixed(1)} (${MODEL_NAME[r.R.best]}, ${r.R.nLoad}/8)` }]);
+        return;
+      }
+      const win = r.d > 0 ? r.best : "flat", x0 = x(0), x1 = x(r.d), bw = Math.max(1, Math.abs(x1 - x0)), bx = Math.min(x0, x1), th = 12, rr = Math.min(4, bw / 2), pos = r.d >= 0;
       const d = pos ? `M${bx},${cy - th / 2}H${bx + bw - rr}Q${bx + bw},${cy - th / 2} ${bx + bw},${cy - th / 2 + rr}V${cy + th / 2 - rr}Q${bx + bw},${cy + th / 2} ${bx + bw - rr},${cy + th / 2}H${bx}Z`
                     : `M${bx + bw},${cy - th / 2}H${bx + rr}Q${bx},${cy - th / 2} ${bx},${cy - th / 2 + rr}V${cy + th / 2 - rr}Q${bx},${cy + th / 2} ${bx + rr},${cy + th / 2}H${bx + bw}Z`;
       el("path", { d, fill: C[win] }, g);
-      text(g, pos ? x1 + 6 : x0 + 6, cy + 4, `${nLoad}/8`, { "text-anchor": "start", "font-size": 10.5 });
-      bindTip(g, r.roi, () => [
-        { label: "Summed ΔAICc vs flat", value: r.dSummed.toFixed(1) },
-        { label: "Best (summed)", value: MODEL_NAME[r.bestSummed] },
-        { label: "Best (group-mean curve)", value: `${MODEL_NAME[r.bestGroup]} (Δ ${r.dGroup.toFixed(1)})` },
-        { label: "Subjects best: flat/lin/exp/NR", value: MODELS.map(m => r.nbest[m]).join(" / ") },
-        { label: "Group exp τ (10 = linear limit)", value: r.tau.toFixed(2) },
-      ]);
+      text(g, pos ? x1 + 6 : x0 + 6, cy + 4, `${r.nLoad}/8`, { "text-anchor": "start", "font-size": 10.5 });
+      bindTip(g, r.roi, () => {
+        const out = [{ label: "Summed ΔAICc vs flat", value: r.d.toFixed(1) }, { label: "Best (summed)", value: MODEL_NAME[r.best] }, { label: "Subjects preferring a load function", value: `${r.nLoad}/8` }];
+        if (r.full) out.push({ label: "Best (group-mean curve)", value: `${MODEL_NAME[r.full.bestGroup]} (Δ ${r.full.dGroup.toFixed(1)})` }, { label: "Group exp τ (10 = linear limit)", value: r.full.tau.toFixed(2) });
+        return out;
+      });
     });
   }
-  // right: vertex-wise segmented bars
   { const box = document.getElementById("vertBars"); box.replaceChildren();
     const W = 520, M = { t: 16, r: 56, b: 26, l: 110 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Fraction of vertices best fit by each model" }, box);
     for (const tv of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: M.l + tv * iw, x2: M.l + tv * iw, y1: M.t - 4, y2: H - M.b, stroke: css("--grid"), "stroke-width": 1 }, svg); text(svg, M.l + tv * iw, H - 8, `${tv * 100}%`, { "text-anchor": "middle" }); }
-    text(svg, M.l + iw, M.t - 6, "share of vertices", { "text-anchor": "end", "font-size": 10 });
+    text(svg, M.l + iw, M.t - 6, `share of vertices · ${HEMI_NAME[state.hemi]}`, { "text-anchor": "end", "font-size": 10 });
     rows.forEach((r, i) => {
-      const cy = M.t + i * rowH + rowH / 2, th = 12, g = el("g", { class: "row-g", tabindex: 0 }, svg);
+      const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
       el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
       text(g, M.l - 10, cy + 4, r.roi, { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
-      let acc = 0; const parts = MODELS.map(m => ({ m, v: r.vert[m] || 0 })).filter(p => p.v > 0.0005);
-      parts.forEach((p, j) => {
-        const x0 = M.l + acc * iw, w = p.v * iw; acc += p.v;
-        const gap = j < parts.length - 1 ? 2 : 0;
-        if (w - gap > 0.5) el("rect", { x: x0, y: cy - th / 2, width: Math.max(0.5, w - gap), height: th, rx: (j === 0 || j === parts.length - 1) ? 3 : 0, fill: C[p.m] }, g);
-      });
+      if (diff) {
+        segBar(g, M.l, iw, cy - 5, 8, r.L.vert, C); segBar(g, M.l, iw, cy + 5, 8, r.R.vert, C);
+        text(g, M.l + iw + 6, cy - 1.5, "L", { "font-size": 9.5 }); text(g, M.l + iw + 6, cy + 8.5, "R", { "font-size": 9.5 });
+        bindTip(g, r.roi, () => MODELS.map(m => ({ label: MODEL_NAME[m], color: C[m], value: `L ${((r.L.vert[m] || 0) * 100).toFixed(0)}% · R ${((r.R.vert[m] || 0) * 100).toFixed(0)}%` })));
+        return;
+      }
+      segBar(g, M.l, iw, cy, 12, r.vert, C);
       bindTip(g, r.roi, () => [...MODELS.map(m => ({ label: MODEL_NAME[m], color: C[m], value: `${((r.vert[m] || 0) * 100).toFixed(1)}%` })), { label: "Vertices increasing", value: `${(r.vert.increasing * 100).toFixed(0)}%` }]);
     });
   }
-  table(document.getElementById("modelTable"), ["ROI", "Summed ΔAICc", "Best (summed)", "Best (group curve)", "Subj best f/l/e/NR", "Vertices: flat", "linear", "exp", "NR", "increasing"],
-    rows.map(r => [r.roi, r.dSummed.toFixed(1), MODEL_NAME[r.bestSummed], MODEL_NAME[r.bestGroup], MODELS.map(m => r.nbest[m]).join("/"), ...MODELS.map(m => ((r.vert[m] || 0) * 100).toFixed(0) + "%"), (r.vert.increasing * 100).toFixed(0) + "%"]));
+  legend("modelHemiLegend", diff ? [{ kind: "key-dot", color: css("--series-1"), label: "Left hemisphere (left chart; upper bar)" }, { kind: "key-dot", color: css("--series-2"), label: "Right hemisphere (left chart; lower bar)" }] : []);
+  if (diff) table(document.getElementById("modelTable"), ["ROI", "Left ΔAICc", "Left best", "Left n/8", "Right ΔAICc", "Right best", "Right n/8"],
+    rows.map(r => [r.roi, r.L.dSummed.toFixed(1), MODEL_NAME[r.L.best], r.L.nLoad, r.R.dSummed.toFixed(1), MODEL_NAME[r.R.best], r.R.nLoad]));
+  else table(document.getElementById("modelTable"), ["ROI", "Summed ΔAICc", "Best", "Subjects preferring load", "Vertices: flat", "linear", "exp", "NR", "increasing"],
+    rows.map(r => [r.roi, r.d.toFixed(1), MODEL_NAME[r.best], `${r.nLoad}/8`, ...MODELS.map(m => ((r.vert[m] || 0) * 100).toFixed(0) + "%"), (r.vert.increasing * 100).toFixed(0) + "%"]));
 }
 function renderRecovery() {
   const box = document.getElementById("recovery");
   const rows = D.models.recovery.map(r => [`noise ${r.noise} · truth ${MODEL_NAME[r.truth]}`, ...MODELS.map(m => r[m].toFixed(0) + "%")]);
   const t = table(box, ["Simulated truth (noise SD, % signal)", ...MODELS.map(m => "chose " + MODEL_NAME[m])], rows);
-  // emphasize the correct-recovery cell
-  [...t.tBodies[0].rows].forEach((tr, i) => { const truth = D.models.recovery[i].truth; tr.cells[1 + MODELS.indexOf(truth)].className = "hl"; });
+  [...t.tBodies[0].rows].forEach((tr, i) => { tr.cells[1 + MODELS.indexOf(D.models.recovery[i].truth)].className = "hl"; });
 }
 
-function renderAll() { renderTiles(); renderBeh(); renderIps(); renderForest(); renderDetail(); renderVis(); renderModels(); renderRecovery(); }
+// ---------- hemispheric composites ----------
+function renderHemi() {
+  const box = document.getElementById("hemiChart"); box.replaceChildren();
+  const rows = D.hemi.composites, rowH = 30, W = 900, M = { t: 18, r: 250, b: 26, l: 250 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Left vs right load effect for network composites" }, box);
+  let lo = Math.floor(Math.min(0, ...rows.flatMap(r => [r.L, r.R])) * 5) / 5, hi = Math.max(0, ...rows.flatMap(r => [r.L, r.R]));
+  const { ticks } = niceTicks(lo, hi, 6); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
+  const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
+  for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - 8, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, 1), { "text-anchor": "middle" }); }
+  text(svg, M.l + iw + 12, M.t - 6, "right − left (paired)", { "text-anchor": "start", "font-size": 10 });
+  rows.forEach((r, i) => {
+    const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
+    el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
+    text(g, M.l - 12, cy + 4, r.label, { "text-anchor": "end", class: "ink2", "font-size": 12 });
+    el("line", { x1: x(r.L), x2: x(r.R), y1: cy, y2: cy, stroke: css("--axis"), "stroke-width": 2 }, g);
+    el("circle", { cx: x(r.L), cy, r: 5, fill: css("--series-1"), stroke: css("--surface-1"), "stroke-width": 2 }, g);
+    el("circle", { cx: x(r.R), cy, r: 5, fill: css("--series-2"), stroke: css("--surface-1"), "stroke-width": 2 }, g);
+    text(g, M.l + iw + 12, cy + 4, `${fmt(r.diff)}% · t = ${r.t.toFixed(1)}, p ${fmtP(r.p)} · ${r.n_R_gt_L}/8`, { "text-anchor": "start", class: "ink2", "font-size": 11.5 });
+    bindTip(g, r.label, () => [
+      { label: "Left load effect", color: css("--series-1"), value: fmt(r.L) + "%" },
+      { label: "Right load effect", color: css("--series-2"), value: fmt(r.R) + "%" },
+      { label: "R − L (paired t, 7 df)", value: `${fmt(r.diff)} ± ${r.sem.toFixed(2)}, p ${fmtP(r.p)}` },
+      { label: "Wilcoxon p", value: fmtP(r.wilcoxon_p) },
+      { label: "Load effect ÷ mean response (L / R)", value: `${r.rel_L.toFixed(2)} / ${r.rel_R.toFixed(2)}` },
+    ]);
+  });
+  table(document.getElementById("hemiTable"), ["Composite", "Left (%)", "Right (%)", "R − L", "t(7)", "p", "Wilcoxon p", "R > L subjects", "Mean β L / R", "Effect ÷ mean β L / R"],
+    rows.map(r => [r.label, fmt(r.L), fmt(r.R), fmt(r.diff), r.t.toFixed(2), fmtP(r.p), fmtP(r.wilcoxon_p), `${r.n_R_gt_L}/8`, `${r.mean_beta_L.toFixed(2)} / ${r.mean_beta_R.toFixed(2)}`, `${r.rel_L.toFixed(2)} / ${r.rel_R.toFixed(2)}`]));
+}
+
+function renderHemiTags() { document.querySelectorAll(".hemi-tag").forEach(t => { t.textContent = state.hemi === "both" ? "" : `· ${HEMI_NAME[state.hemi]}`; }); }
+function renderAll() { renderHemiTags(); renderTiles(); renderBeh(); renderIps(); renderForest(); renderDetail(); renderVis(); renderModels(); renderRecovery(); renderHemi(); }
 
 function tabs(id, attr, onPick) {
   document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => {
@@ -570,6 +731,7 @@ function tabs(id, attr, onPick) {
     onPick(b.dataset[attr]);
   }));
 }
+tabs("hemiSeg", "h", v => { state.hemi = v; renderHemiTags(); renderIps(); renderForest(); renderDetail(); renderVis(); renderModels(); });
 tabs("atlasTabs", "atlas", v => { state.atlas = v; const f = forestRows()[0]; if (f) state.sel = `${f.atlas}|${f.roi}`; renderForest(); renderDetail(); });
 tabs("visTabs", "src", v => { state.vis = v; renderVis(); });
 tabs("modelTabs", "set", v => { state.mset = v; renderModels(); });
@@ -579,6 +741,8 @@ const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "Light" : "Dark";
 themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncThemeBtn(); renderAll(); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { syncThemeBtn(); renderAll(); });
 syncThemeBtn();
+const qHemi = new URLSearchParams(location.search).get("hemi");
+if (["both", "lh", "rh", "diff"].includes(qHemi)) { state.hemi = qHemi; document.querySelectorAll("#hemiSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.h === qHemi))); }
 renderAll();
 })();
 </script>

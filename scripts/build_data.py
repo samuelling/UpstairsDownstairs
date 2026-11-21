@@ -149,9 +149,45 @@ def models():
     return {"rois": rows, "recovery": rec}
 
 
+def hemispheres():
+    """Per-hemisphere group curves, slope stats (lh, rh, rh-lh), per-hemi vertex model fractions,
+    and R-vs-L composites (from hemi_stats.py)."""
+    curves = defaultdict(lambda: {"lh": [None] * len(RATIOS), "rh": [None] * len(RATIOS)})
+    with open(os.path.join(DATA, "hemi_curves.csv")) as fh:
+        for r in csv.DictReader(fh):
+            i = [rkey(x) for x in RATIOS].index(rkey(r["ratio"]))
+            curves[f"{r['atlas']}|{r['roi']}"][r["hemi"]][i] = {"m": round(float(r["m"]), 4), "se": round(float(r["se"]), 4)}
+    vert = defaultdict(lambda: defaultdict(list))
+    with open(os.path.join(DATA, "vertex_model_summary.csv")) as fh:
+        for r in csv.DictReader(fh):
+            for k in ("frac_flat", "frac_linear", "frac_exp", "frac_NR", "frac_increasing"):
+                vert[(r["atlas"], r["roi"], r["hemi"])][k].append(float(r[k]))
+    slopes = []
+    with open(os.path.join(DATA, "hemi_slopes.csv")) as fh:
+        for r in csv.DictReader(fh):
+            n, m, se = int(r["n"]), float(r["mean_slope"]), float(r["sem"])
+            row = {"atlas": r["atlas"], "roi": r["roi"], "hemi": r["hemi"], "n": n,
+                   "slope": round(m, 4), "se": round(se, 4),
+                   "lo": round(m - T975[n - 1] * se, 4), "hi": round(m + T975[n - 1] * se, 4),
+                   "t": round(float(r["t"]), 3), "p": float(f"{float(r['p']):.3g}"), "q": float(f"{float(r['q']):.3g}"),
+                   "subj": {s: round(float(r[f"s{s}"]), 4) for s in SUBJECTS}}
+            if r["hemi"] in ("lh", "rh"):
+                v = vert[(r["atlas"], r["roi"], r["hemi"])]
+                row.update(best=r["best_summed"], dSummed=round(float(r["dAICc_summed"]), 2),
+                           nLoad=int(float(r["nsubj_load"])), beta=round(float(r["mean_beta"]), 4),
+                           vert={k.replace("frac_", ""): round(mean(x), 4) for k, x in v.items()} if v else None)
+            slopes.append(row)
+    comps = []
+    with open(os.path.join(DATA, "hemi_composites.csv")) as fh:
+        for r in csv.DictReader(fh):
+            comps.append({k: (r[k] if k in ("label", "atlas", "rois") else round(float(r[k]), 4)) for k in r})
+    return {"curves": dict(curves), "slopes": slopes, "composites": comps}
+
+
 def main():
     data = {"ratios": RATIOS, "subjects": SUBJECTS, "sets": SETS,
-            "behavior": behavior(), "curves": curves(), "slopes": slopes(), "models": models()}
+            "behavior": behavior(), "curves": curves(), "slopes": slopes(), "models": models(),
+            "hemi": hemispheres()}
     # per-subject OLS slopes (per unit ratio) for ROIs absent from roi_slopes.csv (pRF ROIs)
     mx = mean(RATIOS)
     for row in data["slopes"]:
