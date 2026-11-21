@@ -10,9 +10,10 @@
   --page: #f9f9f7; --surface-1: #fcfcfb;
   --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
   --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
-  --series-1: #2a78d6; --series-2: #eb6834; --neg: #e34948;
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --neg: #e34948; --null: #c3c2b7;
   --band: rgba(42,120,214,0.10); --band-2: rgba(235,104,52,0.10);
   --context: rgba(82,81,78,0.28); --wash: rgba(11,11,11,0.04);
+  --callout: #f0efec;
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) .viz-root {
@@ -20,9 +21,10 @@
     --page: #0d0d0d; --surface-1: #1a1a19;
     --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
-    --series-1: #3987e5; --series-2: #d95926; --neg: #e66767;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --neg: #e66767; --null: #52514e;
     --band: rgba(57,135,229,0.14); --band-2: rgba(217,89,38,0.14);
     --context: rgba(195,194,183,0.25); --wash: rgba(255,255,255,0.05);
+    --callout: #232322;
   }
 }
 :root[data-theme="dark"] .viz-root {
@@ -30,49 +32,50 @@
   --page: #0d0d0d; --surface-1: #1a1a19;
   --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
-  --series-1: #3987e5; --series-2: #d95926; --neg: #e66767;
+  --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --neg: #e66767; --null: #52514e;
   --band: rgba(57,135,229,0.14); --band-2: rgba(217,89,38,0.14);
   --context: rgba(195,194,183,0.25); --wash: rgba(255,255,255,0.05);
+  --callout: #232322;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 .viz-root {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   background: var(--page); color: var(--text-primary);
-  min-height: 100vh; padding: 28px clamp(16px, 4vw, 48px) 64px;
-  line-height: 1.45;
+  min-height: 100vh; padding: 28px clamp(16px, 4vw, 48px) 64px; line-height: 1.45;
 }
 .wrap { max-width: 1180px; margin: 0 auto; }
-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
 h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
-h2 { font-size: 16px; font-weight: 600; margin: 0 0 2px; }
-.sub { color: var(--text-secondary); font-size: 14px; margin: 0; max-width: 860px; }
-.muted { color: var(--text-muted); font-size: 12px; }
+h2 { font-size: 16px; font-weight: 600; margin: 0 0 6px; }
+h3 { font-size: 13px; font-weight: 600; margin: 14px 0 4px; }
+.sub { color: var(--text-secondary); font-size: 14px; margin: 0; max-width: 900px; }
 button { font: inherit; }
-.theme-btn, .seg button, .tabs button {
+.theme-btn, .tabs button {
   border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
   border-radius: 8px; padding: 6px 12px; font-size: 13px; cursor: pointer;
 }
-.filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 22px 0 18px; }
-.filters .lbl { font-size: 13px; color: var(--text-secondary); }
-.seg { display: inline-flex; gap: 0; }
-.seg button { border-radius: 0; }
-.seg button:first-child { border-radius: 8px 0 0 8px; }
-.seg button:last-child { border-radius: 0 8px 8px 0; border-left: none; }
-.seg button[aria-pressed="true"], .tabs button[aria-pressed="true"] {
-  background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary);
-}
+.tabs button[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
 .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 6px; }
-.card {
-  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
-  padding: 18px 18px 14px; margin-bottom: 16px;
-}
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin-bottom: 16px; scroll-margin-top: 12px; }
 .tiles { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
 .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
 .tile .label { font-size: 13px; color: var(--text-secondary); }
 .tile .value { font-size: 26px; font-weight: 600; margin-top: 4px; }
 .tile .note { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 .tile.hero .value { font-size: 52px; line-height: 1.05; }
+.did { font-size: 13px; color: var(--text-secondary); margin: 6px 0 0; max-width: 960px; }
+.did b { color: var(--text-primary); font-weight: 600; }
+.tldr { background: var(--callout); border-radius: 8px; padding: 8px 12px; font-size: 13.5px; margin: 10px 0 4px; max-width: 960px; }
+.tldr b { font-weight: 600; }
+.overview { counter-reset: an; list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+.overview li { counter-increment: an; font-size: 13px; color: var(--text-secondary); padding-left: 28px; position: relative; }
+.overview li::before { content: counter(an); position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--callout); color: var(--text-primary); font-size: 12px; font-weight: 600; text-align: center; line-height: 20px; }
+.overview a { color: var(--text-primary); font-weight: 600; text-decoration: none; }
+.overview a:hover { text-decoration: underline; }
+.overview .t { display: block; color: var(--text-primary); margin-top: 2px; }
+.notice { border-left: 3px solid var(--neg); padding: 6px 12px; font-size: 13px; color: var(--text-secondary); margin-top: 14px; }
+.notice b { color: var(--text-primary); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .multiples { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 14px; margin-top: 10px; }
 .multiples.three { grid-template-columns: repeat(3, 1fr); }
@@ -80,12 +83,12 @@ button { font: inherit; }
 .panel-stat { font-size: 12px; color: var(--text-secondary); margin: 0 0 2px; }
 svg { display: block; width: 100%; height: auto; overflow: visible; }
 svg text { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
-svg .ink { fill: var(--text-primary); }
 svg .ink2 { fill: var(--text-secondary); }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin: 8px 0 0; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .key-line { width: 16px; height: 2px; border-radius: 1px; display: inline-block; }
 .key-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.key-rect { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 .key-ring { width: 9px; height: 9px; border-radius: 50%; display: inline-block; border: 2px solid var(--text-muted); }
 details { margin-top: 10px; }
 summary { cursor: pointer; font-size: 13px; color: var(--text-secondary); }
@@ -93,26 +96,22 @@ table { border-collapse: collapse; width: 100%; font-size: 12px; margin-top: 8px
 th, td { text-align: right; padding: 4px 8px; border-bottom: 1px solid var(--grid); }
 th:first-child, td:first-child { text-align: left; }
 th { color: var(--text-secondary); font-weight: 600; }
-.tip {
-  position: fixed; pointer-events: none; z-index: 10; display: none;
-  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
-  border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  min-width: 150px;
-}
+td.hl { font-weight: 600; color: var(--text-primary); }
+.tip { position: fixed; pointer-events: none; z-index: 10; display: none; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); min-width: 160px; }
 .tip .t-head { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
 .tip .t-row { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
 .tip .t-row .k { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); }
 .tip .t-row strong { font-weight: 600; font-variant-numeric: tabular-nums; }
-.forest-row:hover rect.hit, .forest-row:focus rect.hit, .forest-row.sel rect.hit { fill: var(--wash); }
-.forest-row { cursor: pointer; outline: none; }
+.row-g { cursor: default; outline: none; }
+.row-g.click { cursor: pointer; }
+.row-g:hover rect.hit, .row-g:focus rect.hit, .row-g.sel rect.hit { fill: var(--wash); }
 .notes { font-size: 13px; color: var(--text-secondary); }
 .notes li { margin-bottom: 6px; }
 .notes strong { color: var(--text-primary); }
+code { font-size: 12px; }
 @media (max-width: 900px) {
-  .tiles { grid-template-columns: 1fr 1fr; }
-  .tile.hero { grid-column: 1 / -1; }
-  .grid-2 { grid-template-columns: 1fr; }
-  .multiples.three { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: 1fr 1fr; } .tile.hero { grid-column: 1 / -1; }
+  .grid-2, .overview { grid-template-columns: 1fr; } .multiples.three { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -122,57 +121,73 @@ th { color: var(--text-secondary); font-weight: 600; }
   <header>
     <div>
       <h1>Central load × attention networks</h1>
-      <p class="sub">Reanalysis of the NJP central-load fMRI study: 8 subjects, about 155 runs. A central red/blue majority-color judgment gets harder as the minority proportion rises from 10% to 46%. A task-irrelevant 1/f noise annulus fills the periphery (3–7.5°). Betas come from the original per-subject FS-FAST fsaverage GLMs; ROIs come from the Wang 2015, Glasser 2016 and Schaefer 2018 atlases.</p>
+      <p class="sub">Reanalysis of the NJP central-load fMRI study: 8 subjects and 151 analyzed task runs. Subjects judge which color is in the majority in a small central ring of red and blue squares. Load is the minority proportion, from 10% (easy) to 46% (nearly 50/50, hard). A task-irrelevant noise annulus fills the periphery (3–7.5°). Responses come from the original per-subject FS-FAST GLMs on fsaverage.</p>
     </div>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Dark</button>
   </header>
 
-  <div class="filters" role="group" aria-label="Filters">
-    <span class="lbl">Subjects</span>
-    <div class="seg" id="setSeg">
-      <button type="button" data-set="all8" aria-pressed="true">All 8</button>
-      <button type="button" data-set="excl12_13" aria-pressed="false">Exclude S12, S13 (flat behavior)</button>
-    </div>
-  </div>
-
   <section class="tiles" id="tiles" aria-label="Key numbers"></section>
 
-  <section class="card">
-    <h2>Dorsal attention gradient: IPS0 → FEF</h2>
-    <p class="sub">Group mean response (≈ % signal change vs fixation) by central-task ratio, with the ±1 SEM band. Wang 2015 max-probability ROIs, hemispheres averaged. Panels share a y-axis. X positions are evenly spaced, but the ratios are not; the fitted effects use the true ratios.</p>
+  <section class="card" id="overview">
+    <h2>What was done, and the TL;DR of each analysis</h2>
+    <ol class="overview">
+      <li><a href="#audit">Data &amp; label audit</a>: checked each run's condition file against the ratio saved in its behavioral file, and confirmed raw and preprocessed data exist for every run.<span class="t"><b>TL;DR:</b> all 151 runs are correctly labelled, and the data are complete enough to rerun everything.</span></li>
+      <li><a href="#behavior">Behavior</a>: split performance into detecting the color change and naming the new majority color correctly, and fixed the scoring for the two subjects who pressed reversed keys.<span class="t"><b>TL;DR:</b> the load manipulation works in all 8 subjects. Harder ratios mostly mean more missed changes (100% → 53% detected).</span></li>
+      <li><a href="#ips">Dorsal attention gradient</a>: averaged responses within Wang 2015 IPS0–IPS4/5, SPL1 and FEF, and fit each subject's slope against load.<span class="t"><b>TL;DR:</b> every dorsal ROI rises with load (t = 4.6–8.1). IPS2 rises most, about +1.2% signal.</span></li>
+      <li><a href="#forest">Across atlases</a>: repeated the slope test in Glasser HCP-MMP1 and Schaefer 400/17 parcels.<span class="t"><b>TL;DR:</b> the same IPS/SPL/FEF increase appears in every atlas. The default mode network goes down with load.</span></li>
+      <li><a href="#visual">Fovea vs periphery</a>: split V1–V3 by each subject's own pRF eccentricity (template for S9) into the central-task zone and the noise-annulus zone.<span class="t"><b>TL;DR:</b> foveal V1–V3 go up with load. The periphery goes down, but significantly only in V2. Subject pRFs agree with the template.</span></li>
+      <li><a href="#models">Load-function models</a>: fit flat, linear, saturating-exponential and Naka-Rushton models, vertex by vertex and on ROI averages, and compared them with AICc.<span class="t"><b>TL;DR:</b> load functions beat a flat line in IPS, SPL, FEF and LO. Their shape looks linear, not compressive, over 10–46%. Seven load levels can't support a 4-parameter Naka-Rushton.</span></li>
+    </ol>
+    <div class="notice"><b>Correction (this version):</b> an earlier version said S12 and S13 had flat behavior across load. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed changes as correct. Scored properly, both subjects show the same load effect as everyone else, so the "exclude S12/S13" filter has been removed. No fMRI result changed.</div>
+  </section>
+
+  <section class="card" id="audit">
+    <h2>1 · Data &amp; label audit</h2>
+    <p class="did"><b>What was done:</b> each scan run's condition file (<code>CAM.par</code>) was compared with the ratio stored in that run's behavioral file. The preprocessing and GLM settings were also confirmed from the original FS-FAST configs: fsaverage surface, 5 mm FWHM smoothing, SPM HRF, 16 s blocks, TR 2 s.</p>
+    <div class="tldr"><b>TL;DR:</b> <span id="auditN"></span> of <span id="auditN2"></span> runs match. Raw <code>f.nii</code>, motion-corrected and surface-sampled data exist for every run, so a full rerun from raw data is possible.</div>
+  </section>
+
+  <section class="card" id="behavior">
+    <h2>2 · Behavior</h2>
+    <p class="did"><b>What was done:</b> after each majority-color flip, subjects had 1.5 s to press the key for the new majority color. The data were scored three ways: the original score (correct / all flips, so misses count as wrong), <b>detection</b> (% of flips answered), and <b>accuracy</b> (% correct among answered flips). S12 and S13 pressed reversed keys in every run (raw accuracy 0–46%), so their mapping is flipped. Misses stay wrong, as in the original code.</p>
+    <div class="tldr"><b>TL;DR:</b> the load manipulation works. The original score falls from about 95% to 33% between the 30% and 46% ratios, mostly because subjects miss more changes (detection 100% → 53%). Accuracy on the changes they do catch drops less (96% → 66%).</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div>
+        <h3>Original score (correct / all changes)</h3>
+        <div id="behScore"></div>
+        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Group mean ± SEM</span><span><i class="key-line" style="background:var(--context)"></i>Individual subjects</span></div>
+      </div>
+      <div>
+        <h3>Detection vs accuracy</h3>
+        <div id="behSplit"></div>
+        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Changes detected</span><span><i class="key-line" style="background:var(--series-2)"></i>Accuracy when answered</span></div>
+      </div>
+    </div>
+    <details><summary>Table view</summary><div id="behTable"></div></details>
+  </section>
+
+  <section class="card" id="ips">
+    <h2>3 · Dorsal attention gradient: IPS0 → FEF</h2>
+    <p class="did"><b>What was done:</b> responses were averaged within Wang 2015 maximum-probability ROIs, with hemispheres averaged. Each subject's response was regressed on ratio, and the slopes were t-tested across subjects. The "fitted" value is the slope × 0.36, the predicted change from 10% to 46%. Units are roughly % signal change vs fixation. X positions are evenly spaced, but the ratios are not; the fits use the true ratios.</p>
+    <div class="tldr"><b>TL;DR:</b> all 7 dorsal ROIs increase with load. The effect is largest in IPS2–IPS3 and smallest in FEF. Most areas peak at 44% and dip slightly at 46%, where subjects miss half of the changes.</div>
     <div class="multiples" id="ipsPanels"></div>
     <details><summary>Table view</summary><div id="ipsTable"></div></details>
   </section>
 
-  <div class="grid-2" style="grid-template-columns: 1fr 1.6fr;">
-    <section class="card">
-      <h2>Task accuracy by ratio</h2>
-      <p class="sub">Percent correct on majority-color changes; misses count as wrong. Thin lines are individual subjects. S12 and S13 are scored with the original key-reversal correction.</p>
-      <div id="behChart"></div>
-      <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Group mean ± SEM</span><span><i class="key-line" style="background:var(--context)"></i>Individual subjects</span></div>
-      <details><summary>Table view</summary><div id="behTable"></div></details>
-    </section>
-    <section class="card">
-      <h2>Early visual cortex: fovea vs periphery</h2>
-      <p class="sub">Foveal (0.5–1.5°, under the central task) and peripheral (3–7.5°, under the noise annulus) parts of each area, from the Benson 2014 template eccentricity.</p>
-      <div class="multiples three" id="visPanels"></div>
-      <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Fovea 0.5–1.5°</span><span><i class="key-line" style="background:var(--series-2)"></i>Periphery 3–7.5°</span></div>
-      <details><summary>Table view</summary><div id="visTable"></div></details>
-    </section>
-  </div>
-
-  <section class="card">
-    <h2>Load effect by ROI</h2>
-    <p class="sub">Fitted change in response from the 10% ratio to the 46% ratio: each subject's linear slope × 0.36, averaged across subjects, with a 95% CI. A filled dot means FDR q &lt; .05 within the atlas. Small dots are individual subjects. Click a row to plot its curve on the right.</p>
+  <section class="card" id="forest">
+    <h2>4 · Load effect by ROI, across atlases</h2>
+    <p class="did"><b>What was done:</b> the same slope test was run for every ROI in each atlas, with FDR correction within each atlas. A filled dot means q &lt; .05; small dots are individual subjects. Click a row to plot its curve.</p>
+    <div class="tldr"><b>TL;DR:</b> the increase in IPS, SPL and FEF holds in Glasser (IPS1, MIP, VIP, 7PL, LIP, FEF, PEF) and Schaefer (dorsal attention SPL and FEF, control PFCd, anterior insula). Default mode A decreases. MT shows no load effect.</div>
     <div class="tabs" id="atlasTabs" role="group" aria-label="Atlas">
-      <button type="button" data-atlas="wang2015" aria-pressed="true">Wang 2015 (retinotopic)</button>
+      <button type="button" data-atlas="wang2015" aria-pressed="true">Wang 2015</button>
+      <button type="button" data-atlas="prf" aria-pressed="false">Subject pRF V1–V3</button>
       <button type="button" data-atlas="glasser2016" aria-pressed="false">Glasser HCP-MMP1</button>
       <button type="button" data-atlas="schaeferNet" aria-pressed="false">Schaefer: networks</button>
       <button type="button" data-atlas="schaeferSub" aria-pressed="false">Schaefer: sub-regions</button>
     </div>
     <div class="grid-2" style="grid-template-columns: 1.35fr 1fr; align-items: start;">
       <div>
-        <div id="forest"></div>
+        <div id="forestChart"></div>
         <div class="legend">
           <span><i class="key-dot" style="background:var(--series-1)"></i>Increase with load (q &lt; .05)</span>
           <span><i class="key-dot" style="background:var(--neg)"></i>Decrease with load (q &lt; .05)</span>
@@ -189,15 +204,61 @@ th { color: var(--text-secondary); font-weight: 600; }
     <details><summary>Table view</summary><div id="forestTable"></div></details>
   </section>
 
+  <section class="card" id="visual">
+    <h2>5 · Early visual cortex: fovea vs periphery</h2>
+    <p class="did"><b>What was done:</b> each subject's pRF eccentricity, R² and V1–V3 labels were resampled to fsaverage with FreeSurfer 6. Each area was split into a fovea band (0.5–1.5°, the central task) and a periphery band (3–7.5°, the noise annulus), keeping vertices with pRF R² &gt; 10%. S9 has no pRF data, so the Benson 2014 template within Wang V1–V3 stands in for that subject. The "Template" tab uses the template for everyone.</p>
+    <div class="tldr"><b>TL;DR:</b> foveal V1–V3 rise with load (p = .003–.007). Peripheral V1–V3 all trend down, but only V2 reaches p &lt; .05, and it doesn't survive FDR. Subject pRFs reproduce the template result.</div>
+    <div class="tabs" id="visTabs" role="group" aria-label="Eccentricity source">
+      <button type="button" data-src="prf" aria-pressed="true">Subject pRF (S9: template)</button>
+      <button type="button" data-src="wang2015" aria-pressed="false">Template (Benson 2014)</button>
+    </div>
+    <div class="multiples three" id="visPanels"></div>
+    <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Fovea 0.5–1.5°</span><span><i class="key-line" style="background:var(--series-2)"></i>Periphery 3–7.5°</span></div>
+    <details><summary>Table view</summary><div id="visTable"></div></details>
+  </section>
+
+  <section class="card" id="models">
+    <h2>6 · Load-function models: monotonic vs flat</h2>
+    <p class="did"><b>What was done:</b> the 7 load levels were refit with four models, with load rescaled to 0–1 across 10%→46%: <b>flat</b> (1 parameter); <b>linear</b> (2); <b>saturating exponential</b> a + s·(1−e<sup>−x/τ</sup>), a compressive function that becomes linear as τ grows (3); and <b>Naka-Rushton</b> a + s·xⁿ/(xⁿ+c50ⁿ) (4). The amplitude s can be negative, so decreases count too. Nonlinear parameters were grid-searched, and amplitude and offset solved by least squares. Models were compared with AICc, which penalizes parameters and matters with only 7 points. The fits ran (a) at every fsaverage vertex in each subject and (b) on each subject's ROI average and on the group-mean curve.</p>
+    <div class="tldr"><b>TL;DR:</b> a load function beats a flat line decisively in IPS0–IPS4/5, SPL1, FEF, LO and dorsal attention A (summed ΔAICc 33–64; 5–8 of 8 subjects each). About 60–75% of their vertices prefer a load function, and about 95% increase with load. The winning shape is <b>linear, not compressive</b>: even the group-mean curves choose linear (exponential τ runs to the linear limit). Simulation shows 7 levels can reliably detect a load function, but can't separate compressive from linear unless noise is low, and never select Naka-Rushton.</div>
+    <div class="tabs" id="modelTabs" role="group" aria-label="ROI set">
+      <button type="button" data-set="wang2015" aria-pressed="true">Wang 2015</button>
+      <button type="button" data-set="prf" aria-pressed="false">Subject pRF V1–V3</button>
+      <button type="button" data-set="schaeferNet" aria-pressed="false">Schaefer: networks</button>
+      <button type="button" data-set="glasser2016" aria-pressed="false">Glasser HCP-MMP1</button>
+    </div>
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <h3>ROI averages: evidence for a load function</h3>
+        <p class="panel-stat">AICc(flat) − AICc(best load model), summed over subjects. Above 0, a load function wins; bar color is the winning model; n/8 is how many subjects individually prefer a load function.</p>
+        <div id="modelBars"></div>
+      </div>
+      <div>
+        <h3>Vertex-wise: best model per vertex</h3>
+        <p class="panel-stat">Share of each ROI's vertices best fit by each model, averaged over subjects and hemispheres. Same ROI order as on the left.</p>
+        <div id="vertBars"></div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="key-rect" style="background:var(--null)"></i>Flat</span>
+      <span><i class="key-rect" style="background:var(--series-1)"></i>Linear</span>
+      <span><i class="key-rect" style="background:var(--series-2)"></i>Saturating exponential</span>
+      <span><i class="key-rect" style="background:var(--series-3)"></i>Naka-Rushton</span>
+    </div>
+    <h3>How well can 7 load levels recover the true model? (simulation, amplitude 1% signal)</h3>
+    <div id="recovery"></div>
+    <details><summary>Table view (model comparison)</summary><div id="modelTable"></div></details>
+  </section>
+
   <section class="card notes">
     <h2>Caveats &amp; provenance</h2>
     <ul>
-      <li><strong>Load is confounded with run position.</strong> Each run has a single ratio, and each subject's ratio order repeats one shuffle, so slow drift within a session could look like a load effect. The existing GLMs can't separate these. Fixing it needs a refit with run position as a covariate.</li>
-      <li><strong>S12 and S13</strong> stay at about 80% correct at every ratio, even after the key-reversal correction. Use the subject filter to check that the results hold without them.</li>
-      <li><strong>Foveal increases</strong> could partly reflect stimulus or motor differences between ratios (the red/blue mix, the number of responses), not attention alone.</li>
-      <li><strong>Eccentricity bands</strong> come from the Benson 2014 template, not from subject pRFs. Wang IPS4 and IPS5 are merged because IPS5 is only 18–53 vertices.</li>
-      <li><strong>Units:</strong> FS-FAST betas after intensity normalization to a mean of 100, so they are roughly % signal change relative to fixation.</li>
-      <li><strong>Checks:</strong> the CAM.par conditions match the behavioral ratio in <span id="nRunsNote"></span> of <span id="nRunsNote2"></span> runs. The Wang label order was checked against fsaverage anatomy and its overlap with Benson V1–V3. Code is in <code>scripts/</code>, and the SCC pipeline is described in the README.</li>
+      <li><strong>Load is confounded with run position.</strong> Each run has one ratio, and each subject's ratio order repeats a single shuffle, so slow drift within a session could look like a load effect. Separating the two needs a GLM refit with run position as a covariate. That's the next step.</li>
+      <li><strong>Behavior drives some of the 46% dip.</strong> At 46%, subjects miss about half the changes, which may mean they disengage. That would explain why the attention ROIs peak at 44%.</li>
+      <li><strong>Foveal increases</strong> could partly reflect stimulus or motor differences between ratios (the red/blue mix, the number of responses).</li>
+      <li><strong>Model comparison power:</strong> with 7 levels and per-subject noise, AICc is conservative. Foveal V1–V3 pass the group slope test but are "flat" by per-subject AICc, because the effect is consistent across subjects but small relative to each subject's noise. Vertex maps (ΔAICc, τ, number of subjects with ΔAICc &gt; 2) are saved as fsaverage <code>.mgz</code> files on the cluster.</li>
+      <li><strong>Units:</strong> FS-FAST betas after normalization to a mean of 100, so roughly % signal change relative to fixation. Wang IPS4 and IPS5 are merged (IPS5 is only 18–53 vertices).</li>
+      <li><strong>Code:</strong> <code>scripts/</code> contains the label audit, ROI extraction, pRF resampling, model fits, recovery simulation and this page's data build.</li>
     </ul>
   </section>
 </div>
@@ -212,56 +273,37 @@ const D = window.CAM_DATA;
 const NS = "http://www.w3.org/2000/svg";
 const R = D.ratios;
 const RLAB = R.map(r => String(Math.round(r * 100)));
-const LOAD_SPAN = R[R.length - 1] - R[0]; // 0.36: slope -> fitted 10%->46% change
-const state = { set: "all8", atlas: "wang2015", sel: "wang2015|IPS2" };
-const ATLAS_NAME = { wang2015: "Wang 2015", glasser2016: "Glasser HCP-MMP1", schaefer2018: "Schaefer 2018" };
+const LOAD_SPAN = R[R.length - 1] - R[0];
+const SET = "all8";
+const ATLAS_NAME = { wang2015: "Wang 2015", glasser2016: "Glasser HCP-MMP1", schaefer2018: "Schaefer 2018", prf: "subject pRF" };
+const MODELS = ["flat", "linear", "exp", "NR"];
+const MODEL_NAME = { flat: "Flat", linear: "Linear", exp: "Saturating exp", NR: "Naka-Rushton" };
+const state = { atlas: "wang2015", sel: "wang2015|IPS2", vis: "prf", mset: "wang2015" };
 const qTheme = new URLSearchParams(location.search).get("theme");
 if (qTheme === "light" || qTheme === "dark") document.documentElement.dataset.theme = qTheme;
 
 // ---------- helpers ----------
-function el(tag, attrs = {}, parent) {
-  const n = document.createElementNS(NS, tag);
-  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
-  if (parent) parent.appendChild(n);
-  return n;
-}
-function text(parent, x, y, str, attrs = {}) {
-  const t = el("text", { x, y, ...attrs }, parent);
-  t.textContent = str;
-  return t;
-}
-function h(tag, props = {}, parent) {
-  const n = document.createElement(tag);
-  for (const [k, v] of Object.entries(props)) {
-    if (k === "text") n.textContent = v; else n.setAttribute(k, v);
-  }
-  if (parent) parent.appendChild(n);
-  return n;
-}
+function el(tag, attrs = {}, parent) { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (parent) parent.appendChild(n); return n; }
+function text(parent, x, y, str, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = str; return t; }
+function h(tag, props = {}, parent) { const n = document.createElement(tag); for (const [k, v] of Object.entries(props)) { if (k === "text") n.textContent = v; else n.setAttribute(k, v); } if (parent) parent.appendChild(n); return n; }
 function niceTicks(lo, hi, n = 4) {
-  const span = hi - lo || 1;
-  const step0 = span / n;
-  const mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const span = hi - lo || 1, mag = Math.pow(10, Math.floor(Math.log10(span / n)));
   const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n + 0.5);
-  const out = [];
-  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10));
+  const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10));
   return { ticks: out, step };
 }
-function fmt(v, d = 2) { const s = v.toFixed(d); return v > 0 ? "+" + s : s.replace("-", "−"); }
-function fmtP(p) { return p < 0.001 ? "< .001" : p.toFixed(3).replace(/^0/, ""); }
+const fmt = (v, d = 2) => { const s = v.toFixed(d); return v > 0 ? "+" + s : s.replace("-", "−"); };
+const fmtP = p => p < 0.001 ? "< .001" : p.toFixed(3).replace(/^0/, "");
 const css = name => getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(name).trim();
+const MODEL_COLOR = () => ({ flat: css("--null"), linear: css("--series-1"), exp: css("--series-2"), NR: css("--series-3") });
 
-// tooltip
 const tip = document.getElementById("tip");
 function showTip(evt, head, rows) {
-  tip.replaceChildren();
-  h("div", { class: "t-head", text: head }, tip);
+  tip.replaceChildren(); h("div", { class: "t-head", text: head }, tip);
   for (const r of rows) {
-    const row = h("div", { class: "t-row" }, tip);
-    const k = h("span", { class: "k" }, row);
+    const row = h("div", { class: "t-row" }, tip), k = h("span", { class: "k" }, row);
     if (r.color) { const sw = h("i", { class: "key-line" }, k); sw.style.background = r.color; }
-    k.appendChild(document.createTextNode(r.label));
-    h("strong", { text: r.value }, row);
+    k.appendChild(document.createTextNode(r.label)); h("strong", { text: r.value }, row);
   }
   tip.style.display = "block";
   const pad = 14, w = tip.offsetWidth, ht = tip.offsetHeight;
@@ -270,29 +312,36 @@ function showTip(evt, head, rows) {
   if (y + ht > window.innerHeight - 8) y = evt.clientY - ht - pad;
   tip.style.left = x + "px"; tip.style.top = y + "px";
 }
-function hideTip() { tip.style.display = "none"; }
+const hideTip = () => { tip.style.display = "none"; };
+function bindTip(node, head, rowsFn) {
+  node.addEventListener("pointermove", e => showTip(e, head, rowsFn()));
+  node.addEventListener("pointerleave", hideTip);
+  node.addEventListener("focus", () => { const b = node.getBoundingClientRect(); showTip({ clientX: b.left + 120, clientY: b.bottom }, head, rowsFn()); });
+  node.addEventListener("blur", hideTip);
+}
+function table(container, head, rows) {
+  container.replaceChildren(); const t = h("table", {}, container);
+  const tr = h("tr", {}, h("thead", {}, t)); head.forEach(c => h("th", { text: c }, tr));
+  const tb = h("tbody", {}, t); rows.forEach(r => { const row = h("tr", {}, tb); r.forEach(c => h("td", { text: c }, row)); });
+  return t;
+}
 
-// ---------- line chart (ordinal x, one or more series) ----------
-// series: [{name, color, band, pts:[{m,se}], ctx:[[...]] (optional context lines)}]
+// ---------- line chart (ordinal x) ----------
 function lineChart(container, { series, yDomain, yLabel, W = 300, H = 190, unit = "", endLabels = false, decimals = 2 }) {
   container.replaceChildren();
   const M = { t: yLabel ? 22 : 10, r: endLabels ? 56 : 12, b: 26, l: 40 };
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" }, container);
   const iw = W - M.l - M.r, ih = H - M.t - M.b;
   const x = i => M.l + (i / (R.length - 1)) * iw;
-  const [y0, y1] = yDomain;
-  const y = v => M.t + ih - ((v - y0) / (y1 - y0)) * ih;
-  const { ticks } = niceTicks(y0, y1, 4);
-  for (const tv of ticks) {
+  const [y0, y1] = yDomain, y = v => M.t + ih - ((v - y0) / (y1 - y0)) * ih;
+  for (const tv of niceTicks(y0, y1, 4).ticks) {
     el("line", { x1: M.l, x2: M.l + iw, y1: y(tv), y2: y(tv), stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg);
     text(svg, M.l - 6, y(tv) + 3.5, (Math.abs(tv) < 1e-9 ? "0" : String(+tv.toFixed(2))).replace("-", "−"), { "text-anchor": "end" });
   }
   R.forEach((r, i) => text(svg, x(i), H - 8, RLAB[i], { "text-anchor": "middle" }));
   if (yLabel) text(svg, M.l - 34, 10, yLabel, { "text-anchor": "start", "font-size": 10 });
   const path = arr => arr.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
-  for (const s of series) {
-    if (s.ctx) for (const c of s.ctx) el("path", { d: path(c), fill: "none", stroke: css("--context"), "stroke-width": 1, "stroke-linejoin": "round" }, svg);
-  }
+  for (const s of series) if (s.ctx) for (const c of s.ctx) el("path", { d: path(c), fill: "none", stroke: css("--context"), "stroke-width": 1, "stroke-linejoin": "round" }, svg);
   for (const s of series) {
     const up = s.pts.map(p => p.m + p.se), dn = s.pts.map(p => p.m - p.se);
     const band = up.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("") +
@@ -304,21 +353,14 @@ function lineChart(container, { series, yDomain, yLabel, W = 300, H = 190, unit 
   }
   if (endLabels) {
     const ends = series.map(s => y(s.pts[s.pts.length - 1].m));
-    const clear = ends.every((a, i) => ends.every((b, j) => i === j || Math.abs(a - b) >= 13));
-    if (clear) series.forEach((s, i) => text(svg, x(R.length - 1) + 8, ends[i] + 4, s.name, { class: "ink2", "font-size": 11 }));
+    if (ends.every((a, i) => ends.every((b, j) => i === j || Math.abs(a - b) >= 13)))
+      series.forEach((s, i) => text(svg, x(R.length - 1) + 8, ends[i] + 4, s.name, { class: "ink2", "font-size": 11 }));
   }
-  // crosshair + hit layer
   const cross = el("line", { y1: M.t, y2: M.t + ih, stroke: css("--axis"), "stroke-width": 1, visibility: "hidden" }, svg);
   const hit = el("rect", { x: M.l - 10, y: M.t, width: iw + 20, height: ih, fill: "transparent", tabindex: 0 }, svg);
-  const idxFromEvt = evt => {
-    const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
-    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
-    return Math.max(0, Math.min(R.length - 1, Math.round(((p.x - M.l) / iw) * (R.length - 1))));
-  };
-  const show = (evt, i) => {
-    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
-    showTip(evt, `Ratio ${RLAB[i]}%`, series.map(s => ({ label: s.name, color: s.color, value: `${s.pts[i].m.toFixed(decimals)}${unit} ± ${s.pts[i].se.toFixed(decimals)}` })));
-  };
+  const idxFromEvt = evt => { const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY; const p = pt.matrixTransform(svg.getScreenCTM().inverse()); return Math.max(0, Math.min(R.length - 1, Math.round(((p.x - M.l) / iw) * (R.length - 1)))); };
+  const show = (evt, i) => { cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    showTip(evt, `Ratio ${RLAB[i]}%`, series.map(s => ({ label: s.name, color: s.color, value: `${s.pts[i].m.toFixed(decimals)}${unit} ± ${s.pts[i].se.toFixed(decimals)}` }))); };
   hit.addEventListener("pointermove", e => show(e, idxFromEvt(e)));
   hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
   hit.addEventListener("focus", () => { const b = hit.getBoundingClientRect(); show({ clientX: b.right, clientY: b.top }, R.length - 1); });
@@ -326,150 +368,116 @@ function lineChart(container, { series, yDomain, yLabel, W = 300, H = 190, unit 
   svg.setAttribute("aria-label", series.map(s => `${s.name}: ` + s.pts.map((p, i) => `${RLAB[i]}% ${p.m.toFixed(decimals)}`).join(", ")).join("; "));
 }
 
-function table(container, head, rows) {
-  container.replaceChildren();
-  const t = h("table", {}, container);
-  const tr = h("tr", {}, h("thead", {}, t));
-  head.forEach(c => h("th", { text: c }, tr));
-  const tb = h("tbody", {}, t);
-  rows.forEach(r => { const row = h("tr", {}, tb); r.forEach(c => h("td", { text: c }, row)); });
-}
-
 const curve = key => D.curves[key];
-const grp = key => curve(key).group[state.set];
-const slopeRow = (atlas, roi) => D.slopes.find(s => s.set === state.set && s.atlas === atlas && s.roi === roi);
-const subjLines = key => D.sets[state.set].map(s => curve(key).subjects[s]);
+const grp = key => curve(key).group[SET];
+const slopeRow = (atlas, roi) => D.slopes.find(s => s.set === SET && s.atlas === atlas && s.roi === roi);
+const subjLines = key => D.sets[SET].map(s => curve(key).subjects[s]);
+const domainOf = (keys, pad = 0.5, zero = true) => { let lo = Infinity, hi = -Infinity; for (const k of keys) for (const p of grp(k)) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); } return [zero ? Math.min(0, Math.floor(lo / pad) * pad) : Math.floor(lo / pad) * pad, Math.ceil(hi / pad) * pad]; };
 
 // ---------- tiles ----------
 function renderTiles() {
   const box = document.getElementById("tiles"); box.replaceChildren();
-  const ips2 = slopeRow("wang2015", "IPS2");
-  const beh = D.behavior.group[state.set];
+  const ips2 = slopeRow("wang2015", "IPS2"), sc = D.behavior.score.group, rs = D.behavior.resp.group;
   const dorsal = ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"].map(r => slopeRow("wang2015", r));
   const nSig = dorsal.filter(s => s.q < 0.05 && s.slope > 0).length;
-  const dmn = slopeRow("schaefer2018", "DefaultA");
+  const mods = D.models.rois.filter(m => m.atlas === "wang2015" && ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"].includes(m.roi));
+  const nLin = mods.filter(m => m.dSummed > 0 && m.bestSummed === "linear").length;
   const tiles = [
     { hero: true, label: "IPS2 load effect (fitted 10% → 46%)", value: fmt(ips2.slope * LOAD_SPAN) + "%", note: `t(${ips2.n - 1}) = ${ips2.t.toFixed(1)}, p ${fmtP(ips2.p)} · signal change vs fixation` },
-    { label: "Task accuracy, 30% → 46% ratio", value: `${Math.round(beh[1].m)}% → ${Math.round(beh[6].m)}%`, note: "the manipulation works" },
+    { label: "Task score, 30% → 46% ratio", value: `${Math.round(sc[1].m)}% → ${Math.round(sc[6].m)}%`, note: `changes detected ${Math.round(rs[1].m)}% → ${Math.round(rs[6].m)}%` },
     { label: "Dorsal ROIs increasing with load", value: `${nSig} / ${dorsal.length}`, note: "IPS0–IPS4/5, SPL1, FEF · q < .05" },
-    { label: "Default mode A load effect", value: fmt(dmn.slope * LOAD_SPAN) + "%", note: `t(${dmn.n - 1}) = ${dmn.t.toFixed(1)}, p ${fmtP(dmn.p)}` },
+    { label: "Best load function (dorsal ROIs)", value: `Linear ${nLin} / ${mods.length}`, note: "summed AICc beats flat; compressive not preferred" },
     { label: "Condition labels verified", value: `${D.behavior.nRuns} / ${D.behavior.nRuns}`, note: "CAM.par vs behavioral ratio" },
   ];
-  for (const t of tiles) {
-    const d = h("div", { class: "tile" + (t.hero ? " hero" : "") }, box);
-    h("div", { class: "label", text: t.label }, d);
-    h("div", { class: "value", text: t.value }, d);
-    h("div", { class: "note", text: t.note }, d);
-  }
+  for (const t of tiles) { const d = h("div", { class: "tile" + (t.hero ? " hero" : "") }, box); h("div", { class: "label", text: t.label }, d); h("div", { class: "value", text: t.value }, d); h("div", { class: "note", text: t.note }, d); }
+  document.getElementById("auditN").textContent = D.behavior.nRuns;
+  document.getElementById("auditN2").textContent = D.behavior.nRuns;
 }
 
-// ---------- IPS small multiples ----------
+// ---------- behavior ----------
+function renderBeh() {
+  const B = D.behavior;
+  lineChart(document.getElementById("behScore"), { series: [{ name: "Score", color: css("--series-1"), band: css("--band"), pts: B.score.group, ctx: D.subjects.map(s => B.score.subjects[s]) }], yDomain: [0, 100], W: 420, H: 240, unit: "%", yLabel: "% correct", decimals: 1 });
+  lineChart(document.getElementById("behSplit"), { series: [
+    { name: "Detected", color: css("--series-1"), band: css("--band"), pts: B.resp.group },
+    { name: "Accuracy", color: css("--series-2"), band: css("--band-2"), pts: B.acc.group },
+  ], yDomain: [0, 100], W: 420, H: 240, unit: "%", yLabel: "%", decimals: 1, endLabels: true });
+  const rows = [];
+  for (const s of D.subjects) rows.push([`S${s}${B.keyFlipped.includes(s) ? " (keys flipped)" : ""}`, ...R.map((_, i) => `${B.score.subjects[s][i].toFixed(0)} / ${B.resp.subjects[s][i].toFixed(0)} / ${B.acc.subjects[s][i].toFixed(0)}`)]);
+  rows.push(["Mean", ...R.map((_, i) => `${B.score.group[i].m.toFixed(0)} / ${B.resp.group[i].m.toFixed(0)} / ${B.acc.group[i].m.toFixed(0)}`)]);
+  table(document.getElementById("behTable"), ["Score / detected / accuracy (%)", ...RLAB.map(l => l + "%")], rows);
+}
+
+// ---------- IPS ----------
 const DORSAL = ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"];
 function renderIps() {
   const box = document.getElementById("ipsPanels"); box.replaceChildren();
-  let lo = Infinity, hi = -Infinity;
-  for (const r of DORSAL) for (const p of grp("wang2015|" + r)) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); }
-  const dom = [Math.min(0, Math.floor(lo * 2) / 2), Math.ceil(hi * 2) / 2];
+  const dom = domainOf(DORSAL.map(r => "wang2015|" + r));
   for (const r of DORSAL) {
-    const s = slopeRow("wang2015", r);
-    const p = h("div", {}, box);
+    const s = slopeRow("wang2015", r), p = h("div", {}, box);
     h("p", { class: "panel-title", text: r }, p);
     h("p", { class: "panel-stat", text: `${fmt(s.slope * LOAD_SPAN)}% fitted · t = ${s.t.toFixed(1)}, q ${fmtP(s.q)}` }, p);
-    const c = h("div", {}, p);
-    lineChart(c, { series: [{ name: r, color: css("--series-1"), band: css("--band"), pts: grp("wang2015|" + r) }], yDomain: dom, W: 240, H: 160, unit: "%", yLabel: "% signal" });
+    lineChart(h("div", {}, p), { series: [{ name: r, color: css("--series-1"), band: css("--band"), pts: grp("wang2015|" + r) }], yDomain: dom, W: 240, H: 160, unit: "%", yLabel: "% signal" });
   }
   table(document.getElementById("ipsTable"), ["ROI", ...RLAB.map(l => l + "%"), "Fitted effect", "t", "q"],
     DORSAL.map(r => { const s = slopeRow("wang2015", r); return [r, ...grp("wang2015|" + r).map(p => `${p.m.toFixed(2)} ± ${p.se.toFixed(2)}`), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.q)]; }));
 }
 
-// ---------- behavior ----------
-function renderBeh() {
-  const g = D.behavior.group[state.set];
-  const ctx = D.sets[state.set].map(s => D.behavior.subjects[s]);
-  lineChart(document.getElementById("behChart"), {
-    series: [{ name: "Group mean", color: css("--series-1"), band: css("--band"), pts: g, ctx }],
-    yDomain: [0, 100], W: 380, H: 260, unit: "%", yLabel: "% correct", decimals: 1,
-  });
-  table(document.getElementById("behTable"), ["Subject", ...RLAB.map(l => l + "%")],
-    [...D.sets[state.set].map(s => ["S" + s, ...D.behavior.subjects[s].map(v => v.toFixed(1))]),
-     ["Mean ± SEM", ...g.map(p => `${p.m.toFixed(1)} ± ${p.se.toFixed(1)}`)]]);
-}
-
-// ---------- visual push-pull ----------
+// ---------- visual ----------
 function renderVis() {
   const box = document.getElementById("visPanels"); box.replaceChildren();
-  const areas = ["V1", "V2", "V3"];
-  let lo = Infinity, hi = -Infinity;
-  for (const a of areas) for (const b of ["fovea", "periph"]) for (const p of grp(`wang2015|${a}_${b}`)) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); }
-  const dom = [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2];
-  const rows = [];
+  const A = state.vis, areas = ["V1", "V2", "V3"], rows = [];
+  const dom = domainOf(areas.flatMap(a => [`${A}|${a}_fovea`, `${A}|${a}_periph`]), 0.5, false);
   for (const a of areas) {
-    const f = slopeRow("wang2015", a + "_fovea"), pe = slopeRow("wang2015", a + "_periph");
-    const p = h("div", {}, box);
+    const f = slopeRow(A, a + "_fovea"), pe = slopeRow(A, a + "_periph"), p = h("div", {}, box);
     h("p", { class: "panel-title", text: a }, p);
     h("p", { class: "panel-stat", text: `fovea ${fmt(f.slope * LOAD_SPAN)}% (p ${fmtP(f.p)}) · periph ${fmt(pe.slope * LOAD_SPAN)}% (p ${fmtP(pe.p)})` }, p);
-    const c = h("div", {}, p);
-    lineChart(c, { series: [
-      { name: "Fovea", color: css("--series-1"), band: css("--band"), pts: grp(`wang2015|${a}_fovea`) },
-      { name: "Periph", color: css("--series-2"), band: css("--band-2"), pts: grp(`wang2015|${a}_periph`) },
-    ], yDomain: dom, W: 300, H: 200, unit: "%", endLabels: true, yLabel: "% signal" });
-    for (const [b, s] of [["fovea", f], ["periph", pe]])
-      rows.push([`${a} ${b}`, ...grp(`wang2015|${a}_${b}`).map(q => q.m.toFixed(2)), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.p)]);
+    lineChart(h("div", {}, p), { series: [
+      { name: "Fovea", color: css("--series-1"), band: css("--band"), pts: grp(`${A}|${a}_fovea`) },
+      { name: "Periph", color: css("--series-2"), band: css("--band-2"), pts: grp(`${A}|${a}_periph`) },
+    ], yDomain: dom, W: 320, H: 210, unit: "%", endLabels: true, yLabel: "% signal" });
+    for (const [b, s] of [["fovea", f], ["periph", pe]]) rows.push([`${a} ${b}`, ...grp(`${A}|${a}_${b}`).map(q => q.m.toFixed(2)), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.p), fmtP(s.q)]);
   }
-  table(document.getElementById("visTable"), ["ROI", ...RLAB.map(l => l + "%"), "Fitted effect", "t", "p"], rows);
+  table(document.getElementById("visTable"), ["ROI", ...RLAB.map(l => l + "%"), "Fitted effect", "t", "p", "q"], rows);
 }
 
 // ---------- forest ----------
-function forestRows() {
-  let rows = D.slopes.filter(s => s.set === state.set);
-  if (state.atlas === "schaeferNet") rows = rows.filter(s => s.atlas === "schaefer2018" && !s.roi.includes("_"));
-  else if (state.atlas === "schaeferSub") rows = rows.filter(s => s.atlas === "schaefer2018" && s.roi.includes("_"));
-  else rows = rows.filter(s => s.atlas === state.atlas);
-  return rows.slice().sort((a, b) => b.slope - a.slope);
+function atlasFilter(rows, key) {
+  if (key === "schaeferNet") return rows.filter(s => s.atlas === "schaefer2018" && !s.roi.includes("_"));
+  if (key === "schaeferSub") return rows.filter(s => s.atlas === "schaefer2018" && s.roi.includes("_"));
+  return rows.filter(s => s.atlas === key);
 }
+const forestRows = () => atlasFilter(D.slopes.filter(s => s.set === SET), state.atlas).slice().sort((a, b) => b.slope - a.slope);
 function renderForest() {
-  const box = document.getElementById("forest"); box.replaceChildren();
-  const rows = forestRows();
-  const rowH = 22, W = 560, M = { t: 18, r: 16, b: 26, l: 150 };
-  const H = M.t + rows.length * rowH + M.b;
+  const box = document.getElementById("forestChart"); box.replaceChildren();
+  const rows = forestRows(), rowH = 22, W = 560, M = { t: 18, r: 16, b: 26, l: 150 };
+  const H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Load effect by ROI with 95% confidence intervals" }, box);
-  const iw = W - M.l - M.r;
   let lo = 0, hi = 0;
-  for (const r of rows) {
-    lo = Math.min(lo, r.lo * LOAD_SPAN, ...Object.values(r.subj).map(v => v * LOAD_SPAN));
-    hi = Math.max(hi, r.hi * LOAD_SPAN, ...Object.values(r.subj).map(v => v * LOAD_SPAN));
-  }
-  const { ticks } = niceTicks(lo, hi, 6);
-  lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
+  for (const r of rows) { const sv = Object.values(r.subj).map(v => v * LOAD_SPAN); lo = Math.min(lo, r.lo * LOAD_SPAN, ...sv); hi = Math.max(hi, r.hi * LOAD_SPAN, ...sv); }
+  const { ticks, step } = niceTicks(lo, hi, 6); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
   const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
   for (const tv of ticks) {
     el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg);
-    text(svg, x(tv), H - 8, (Math.abs(tv) < 1e-9 ? "0" : fmt(tv, Math.abs(ticks[1] - ticks[0]) < 0.5 ? 2 : 1)) , { "text-anchor": "middle" });
+    text(svg, x(tv), H - 8, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, step < 0.5 ? 2 : 1), { "text-anchor": "middle" });
   }
   text(svg, M.l + iw, M.t - 6, "% signal change, fitted 10% → 46%", { "text-anchor": "end", "font-size": 10 });
   rows.forEach((r, i) => {
-    const cy = M.t + i * rowH + rowH / 2;
-    const sig = r.q < 0.05;
+    const cy = M.t + i * rowH + rowH / 2, sig = r.q < 0.05, key = `${r.atlas}|${r.roi}`;
     const color = sig ? (r.slope > 0 ? css("--series-1") : css("--neg")) : css("--text-muted");
-    const g = el("g", { class: "forest-row" + (state.sel === `${r.atlas}|${r.roi}` ? " sel" : ""), tabindex: 0, role: "button", "aria-label": `${r.roi}: ${fmt(r.slope * LOAD_SPAN)} percent, q ${fmtP(r.q)}` }, svg);
+    const g = el("g", { class: "row-g click" + (state.sel === key ? " sel" : ""), tabindex: 0, role: "button", "aria-label": `${r.roi}: ${fmt(r.slope * LOAD_SPAN)} percent, q ${fmtP(r.q)}` }, svg);
     el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
     text(g, M.l - 10, cy + 4, r.roi, { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
     for (const v of Object.values(r.subj)) el("circle", { cx: x(v * LOAD_SPAN), cy, r: 2.5, fill: css("--context") }, g);
     el("line", { x1: x(r.lo * LOAD_SPAN), x2: x(r.hi * LOAD_SPAN), y1: cy, y2: cy, stroke: color, "stroke-width": 2, "stroke-linecap": "round" }, g);
     el("circle", { cx: x(r.slope * LOAD_SPAN), cy, r: 4.5, fill: sig ? color : css("--surface-1"), stroke: sig ? css("--surface-1") : color, "stroke-width": 2 }, g);
-    const key = `${r.atlas}|${r.roi}`;
-    const tipRows = () => [
+    bindTip(g, r.roi, () => [
       { label: "Fitted effect", value: fmt(r.slope * LOAD_SPAN) + "%" },
       { label: "95% CI", value: `${fmt(r.lo * LOAD_SPAN)} to ${fmt(r.hi * LOAD_SPAN)}` },
       { label: `t(${r.n - 1})`, value: r.t.toFixed(2) },
       { label: "p / q (FDR)", value: `${fmtP(r.p)} / ${fmtP(r.q)}` },
       { label: "Mean Spearman ρ", value: r.rho.toFixed(2) },
-      { label: "Vertices lh / rh", value: curve(key) ? `${curve(key).nVert.lh} / ${curve(key).nVert.rh}` : "–" },
-    ];
-    g.addEventListener("pointermove", e => showTip(e, r.roi, tipRows()));
-    g.addEventListener("pointerleave", hideTip);
-    g.addEventListener("focus", () => { const b = g.getBoundingClientRect(); showTip({ clientX: b.left + 160, clientY: b.bottom }, r.roi, tipRows()); });
-    g.addEventListener("blur", hideTip);
+    ]);
     const pick = () => { state.sel = key; renderForest(); renderDetail(); };
     g.addEventListener("click", pick);
     g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
@@ -478,46 +486,97 @@ function renderForest() {
     rows.map(r => [r.roi, fmt(r.slope * LOAD_SPAN), `${fmt(r.lo * LOAD_SPAN)} to ${fmt(r.hi * LOAD_SPAN)}`, r.t.toFixed(2), fmtP(r.p), fmtP(r.q), r.rho.toFixed(2), r.beta.toFixed(2)]));
 }
 function renderDetail() {
-  const key = D.curves[state.sel] ? state.sel : "wang2015|IPS2";
-  const c = curve(key), [atlas, roi] = key.split("|");
-  const s = slopeRow(atlas, roi);
+  const key = D.curves[state.sel] ? state.sel : "wang2015|IPS2", [atlas, roi] = key.split("|"), s = slopeRow(atlas, roi);
   document.getElementById("detailTitle").textContent = `${roi} · ${ATLAS_NAME[atlas] || atlas}`;
   document.getElementById("detailStat").textContent = `${fmt(s.slope * LOAD_SPAN)}% fitted · t(${s.n - 1}) = ${s.t.toFixed(2)}, p ${fmtP(s.p)}, q ${fmtP(s.q)}`;
-  const ctx = subjLines(key);
-  let lo = Math.min(0, ...ctx.flat()), hi = Math.max(...ctx.flat());
-  lineChart(document.getElementById("detail"), {
-    series: [{ name: roi, color: css("--series-1"), band: css("--band"), pts: grp(key), ctx }],
-    yDomain: [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2], W: 380, H: 250, unit: "%", yLabel: "% signal",
-  });
+  const ctx = subjLines(key), lo = Math.min(0, ...ctx.flat()), hi = Math.max(...ctx.flat());
+  lineChart(document.getElementById("detail"), { series: [{ name: roi, color: css("--series-1"), band: css("--band"), pts: grp(key), ctx }], yDomain: [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2], W: 380, H: 250, unit: "%", yLabel: "% signal" });
 }
 
-function renderAll() {
-  renderTiles(); renderIps(); renderBeh(); renderVis(); renderForest(); renderDetail();
-  document.getElementById("nRunsNote").textContent = D.behavior.nRuns;
-  document.getElementById("nRunsNote2").textContent = D.behavior.nRuns;
+// ---------- models ----------
+function modelRows() {
+  let rows = atlasFilter(D.models.rois, state.mset);
+  if (state.mset === "wang2015") rows = rows.filter(r => !/_(fovea|periph)$/.test(r.roi));
+  return rows.slice().sort((a, b) => b.dSummed - a.dSummed);
+}
+function renderModels() {
+  const rows = modelRows(), C = MODEL_COLOR(), rowH = 20;
+  // left: summed dAICc bars
+  { const box = document.getElementById("modelBars"); box.replaceChildren();
+    const W = 520, M = { t: 16, r: 56, b: 26, l: 110 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Summed AICc evidence for a load function by ROI" }, box);
+    let lo = Math.min(0, ...rows.map(r => r.dSummed)), hi = Math.max(0, ...rows.map(r => r.dSummed));
+    const { ticks } = niceTicks(lo, hi, 5); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
+    const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
+    for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - 8, String(tv).replace("-", "−"), { "text-anchor": "middle" }); }
+    text(svg, x(hi), M.t - 6, "ΔAICc (flat − best), summed over 8 subjects", { "text-anchor": "end", "font-size": 10 });
+    rows.forEach((r, i) => {
+      const cy = M.t + i * rowH + rowH / 2, win = r.dSummed > 0 ? r.bestSummed : "flat";
+      const nLoad = 8 - r.nbest.flat;
+      const g = el("g", { class: "row-g", tabindex: 0 }, svg);
+      el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
+      text(g, M.l - 10, cy + 4, r.roi, { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
+      const x0 = x(0), x1 = x(r.dSummed), bw = Math.max(1, Math.abs(x1 - x0)), bx = Math.min(x0, x1), th = 12;
+      const rr = Math.min(4, bw / 2), pos = r.dSummed >= 0;
+      // 4px rounded data-end, square at baseline
+      const d = pos ? `M${bx},${cy - th / 2}H${bx + bw - rr}Q${bx + bw},${cy - th / 2} ${bx + bw},${cy - th / 2 + rr}V${cy + th / 2 - rr}Q${bx + bw},${cy + th / 2} ${bx + bw - rr},${cy + th / 2}H${bx}Z`
+                    : `M${bx + bw},${cy - th / 2}H${bx + rr}Q${bx},${cy - th / 2} ${bx},${cy - th / 2 + rr}V${cy + th / 2 - rr}Q${bx},${cy + th / 2} ${bx + rr},${cy + th / 2}H${bx + bw}Z`;
+      el("path", { d, fill: C[win] }, g);
+      text(g, pos ? x1 + 6 : x0 + 6, cy + 4, `${nLoad}/8`, { "text-anchor": "start", "font-size": 10.5 });
+      bindTip(g, r.roi, () => [
+        { label: "Summed ΔAICc vs flat", value: r.dSummed.toFixed(1) },
+        { label: "Best (summed)", value: MODEL_NAME[r.bestSummed] },
+        { label: "Best (group-mean curve)", value: `${MODEL_NAME[r.bestGroup]} (Δ ${r.dGroup.toFixed(1)})` },
+        { label: "Subjects best: flat/lin/exp/NR", value: MODELS.map(m => r.nbest[m]).join(" / ") },
+        { label: "Group exp τ (10 = linear limit)", value: r.tau.toFixed(2) },
+      ]);
+    });
+  }
+  // right: vertex-wise segmented bars
+  { const box = document.getElementById("vertBars"); box.replaceChildren();
+    const W = 520, M = { t: 16, r: 56, b: 26, l: 110 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Fraction of vertices best fit by each model" }, box);
+    for (const tv of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: M.l + tv * iw, x2: M.l + tv * iw, y1: M.t - 4, y2: H - M.b, stroke: css("--grid"), "stroke-width": 1 }, svg); text(svg, M.l + tv * iw, H - 8, `${tv * 100}%`, { "text-anchor": "middle" }); }
+    text(svg, M.l + iw, M.t - 6, "share of vertices", { "text-anchor": "end", "font-size": 10 });
+    rows.forEach((r, i) => {
+      const cy = M.t + i * rowH + rowH / 2, th = 12, g = el("g", { class: "row-g", tabindex: 0 }, svg);
+      el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
+      text(g, M.l - 10, cy + 4, r.roi, { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
+      let acc = 0; const parts = MODELS.map(m => ({ m, v: r.vert[m] || 0 })).filter(p => p.v > 0.0005);
+      parts.forEach((p, j) => {
+        const x0 = M.l + acc * iw, w = p.v * iw; acc += p.v;
+        const gap = j < parts.length - 1 ? 2 : 0;
+        if (w - gap > 0.5) el("rect", { x: x0, y: cy - th / 2, width: Math.max(0.5, w - gap), height: th, rx: (j === 0 || j === parts.length - 1) ? 3 : 0, fill: C[p.m] }, g);
+      });
+      bindTip(g, r.roi, () => [...MODELS.map(m => ({ label: MODEL_NAME[m], color: C[m], value: `${((r.vert[m] || 0) * 100).toFixed(1)}%` })), { label: "Vertices increasing", value: `${(r.vert.increasing * 100).toFixed(0)}%` }]);
+    });
+  }
+  table(document.getElementById("modelTable"), ["ROI", "Summed ΔAICc", "Best (summed)", "Best (group curve)", "Subj best f/l/e/NR", "Vertices: flat", "linear", "exp", "NR", "increasing"],
+    rows.map(r => [r.roi, r.dSummed.toFixed(1), MODEL_NAME[r.bestSummed], MODEL_NAME[r.bestGroup], MODELS.map(m => r.nbest[m]).join("/"), ...MODELS.map(m => ((r.vert[m] || 0) * 100).toFixed(0) + "%"), (r.vert.increasing * 100).toFixed(0) + "%"]));
+}
+function renderRecovery() {
+  const box = document.getElementById("recovery");
+  const rows = D.models.recovery.map(r => [`noise ${r.noise} · truth ${MODEL_NAME[r.truth]}`, ...MODELS.map(m => r[m].toFixed(0) + "%")]);
+  const t = table(box, ["Simulated truth (noise SD, % signal)", ...MODELS.map(m => "chose " + MODEL_NAME[m])], rows);
+  // emphasize the correct-recovery cell
+  [...t.tBodies[0].rows].forEach((tr, i) => { const truth = D.models.recovery[i].truth; tr.cells[1 + MODELS.indexOf(truth)].className = "hl"; });
 }
 
-// ---------- controls ----------
-document.querySelectorAll("#setSeg button").forEach(b => b.addEventListener("click", () => {
-  state.set = b.dataset.set;
-  document.querySelectorAll("#setSeg button").forEach(o => o.setAttribute("aria-pressed", String(o === b)));
-  renderAll();
-}));
-document.querySelectorAll("#atlasTabs button").forEach(b => b.addEventListener("click", () => {
-  state.atlas = b.dataset.atlas;
-  document.querySelectorAll("#atlasTabs button").forEach(o => o.setAttribute("aria-pressed", String(o === b)));
-  const first = forestRows()[0];
-  if (first) state.sel = `${first.atlas}|${first.roi}`;
-  renderForest(); renderDetail();
-}));
+function renderAll() { renderTiles(); renderBeh(); renderIps(); renderForest(); renderDetail(); renderVis(); renderModels(); renderRecovery(); }
+
+function tabs(id, attr, onPick) {
+  document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(`#${id} button`).forEach(o => o.setAttribute("aria-pressed", String(o === b)));
+    onPick(b.dataset[attr]);
+  }));
+}
+tabs("atlasTabs", "atlas", v => { state.atlas = v; const f = forestRows()[0]; if (f) state.sel = `${f.atlas}|${f.roi}`; renderForest(); renderDetail(); });
+tabs("visTabs", "src", v => { state.vis = v; renderVis(); });
+tabs("modelTabs", "set", v => { state.mset = v; renderModels(); });
 const themeBtn = document.getElementById("themeBtn");
-const isDark = () => document.documentElement.dataset.theme === "dark" ||
-  (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
 const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "Light" : "Dark"; };
-themeBtn.addEventListener("click", () => {
-  document.documentElement.dataset.theme = isDark() ? "light" : "dark";
-  syncThemeBtn(); renderAll();
-});
+themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncThemeBtn(); renderAll(); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { syncThemeBtn(); renderAll(); });
 syncThemeBtn();
 renderAll();

@@ -42,13 +42,18 @@ def beh_ratio_and_perf(mat_path):
     import numpy as np
     vals = np.concatenate([np.atleast_1d(np.asarray(b, dtype=float))
                            for b in np.atleast_1d(td.output.correctResp)])
+    # Raw values only - no key-flip here. Downstream, a key-reversed subject's
+    # score is nansum(1 - x)/len (misses stay wrong), NOT 100 - raw score.
     perf = float(np.nansum(vals) / len(vals)) if len(vals) else None
-    return ratio, perf
+    answered = ~np.isnan(vals)
+    resp_rate = float(answered.mean()) if len(vals) else None
+    acc_answered = float(vals[answered].mean()) if answered.any() else float("nan")
+    return ratio, perf, resp_rate, acc_answered
 
 
 def main():
     n_bad = 0
-    print(f"{'subj':>4} {'run':>4} {'par_label':>10} {'par':>5} {'beh':>5} {'pctCorr':>7}  status")
+    print(f"{'subj':>4} {'run':>4} {'par_label':>10} {'par':>5} {'beh':>5} {'pctCorr':>7} {'respPct':>7} {'accAns':>7}  status")
     for s in SUBJECTS:
         runs = sorted(glob.glob(f"{PROJ}/sess0{s}/task/0[0-9][0-9]"))
         for rdir in runs:
@@ -56,14 +61,16 @@ def main():
             pr, lab = par_ratio(f"{rdir}/CAM.par")
             mat = f"{PROJ}/Behavioral/{s}/Data_CentralAttMod_Run{rn}_{s}.mat"
             if not os.path.exists(mat):
-                print(f"{s:>4} {rn:>4} {lab:>10} {'':>5} {'':>5} {'':>7}  NO_BEHAVIOR_FILE")
+                print(f"{s:>4} {rn:>4} {lab:>10} {'':>5} {'':>5} {'':>7} {'':>7} {'':>7}  NO_BEHAVIOR_FILE")
                 n_bad += 1
                 continue
-            br, perf = beh_ratio_and_perf(mat)
+            br, perf, rrate, acc = beh_ratio_and_perf(mat)
             ok = pr is not None and abs(pr - br) < 1e-6
             n_bad += not ok
             pstr = f"{perf*100:6.1f}" if perf is not None else "   n/a"
-            print(f"{s:>4} {rn:>4} {lab:>10} {pr if pr is not None else 'NA':>5} {br:>5.2f} {pstr:>7}  {'ok' if ok else 'MISMATCH'}")
+            rstr = f"{rrate*100:6.1f}" if rrate is not None else "   n/a"
+            astr = f"{acc*100:6.1f}" if acc == acc else "   nan"
+            print(f"{s:>4} {rn:>4} {lab:>10} {pr if pr is not None else 'NA':>5} {br:>5.2f} {pstr:>7} {rstr:>7} {astr:>7}  {'ok' if ok else 'MISMATCH'}")
     print(f"\nmismatches/missing: {n_bad}")
     return 1 if n_bad else 0
 
