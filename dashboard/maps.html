@@ -28,6 +28,16 @@
 .colorbar .bar { height: 12px; flex: 0 0 240px; border-radius: 2px; border: 1px solid var(--border); }
 .hint { font-family: var(--ui); font-size: 12px; color: var(--text-muted); margin: 8px 0 0; }
 @media (max-width: 760px) { .viewer-grid { grid-template-columns: 1fr; } }
+.slices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.slice { position: relative; background: #000; border: 2px solid var(--rule); }
+.slice canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; cursor: crosshair; touch-action: none; }
+.slice .vp-label { color: #ddd; }
+.slice .orient { position: absolute; font-family: var(--ui); font-size: 11px; color: #bbb; pointer-events: none; }
+.slice-ctl { display: grid; grid-template-columns: auto 1fr auto; gap: 6px 10px; align-items: center; font-family: var(--ui); font-size: 12.5px; margin-top: 8px; }
+.slice-ctl input[type=range] { accent-color: var(--series-1); }
+.readout { font-family: var(--ui); font-size: 13px; color: var(--text-secondary); margin-top: 10px; min-height: 1.4em; font-variant-numeric: tabular-nums; }
+.readout b { color: var(--text-primary); }
+@media (max-width: 760px) { .slices { grid-template-columns: 1fr; } }
 </style>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
 </head>
@@ -41,8 +51,8 @@
     </div>
     <nav class="study-tabs" aria-label="Studies">
       <a href="index.html">fMRI<span>central load × attention networks</span></a>
-      <a href="psychophysics.html">Psychophysics<span>dual task: central load × peripheral tilt</span></a>
       <a href="maps.html" aria-current="page">Brain maps<span>ROIs and load effects on the inflated cortex</span></a>
+      <a href="psychophysics.html">Psychophysics<span>dual task: central load × peripheral tilt</span></a>
     </nav>
     <h1 class="wordmark"><span class="up">Upstairs</span><span class="slash">/</span><span class="down">Downstairs</span></h1>
     <div class="mast-row">
@@ -85,6 +95,32 @@
       <p><b>Surface.</b> The fsaverage6 inflated cortex (40,962 vertices per hemisphere), shaded by sulcal depth (darker = sulcus). fsaverage6 is nested in fsaverage, so ROIs and maps from the analyses transfer exactly.</p>
       <p><b>ROIs</b> are the ones used in the analyses: Wang et al. (2015) maximum-probability retinotopic areas (IPS4 and IPS5 merged); V1–V3 split into a fovea band (0.5–1.5°, the task ring) and a periphery band (3–7.5°, the noise annulus) by the Benson (2014) template (the per-subject pRF versions are not shown); the 12 Schaefer (2018) 17-network networks analyzed; and the selected Glasser HCP-MMP1 areas. "Load effect" colors each ROI by its group load effect (fitted change from 10% to 46% load, both hemispheres averaged, 8 subjects), the same numbers as on the fMRI tab.</p>
       <p><b>Load-effect map.</b> For each subject and vertex, the 7 load betas from the original GLMs (5 mm smoothing) were regressed on load and expressed as the fitted change from 10% to 46%; the map shows the mean across the 8 subjects. "Only p &lt; .05" hides vertices with |t(7)| &lt; 2.36, uncorrected for the number of vertices, so treat it as descriptive.</p>
+    </details>
+  </section>
+  <section class="card" id="volume">
+    <div class="sec-head"><span class="sec-num">◫</span><div><span class="kicker">Volume</span><h2>Whole-brain slices: navigate through the volume</h2></div></div>
+    <div class="map-controls">
+      <div class="ctl-group"><span class="lbl">Overlay</span>
+        <div class="seg" id="volLayer"><button type="button" data-v="effect" aria-pressed="true">Load effect</button><button type="button" data-v="aseg" aria-pressed="false">Subcortical structures</button><button type="button" data-v="none" aria-pressed="false">Anatomy only</button></div></div>
+      <div class="ctl-group" id="volThreshGroup"><span class="lbl">Show voxels</span>
+        <div class="seg" id="volThresh"><button type="button" data-v="all" aria-pressed="true">All in brain</button><button type="button" data-v="p05" aria-pressed="false">Only p &lt; .05</button></div></div>
+      <div class="ctl-group"><span class="lbl">Overlay opacity</span><div class="range-row"><input type="range" id="volOpacity" min="0" max="100" value="80" aria-label="Overlay opacity"></div></div>
+    </div>
+    <div class="slices">
+      <div class="slice"><span class="vp-label">Sagittal</span><canvas id="sl-sag" tabindex="0" aria-label="Sagittal slice"></canvas><span class="orient" style="left:6px;bottom:4px">P</span><span class="orient" style="right:6px;bottom:4px">A</span></div>
+      <div class="slice"><span class="vp-label">Coronal</span><canvas id="sl-cor" tabindex="0" aria-label="Coronal slice"></canvas><span class="orient" style="left:6px;bottom:4px">L</span><span class="orient" style="right:6px;bottom:4px">R</span></div>
+      <div class="slice"><span class="vp-label">Axial</span><canvas id="sl-ax" tabindex="0" aria-label="Axial slice"></canvas><span class="orient" style="left:6px;bottom:4px">L</span><span class="orient" style="right:6px;bottom:4px">R</span></div>
+    </div>
+    <div class="slice-ctl">
+      <span>x (left–right)</span><input type="range" id="slX"><span id="slXv"></span>
+      <span>y (posterior–anterior)</span><input type="range" id="slY"><span id="slYv"></span>
+      <span>z (inferior–superior)</span><input type="range" id="slZ"><span id="slZv"></span>
+    </div>
+    <div class="readout" id="volReadout">Loading volume…</div>
+    <div class="colorbar" id="volColorbar"></div>
+    <p class="hint">Click or drag in any slice to move the crosshair · arrow keys step through slices in the selected view · jump to: <button type="button" class="pill" data-jump="lgn">Left LGN area</button> <button type="button" class="pill" data-jump="ips">Right IPS</button> <button type="button" class="pill" data-jump="v1">Occipital pole</button></p>
+    <details class="method"><summary>About the volume view</summary>
+      <p>The overlay combines two sources, and the read-out says which one a voxel comes from. <b>Cortex</b>: the group surface map (8 subjects, the same as the 3D view above) projected into the cortical ribbon of the 2 mm template, t with 7 degrees of freedom. <b>Subcortex and cerebellum</b>: the original analysis's volumetric GLM in MNI305 space (2 mm voxels, 5 mm smoothing), which FreeSurfer restricts to non-cortical tissue; S12 and S13 have no volumetric analysis, so this part averages <span id="volN"></span> subjects (t with <span id="volDf"></span> degrees of freedom). In both, each subject's 7 load betas were regressed on load, giving the fitted change from 10% to 46% load. "Only p &lt; .05" is uncorrected. The underlay is the fsaverage MNI305 template, and subcortical structures come from its automatic segmentation (aseg). With 5 mm smoothing, small structures such as the LGN mix with their neighbours, so the thalamic analysis uses unsmoothed native-space data instead.</p>
     </details>
   </section>
 </div>
@@ -272,6 +308,117 @@ load().then(() => {
   for (const [k, id] of [["atlas", "atlasSeg"], ["layer", "layerSeg"], ["view", "viewSeg"]]) { const v = qs.get(k); const b = v && document.querySelector(`#${id} button[data-v="${v}"]`); if (b) b.click(); }
   recolor(); layout();
 }).catch(err => { document.querySelectorAll(".viewport .loading").forEach(n => { n.textContent = "Could not load the surfaces (" + err.message + "). Open this page from the website, not as a local file."; }); });
+</script>
+
+<script>
+// ---------- volume slice viewer (plain canvas) ----------
+(() => {
+  const S = { layer: "effect", thresh: "all", op: 0.8, x: 0, y: 0, z: 0, focus: "ax" };
+  let V = null;
+  const $ = id => document.getElementById(id);
+  const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  async function load() {
+    const meta = await (await fetch("brain/vol.json")).json();
+    const res = await fetch("brain/vol.bin"); const total = meta.bytes; let got = 0; const chunks = [];
+    const reader = res.body.getReader();
+    for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; $("volReadout").textContent = `Loading volume… ${(got / 1e6).toFixed(1)} of ${(total / 1e6).toFixed(1)} MB`; }
+    const buf = new Uint8Array(got); let o = 0; for (const c of chunks) { buf.set(c, o); o += c.length; }
+    const [ni, nj, nk] = meta.shape, n = ni * nj * nk, P = meta.parts, B = buf.buffer;
+    V = { meta, ni, nj, nk, anat: new Uint8Array(B, P.anat.offset, n), eff: new Int16Array(B, P.effect.offset, n), t: new Int16Array(B, P.t.offset, n),
+          mask: new Uint8Array(B, P.mask.offset, n), aseg: new Uint8Array(B, P.aseg.offset, n), src: P.source ? new Uint8Array(B, P.source.offset, n) : null, names: meta.aseg, A: meta.vox2ras };
+    const TC = { 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365 };
+    V.dfVol = meta.subjects.length - 1; V.dfCtx = (meta.surface_subjects || meta.subjects).length - 1;
+    V.tcVol = TC[V.dfVol] || 2.5; V.tcCtx = TC[V.dfCtx] || 2.5; V.df = V.dfVol; V.tcrit = V.tcVol;
+    $("volN").textContent = meta.subjects.length; $("volDf").textContent = V.dfVol;
+    // sliders in voxel index units; start at the centre
+    $("slX").min = 0; $("slX").max = ni - 1; $("slY").min = 0; $("slY").max = nk - 1; $("slZ").min = 0; $("slZ").max = nj - 1;
+    S.x = Math.round(ni / 2); S.y = Math.round(nk / 2); S.z = Math.round(nj / 2);
+    jumpMM(-22, -24, -4);   // near left LGN
+  }
+  const idx = (i, j, k) => (i * V.nj + j) * V.nk + k;
+  const mm = (i, j, k) => { const A = V.A; return [0, 1, 2].map(r => A[r][0] * i + A[r][1] * j + A[r][2] * k + A[r][3]); };
+  function vox(x, y, z) {   // inverse of the (axis-aligned) vox2ras: x = -2i+74, z = -2j+85, y = 2k-109
+    const A = V.A; return [Math.round((x - A[0][3]) / A[0][0]), Math.round((z - A[2][3]) / A[2][1]), Math.round((y - A[1][3]) / A[1][2])];
+  }
+  function jumpMM(x, y, z) {   // go to the nearest voxel that has a value (cortex ribbon or volume GLM)
+    let [i, j, k] = vox(x, y, z), best = null;
+    for (let r = 0; r <= 4 && !best; r++) for (let a = -r; a <= r; a++) for (let b = -r; b <= r; b++) for (let c = -r; c <= r; c++) {
+      const ii = i + a, jj = j + b, kk = k + c; if (ii < 0 || jj < 0 || kk < 0 || ii >= V.ni || jj >= V.nj || kk >= V.nk) continue;
+      const v = idx(ii, jj, kk); if ((V.src ? V.src[v] : V.mask[v]) && (!best || a * a + b * b + c * c < best[3])) best = [ii, jj, kk, a * a + b * b + c * c];
+    }
+    if (best) [i, j, k] = best;
+    S.x = clamp(i, 0, V.ni - 1); S.z = clamp(j, 0, V.nj - 1); S.y = clamp(k, 0, V.nk - 1); draw();
+  }
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  // colours
+  function div(v) { const x = Math.max(-1, Math.min(1, v / 0.6)), a = Math.pow(Math.abs(x), 0.7); return x >= 0 ? [31 + (117 - 31) * 0, 73, 209].map((c, q) => [255, 255, 255][q] + (c - 255) * a) : [194, 38, 74].map((c, q) => [255, 255, 255][q] + (c - 255) * a); }
+  const ASEG_COL = n => { const h = (n * 0.618034) % 1, s = 0.7, l = 0.55; const f = (p, q, t) => { t = (t + 1) % 1; return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p; }; const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q; return [f(p, q, h + 1 / 3), f(p, q, h), f(p, q, h - 1 / 3)].map(v => v * 255); };
+  function paint(canvas, W, H, get) {   // get(c, r) -> voxel index or -1
+    const scale = 4; canvas.width = W * scale; canvas.height = H * scale;
+    const off = document.createElement("canvas"); off.width = W; off.height = H; const ctx = off.getContext("2d"), img = ctx.createImageData(W, H), d = img.data;
+    for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+      const q = 4 * (r * W + c), v = get(c, r); let R = 0, G = 0, Bc = 0;
+      if (v >= 0) {
+        const a = V.anat[v]; R = G = Bc = a;
+        let ov = null, alpha = 0;
+        if (S.layer === "effect" && (V.mask[v] || (V.src && V.src[v]))) { const e = V.eff[v] / 1000, t = V.t[v] / 100; const tc = V.src && V.src[v] === 1 ? V.tcCtx : V.tcVol; if ((S.thresh === "all" || Math.abs(t) > tc) && Math.abs(e) > 0.02) { ov = div(e); alpha = S.op * Math.min(1, Math.abs(e) / 0.15); } }
+        else if (S.layer === "aseg" && V.aseg[v]) { ov = ASEG_COL(V.aseg[v]); alpha = S.op * 0.8; }
+        if (ov) { R = R + (ov[0] - R) * alpha; G = G + (ov[1] - G) * alpha; Bc = Bc + (ov[2] - Bc) * alpha; }
+      }
+      d[q] = R; d[q + 1] = G; d[q + 2] = Bc; d[q + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    const g = canvas.getContext("2d"); g.imageSmoothingEnabled = false; g.drawImage(off, 0, 0, W * scale, H * scale); return { g, scale };
+  }
+  function cross(g, scale, cx, cy, W, H) { g.strokeStyle = "rgba(255,216,74,.85)"; g.lineWidth = 1.5; g.beginPath(); g.moveTo((cx + .5) * scale, 0); g.lineTo((cx + .5) * scale, H * scale); g.moveTo(0, (cy + .5) * scale); g.lineTo(W * scale, (cy + .5) * scale); g.stroke(); }
+  function draw() {
+    if (!V) return;
+    const { ni, nj, nk } = V;
+    // sagittal: fixed i; columns k (posterior->anterior), rows j (superior at top)
+    let o = paint($("sl-sag"), nk, nj, (c, r) => idx(S.x, r, c)); cross(o.g, o.scale, S.y, S.z, nk, nj);
+    // coronal: fixed k; columns = left->right (x increases => i decreases), rows j
+    o = paint($("sl-cor"), ni, nj, (c, r) => idx(ni - 1 - c, r, S.y)); cross(o.g, o.scale, ni - 1 - S.x, S.z, ni, nj);
+    // axial: fixed j; columns left->right, rows anterior at top (k decreasing downward)
+    o = paint($("sl-ax"), ni, nk, (c, r) => idx(ni - 1 - c, S.z, nk - 1 - r)); cross(o.g, o.scale, ni - 1 - S.x, nk - 1 - S.y, ni, nk);
+    $("slX").value = S.x; $("slY").value = S.y; $("slZ").value = S.z;
+    const [X, Y, Z] = mm(S.x, S.z, S.y); $("slXv").textContent = `${X.toFixed(0)} mm`; $("slYv").textContent = `${Y.toFixed(0)} mm`; $("slZv").textContent = `${Z.toFixed(0)} mm`;
+    const v = idx(S.x, S.z, S.y), lab = V.aseg[v] ? V.names[V.aseg[v]] : V.src && V.src[v] === 1 ? "cerebral cortex" : (V.mask[v] ? "white matter / other" : "outside brain");
+    const ro = $("volReadout"); ro.replaceChildren();
+    const add = (k, val) => { const b = document.createElement("b"); b.textContent = val; ro.append(k, b, "   "); };
+    add("MNI305 ", `(${X.toFixed(0)}, ${Y.toFixed(0)}, ${Z.toFixed(0)})`); add("structure ", lab);
+    const sc = V.src ? V.src[v] : (V.mask[v] ? 2 : 0);
+    if (sc) { add("load effect ", `${(V.eff[v] / 1000 >= 0 ? "+" : "−") + Math.abs(V.eff[v] / 1000).toFixed(2)}%`); add(`t(${sc === 1 ? V.dfCtx : V.dfVol}) `, (V.t[v] / 100).toFixed(2)); add("from ", sc === 1 ? "cortical surface map (8 subjects)" : "volume GLM (6 subjects)"); }
+  }
+  function bind(id, toVox) {
+    const cv = $(id); let down = false;
+    const set = e => { const r = cv.getBoundingClientRect(), c = Math.floor((e.clientX - r.left) / r.width * (cv.width / 4)), rr = Math.floor((e.clientY - r.top) / r.height * (cv.height / 4)); toVox(c, rr); S.focus = id; draw(); };
+    cv.addEventListener("pointerdown", e => { down = true; cv.setPointerCapture(e.pointerId); set(e); });
+    cv.addEventListener("pointermove", e => { if (down) set(e); });
+    cv.addEventListener("pointerup", () => { down = false; });
+    cv.addEventListener("keydown", e => {
+      const step = e.key === "ArrowUp" || e.key === "ArrowRight" ? 1 : e.key === "ArrowDown" || e.key === "ArrowLeft" ? -1 : 0; if (!step) return; e.preventDefault();
+      if (id === "sl-sag") S.x = clamp(S.x - step, 0, V.ni - 1); else if (id === "sl-cor") S.y = clamp(S.y + step, 0, V.nk - 1); else S.z = clamp(S.z - step, 0, V.nj - 1); draw();
+    });
+  }
+  bind("sl-sag", (c, r) => { S.y = clamp(c, 0, V.nk - 1); S.z = clamp(r, 0, V.nj - 1); });
+  bind("sl-cor", (c, r) => { S.x = clamp(V.ni - 1 - c, 0, V.ni - 1); S.z = clamp(r, 0, V.nj - 1); });
+  bind("sl-ax", (c, r) => { S.x = clamp(V.ni - 1 - c, 0, V.ni - 1); S.y = clamp(V.nk - 1 - r, 0, V.nk - 1); });
+  $("slX").addEventListener("input", e => { S.x = +e.target.value; draw(); });
+  $("slY").addEventListener("input", e => { S.y = +e.target.value; draw(); });
+  $("slZ").addEventListener("input", e => { S.z = +e.target.value; draw(); });
+  $("volOpacity").addEventListener("input", e => { S.op = e.target.value / 100; draw(); });
+  const seg = (id, key) => document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => { document.querySelectorAll(`#${id} button`).forEach(o => o.setAttribute("aria-pressed", String(o === b))); S[key] = b.dataset.v; $("volThreshGroup").hidden = S.layer !== "effect"; colorbar(); draw(); }));
+  seg("volLayer", "layer"); seg("volThresh", "thresh");
+  document.querySelectorAll("[data-jump]").forEach(b => b.addEventListener("click", () => { const J = { lgn: [-22, -24, -4], ips: [28, -60, 48], v1: [0, -96, 4] }[b.dataset.jump]; jumpMM(...J); }));
+  function colorbar() {
+    const cb = $("volColorbar"); cb.replaceChildren(); if (S.layer !== "effect") return;
+    const lo = div(-0.6), mid = div(0), hi = div(0.6), rgb = a => `rgb(${a.map(Math.round).join(",")})`;
+    const l = document.createElement("span"); l.textContent = "−0.6%"; const bar = document.createElement("span"); bar.className = "bar"; bar.style.background = `linear-gradient(90deg, ${rgb(lo)}, ${rgb(mid)}, ${rgb(hi)})`;
+    const r = document.createElement("span"); r.textContent = "+0.6%  load effect (red = decreases, blue = increases)"; cb.append(l, bar, r);
+  }
+  colorbar();
+  load().catch(e => { $("volReadout").textContent = "Could not load the volume (" + e.message + "). Open this page from the website, not as a local file."; });
+})();
 </script>
 </body>
 </html>
