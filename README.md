@@ -12,6 +12,7 @@ Does making a central task harder pull attention inward, raising activity in the
 - **Periphery:** a task-irrelevant 1/f noise annulus at 3–7.5°, identical in every condition.
 
 ## What's in the dashboard (one TL;DR per analysis)
+0. **The task, animated.** A canvas reconstruction of the stimulus built from the original experiment code (`Design/*.m`) and the parameters stored in the behavior files: 173 squares at 0.5–1.5°, reshuffles 25–29 times per 16-s block, a majority-color coin toss every 5–6 reshuffles, a 1.5-s response window, and the 1/f noise annulus at 3–7.5°. You can play along with Blue/Red buttons or the B/R keys and compare your score with the subjects'. A run timeline shows the ON/OFF blocks and each block's reshuffles, flips and response windows, and a gallery shows all seven load levels. The noise updates twice a second by default; real speed (about 30 Hz) is opt-in.
 1. **Data and label audit.** All 151 runs are correctly labelled, and raw and preprocessed data exist for every run.
 2. **Behavior.** The load manipulation works in all 8 subjects. The task score falls from 95% to 33% between the 30% and 46% ratios, mostly through missed changes: detection falls from 100% to 53%, while accuracy on answered changes falls from 96% to 66%.
 3. **Dorsal attention gradient (Wang 2015).** IPS0–IPS4/5, SPL1 and FEF all rise with load (t = 4.6–8.1). IPS2 rises most (+1.16% signal, fitted 10% → 46%).
