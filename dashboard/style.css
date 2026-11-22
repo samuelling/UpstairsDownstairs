@@ -51,7 +51,7 @@ a { color: inherit; }
 .mast-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font-family: var(--ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); border-bottom: 2px solid var(--rule); padding-bottom: 8px; }
 .mast-strip .grow { flex: 1; }
 .theme-btn { font-family: var(--ui); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; border: 1.5px solid var(--rule); background: transparent; color: var(--text-primary); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
-.wordmark { font-family: var(--display); font-weight: 900; font-size: clamp(46px, 10.5vw, 128px); line-height: .9; letter-spacing: -0.035em; margin: 18px 0 22px; font-variation-settings: "opsz" 144; }
+.wordmark { font-family: var(--display); font-weight: 900; font-size: clamp(36px, 10.5vw, 128px); line-height: .9; letter-spacing: -0.035em; margin: 18px 0 22px; font-variation-settings: "opsz" 144; }
 .wordmark .up { color: var(--series-1); }
 .wordmark .slash { color: var(--text-primary); font-weight: 300; margin: 0 .04em; }
 .wordmark .down { color: var(--series-2); font-style: italic; }
@@ -236,3 +236,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
 .study-tabs a[aria-current="page"] { color: var(--text-primary); background: var(--surface-1); border-color: var(--rule); border-radius: 4px 4px 0 0; }
 .study-tabs a span { font-weight: 400; letter-spacing: .02em; text-transform: none; margin-left: 6px; color: var(--text-muted); }
 
+
+.charts-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+@media (max-width: 900px) { .charts-2 { grid-template-columns: 1fr; } }
+details > div, #recovery { overflow-x: auto; }

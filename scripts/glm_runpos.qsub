@@ -1,0 +1,11 @@
+#!/bin/bash -l
+#$ -P vision
+#$ -N cam_runpos
+#$ -l h_rt=04:00:00
+#$ -l mem_per_core=8G
+#$ -pe omp 1
+#$ -j y
+#$ -o /projectnb/vision/CentralAttentionManipulation_reanalysis/glm_runpos/job.log
+module load python3/3.10.12
+cd /projectnb/vision/CentralAttentionManipulation_reanalysis/code
+python3 glm_runpos.py

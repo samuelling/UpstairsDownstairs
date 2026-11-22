@@ -39,7 +39,7 @@ A reanalysis of the dual-task psychophysics study that preceded the fMRI (cluste
 Rebuild: `rsync -a scc:/projectnb/vision/AttentionManipulation_reanalysis/outputs/ data/psychophysics/ && python3 scripts/build_psy_data.py`.
 
 ## Caveats
-- **Load is confounded with run position.** There is one ratio per run and each subject's order repeats, which the existing GLMs can't separate. Next step: refit with run position as a covariate.
+- **Run position (now controlled).** There is one ratio per run in a repeating order. A run-by-run refit (`scripts/glm_runpos.py`, a cluster batch job) with run position, scan day and motion as covariates reproduces the original slopes (r = .99) and leaves the load effects essentially unchanged (IPS2 +0.90 → +0.87% fitted). No ROI's run-position term survives FDR. Peripheral V2 suppression becomes p = .024.
 - At 46% subjects miss about half of the changes, which may mean they disengage; this would explain the dip at 46% in the attention ROIs.
 - The S9 eccentricity split uses the Benson 2014 template (that subject has no pRF data). Wang IPS4 and IPS5 are merged.
 
@@ -68,3 +68,5 @@ Rebuild: `rsync -a scc:/projectnb/vision/AttentionManipulation_reanalysis/output
 ```
 python3 scripts/build_data.py   # after refreshing data/ from the cluster outputs
 ```
+- **Attentional response function (`scripts/arf_demand.py`).** Power-law fits against three load axes: minority share (q ≈ 1.1–1.9, linear), evidence margin on a log axis (q ≈ 0.5–0.8, not different from linear) and behavioral difficulty (q ≈ 0.2–0.35, compressive but poorly fitting). There is no evidence of saturation within 10–46%.
+- Rebuild these two sections: `python3 scripts/build_extra_data.py` → `dashboard/extra_data.js`.

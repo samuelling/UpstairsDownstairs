@@ -40,13 +40,13 @@
     <div class="hl-left">
       <span class="kicker">Summary</span>
       <h2>Harder central judgments turn the brain's attention network up, but barely turn the periphery down</h2>
-      <p class="caveat">Not yet controlled: load is confounded with run position (one ratio per run, in a fixed order). A refit with run position as a covariate is the next step, and it could change these numbers.</p>
+      <p class="caveat">Load was partly confounded with run position (one ratio per run, in a repeating order). A run-by-run refit that controls run position, scan day and motion leaves the load effects essentially unchanged (<a href="#runorder">section 03c</a>).</p>
     </div>
     <ol class="takeaways">
       <li><a href="#behavior"><span><b>Load degrades performance.</b> At 46%, subjects detect about half of the flips, compared with all of them at 10–30%.</span></a></li>
       <li><a href="#ips"><span><b>Dorsal attention activity scales with load.</b> Every IPS, SPL and FEF region rises with load, across three atlases; IPS2 gains about 1.2% signal. The default mode network declines.</span></a></li>
-      <li><a href="#models"><span><b>The scaling is linear.</b> Over 10–46% the response rises linearly, with no evidence of saturation, although 7 levels limit how well saturation can be detected.</span></a></li>
-      <li><a href="#visual"><span><b>Peripheral suppression is weak.</b> Foveal V1–V3 increase with load; peripheral V1–V3 only trend downward (V2, uncorrected).</span></a></li>
+      <li><a href="#models"><span><b>The scaling is linear.</b> Over 10–46% the response rises linearly with the minority share. A compressive, saturating response appears only when load is re-expressed as behavioral difficulty, and that description fits the data poorly.</span></a></li>
+      <li><a href="#visual"><span><b>Peripheral suppression is weak.</b> Foveal V1–V3 increase with load; peripheral V1–V3 trend downward, reliably only in V2 once run order is controlled.</span></a></li>
       <li><a href="#hemis"><span><b>Effects are right-lateralized.</b> Load effects in attention and control networks are larger on the right, alongside a larger right-hemisphere response overall.</span></a></li>
     </ol>
   </section>
@@ -157,7 +157,7 @@
       <button type="button" data-h="rh" aria-pressed="false">Right</button>
       <button type="button" data-h="diff" aria-pressed="false">Right vs Left</button>
     </div>
-    <span class="scope">applies to sections 03–05</span>
+    <span class="scope">applies to sections 03, 03b, 04 and 05</span>
   </div>
 
   <section class="card" id="ips">
@@ -196,6 +196,22 @@
     <details class="method"><summary>How this was tested</summary>
       <p>The same slope test was run for every ROI in each atlas, with FDR correction within each atlas. A filled dot means q &lt; .05; small dots are individual subjects. Click a row to plot its curve on the right.</p>
       <div id="forestTable"></div>
+    </details>
+  </section>
+
+  <section class="card" id="runorder">
+    <div class="sec-head"><span class="sec-num">03c</span><div><span class="kicker">Control</span><h2>Run order does not explain the load effect</h2></div></div>
+    <div class="tldr" id="roTakeaway"></div>
+    <div class="tabs" id="roTabs" role="group" aria-label="ROI set">
+      <button type="button" data-a="wang2015" aria-pressed="true">Wang 2015</button>
+      <button type="button" data-a="schaeferNet" aria-pressed="false">Schaefer: networks</button>
+      <button type="button" data-a="glasser2016" aria-pressed="false">Glasser HCP-MMP1</button>
+    </div>
+    <div id="roChart"></div>
+    <div class="legend" id="roLegend"></div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Each run was refit on its own: the smoothed, surface-sampled time series was intensity-normalized to a global mean of 100 (as in the original FS-FAST analysis), averaged within each ROI and hemisphere, and fit with the 16-s ON blocks convolved with the SPM canonical HRF plus quadratic drift (the original settings); a second fit added the six motion regressors. Per subject and ROI, the run betas (hemispheres averaged) were then regressed on load alone (<b>uncontrolled</b>, which reproduces the original slopes, r = .99 across subjects × ROIs), and on load plus scan-day terms plus run position within the day (<b>controlled</b>; only S3 was scanned on two days). Load slopes were t-tested across subjects with FDR within each atlas. Run-level betas are on a somewhat smaller scale than the FS-FAST betas, so compare the two estimates here with each other rather than with other sections. Load and run position were only weakly correlated within subjects (mean |r| = <span id="roCorr"></span>).</p>
+      <div id="roTable"></div>
     </details>
   </section>
 
@@ -251,6 +267,19 @@
     </details>
   </section>
 
+  <section class="card" id="arf">
+    <div class="sec-head"><span class="sec-num">05b</span><div><span class="kicker">Attentional response function</span><h2>A compressive ARF appears only against behavioral difficulty, which fits poorly</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Whether the attentional response function looks compressive depends on how load is measured. Against the design's own axis (minority share), dorsal attention responses are linear or slightly accelerating (power exponent q ≈ 1.1–1.9). Against the strength of the evidence for the majority, on a log, contrast-like axis, q falls to about 0.5–0.8: mildly compressive, but not reliably different from linear, and no better fitting. Against behavioral difficulty, the response looks strongly compressive (q ≈ 0.2–0.35, 7–8 of 8 subjects), but that axis explains the data far less well (summed ΔAICc vs flat 14 vs 68 for the dorsal composite), because the attention network already rises from 10% to 30% load, where performance is at ceiling. Cortical modulation therefore tracks stimulus-defined demand rather than performance, and nothing indicates saturation within 10–46%.</div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Fitted exponent by ROI and load axis</h3><div id="arfQ"></div><div class="legend" id="arfQLegend"></div></div>
+      <div><h3>Dorsal attention composite on each load axis</h3><div id="arfCurve"></div><div class="legend" id="arfCurveLegend"></div></div>
+    </div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Each subject's ROI responses (original FS-FAST betas, hemispheres averaged) were refit against three load axes, each rescaled to 0–1 across the 7 levels: the <b>minority share</b> itself; <b>evidence</b>, log(0.4 / (0.5 − share)), which treats the shrinking majority margin like stimulus contrast on a log axis; and <b>behavioral difficulty</b>, the group-mean error rate of the task score (misses count as errors). The model was b = a + k·x<sup>q</sup>, with q grid-searched from 0.1 to 10 (q &lt; 1 compressive, q = 1 linear, q &gt; 1 accelerating) and compared with linear and flat models by AICc. Exponents are geometric means across subjects; p tests log q against 0. With 7 load levels, the model-recovery simulation in section 05 shows compressive and linear shapes are hard to tell apart, so these exponents describe shape loosely.</p>
+      <div id="arfTable"></div>
+    </details>
+  </section>
+
   <section class="card" id="hemis">
     <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Lateralization</span><h2>Load effects are right-lateralized</h2></div></div>
     <div class="tldr"><b>Takeaway</b> Load effects are larger on the right in the dorsal attention network (+0.32%, p = .035, 6 of 8 subjects) and the control network (p = .017; only the right side is significant on its own). The right hemisphere also responds about 35% more overall, and relative to that baseline the load effects are similar on both sides (0.76 vs 0.82). So this looks like the task engaging the right hemisphere more, not a right-only load mechanism. Default mode shows no asymmetry, and V1–V3 show only a tiny one.</div>
@@ -268,13 +297,13 @@
     <div class="verdict">
       <div>
         <h3>Where things stand</h3>
-        <p>Making a small central judgment harder recruits the dorsal attention network in a graded, roughly linear way. It also raises activity in the visual cortex that represents the task ring and lowers activity in the default mode network. That fits the "upstairs" half of the story well.</p>
-        <p>The "downstairs" half, where the periphery is suppressed as the center demands more, is <b>weak in this dataset</b>. Peripheral V1–V3 trend down, but the effect is small and not reliable after correction. The task also loads the right hemisphere more than the left.</p>
+        <p>Making a small central judgment harder recruits the dorsal attention network in a graded, roughly linear way. It also raises activity in the visual cortex that represents the task ring and lowers activity in the default mode network. That fits the "upstairs" half of the story well, and it survives a run-by-run refit that controls run order. The response grows linearly with the minority share; it looks saturating only if load is measured by behavioral difficulty, a description the data fit poorly.</p>
+        <p>The "downstairs" half, where the periphery is suppressed as the center demands more, is <b>weak in this dataset</b>. Peripheral V1–V3 trend down; once run order is controlled the decrease is reliable only in V2 (−0.46% fitted, p = .024), and it remains much smaller than the foveal increase. The dual-task psychophysics agrees: peripheral tilt thresholds rise only modestly with central load. The task also loads the right hemisphere more than the left.</p>
       </div>
       <div>
         <h3>What could still change the picture</h3>
         <ul>
-          <li><b>Run order.</b> Each run used one ratio, and each subject repeated a single ratio order, so slow drift within a session could look like a load effect, or hide one. This is the biggest open issue.</li>
+          <li><b>Arousal and effort.</b> Harder runs may raise general arousal as well as attention; the run-order control rules out slow drift, not condition-specific arousal.</li>
           <li><b>Disengagement at 46%.</b> Subjects miss about half the flips at 46%, which may mean they partly give up. That could explain the dip at the hardest level.</li>
           <li><b>Stimulus differences.</b> The foveal increase could partly reflect the different red/blue mixes or the number of button presses, not attention alone.</li>
         </ul>
@@ -282,8 +311,9 @@
       <div>
         <h3>Next steps</h3>
         <ul>
-          <li><b>Refit the GLMs with run position as a covariate</b> to separate load from run order. This is the next analysis; it needs a cluster batch job.</li>
-          <li><b>Link to behavior in the periphery.</b> An earlier psychophysics study used the same kind of central task with a peripheral tilt-discrimination task. It could show whether peripheral perception actually suffers as central load rises.</li>
+          <li><b>Vertex-wise maps with the run-order control</b>, to check that the controlled effects have the same spatial layout as the original maps.</li>
+          <li><b>Test saturation directly</b> with more load levels between 44% and 50%, where a compressive attentional response function would flatten.</li>
+          <li><b>Link to behavior in the periphery.</b> The earlier dual-task psychophysics study is now analyzed in the <a href="psychophysics.html">Psychophysics tab</a>: peripheral tilt thresholds rise modestly with central load, in line with the weak peripheral suppression here.</li>
         </ul>
       </div>
     </div>
@@ -293,6 +323,8 @@
     <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Appendix</span><h2>Methods, data checks &amp; provenance</h2></div></div>
     <ul>
       <li id="audit"><strong>Data &amp; label audit.</strong> Each scan run's condition file (<code>CAM.par</code>) was checked against the ratio stored in its behavioral file: <span id="auditN"></span> of <span id="auditN2"></span> runs match. Raw <code>f.nii</code>, motion-corrected and surface-sampled data exist for every run, so a full rerun from raw data is possible. Preprocessing and GLM settings were confirmed from the original FS-FAST configs: fsaverage surface, 5 mm FWHM smoothing, SPM HRF, 16 s blocks, TR 2 s.</li>
+      <li><strong>Run-order control.</strong> Run-by-run refit with run position, scan day and (in a variant) motion regressors; see section 03c. Code: <code>scripts/glm_runpos.py</code> (cluster batch job, <code>glm_runpos.qsub</code>).</li>
+      <li><strong>Demand-axis fits.</strong> Power-law fits of ROI responses against ratio, evidence and behavioral-difficulty axes; see section 05b. Code: <code>scripts/arf_demand.py</code>.</li>
       <li><strong>Two display setups.</strong> S1–S11 were scanned in 2016–17 (41.9 cm screen at 104 cm), and S12 and S13 in 2018 on a newer setup (51.2 cm at 82 cm). The 2018 setup differs in square count (185 vs 173), red luminance (RGB 255 vs 185), noise refresh and orientation, and button mapping. Stimulus sizes in degrees match, but setup is confounded with these two subjects. Their load effects look like everyone else's, as the per-subject dots in the ROI chart show.</li>
       <li><strong>Units.</strong> FS-FAST betas after normalization to a mean of 100, so roughly % signal change relative to fixation. Wang IPS4 and IPS5 are merged (IPS5 is only 18–53 vertices).</li>
       <li><strong>Model comparison power.</strong> With 7 levels and per-subject noise, AICc is conservative. Foveal V1–V3 pass the group slope test but count as "flat" by per-subject AICc, because the effect is consistent across subjects but small relative to each subject's noise. Vertex maps (ΔAICc, τ, number of subjects with ΔAICc &gt; 2) are saved as fsaverage <code>.mgz</code> files on the cluster.</li>
@@ -306,6 +338,7 @@
 </div>
 
 <script src="data.js"></script>
+<script src="extra_data.js"></script>
 <script>
 (() => {
 "use strict";
@@ -1077,6 +1110,110 @@ if (!reduceMotion && "IntersectionObserver" in window) {
 window.addEventListener("resize", () => { draw(); drawGallery(); });
 document.getElementById("themeBtn").addEventListener("click", () => { buildTimeline(); draw(); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { buildTimeline(); draw(); });
+})();
+</script>
+<script>
+// ---------- 03c run-order control + 05b demand-axis ARF (data: extra_data.js) ----------
+(() => {
+"use strict";
+const E = window.CAM_EXTRA, D = window.CAM_DATA, NS = "http://www.w3.org/2000/svg";
+const css = n => getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(n).trim();
+const el = (t, a = {}, p) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
+const txt = (p, x, y, s, a = {}) => { const t = el("text", { x, y, ...a }, p); t.textContent = s; return t; };
+const h = (t, pr = {}, p) => { const n = document.createElement(t); for (const k in pr) { if (k === "text") n.textContent = pr[k]; else n.setAttribute(k, pr[k]); } if (p) p.appendChild(n); return n; };
+const fmt = (v, d = 2) => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d);
+const fmtP = p => p < 0.001 ? "< .001" : "= " + p.toFixed(3).replace(/^0/, "");
+const tip = document.getElementById("tip");
+function showTip(e, head, rows) { tip.replaceChildren(); h("div", { class: "t-head", text: head }, tip); for (const r of rows) { const row = h("div", { class: "t-row" }, tip), k = h("span", { class: "k" }, row); if (r.color) { const sw = h("i", { class: "key-dot" }, k); sw.style.background = r.color; } k.appendChild(document.createTextNode(r.label)); h("strong", { text: r.value }, row); } tip.style.display = "block"; let x = e.clientX + 14, y = e.clientY + 14; if (x + tip.offsetWidth > innerWidth - 8) x = e.clientX - tip.offsetWidth - 14; if (y + tip.offsetHeight > innerHeight - 8) y = e.clientY - tip.offsetHeight - 14; tip.style.left = x + "px"; tip.style.top = y + "px"; }
+const hideTip = () => { tip.style.display = "none"; };
+function legend(id, items) { const b = document.getElementById(id); b.replaceChildren(); for (const it of items) { const s = h("span", {}, b), k = h("i", { class: it.kind || "key-dot" }, s); if (it.color) k.style.background = it.color; if (it.border) k.style.border = it.border; s.appendChild(document.createTextNode(it.label)); } }
+function table(id, head, rows) { const c = document.getElementById(id); c.replaceChildren(); const t = h("table", {}, c), tr = h("tr", {}, h("thead", {}, t)); head.forEach(x => h("th", { text: x }, tr)); const tb = h("tbody", {}, t); rows.forEach(r => { const row = h("tr", {}, tb); r.forEach(x => h("td", { text: x }, row)); }); }
+function niceTicks(lo, hi, n = 6) { const span = hi - lo || 1, mag = Math.pow(10, Math.floor(Math.log10(span / n))), step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n + 0.5), out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10)); return out; }
+// horizontal dot chart: rows = ROIs, x = value; marks: [{key,label,color,filled}]
+function dotRows(box, rows, { xlo, xhi, log = false, xTitle, yTitle, marks, ref, tipFn, W = 760 }) {
+  box.replaceChildren();
+  const rowH = 24, M = { t: 10, r: 24, b: 58, l: 150 }, iw = W - M.l - M.r, H = M.t + rows.length * rowH + M.b;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img" }, box);
+  const X = v => M.l + (log ? (Math.log10(v) - Math.log10(xlo)) / (Math.log10(xhi) - Math.log10(xlo)) : (v - xlo) / (xhi - xlo)) * iw;
+  const ticks = log ? [0.1, 0.2, 0.5, 1, 2, 5].filter(v => v >= xlo && v <= xhi) : niceTicks(xlo, xhi, 6);
+  for (const tv of ticks) { el("line", { x1: X(tv), x2: X(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv - ref) < 1e-9 ? css("--axis") : css("--grid") }, svg); txt(svg, X(tv), H - M.b + 19, log ? String(tv) : (Math.abs(tv) < 1e-9 ? "0" : fmt(tv, 1)), { "text-anchor": "middle" }); }
+  txt(svg, M.l + iw / 2, H - 8, xTitle, { "text-anchor": "middle", class: "axt" });
+  const yt = M.t + rows.length * rowH / 2; txt(svg, 16, yt, yTitle, { "text-anchor": "middle", class: "axt", transform: `rotate(-90 16 ${yt})` });
+  rows.forEach((r, i) => {
+    const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
+    el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
+    txt(g, M.l - 10, cy + 4, r.label, { "text-anchor": "end" });
+    const vals = marks.map(m => r[m.key]).filter(v => v != null);
+    if (vals.length > 1) el("line", { x1: X(Math.min(...vals)), x2: X(Math.max(...vals)), y1: cy, y2: cy, stroke: css("--axis"), "stroke-width": 1.5 }, g);
+    for (const m of marks) { const v = r[m.key]; if (v == null) continue; const c = typeof m.color === "function" ? m.color(r) : m.color;
+      if (m.err && r[m.err] != null) el("line", { x1: X(v - r[m.err]), x2: X(v + r[m.err]), y1: cy, y2: cy, stroke: c, "stroke-width": 2.5, "stroke-linecap": "round" }, g);
+      el("circle", { cx: X(Math.min(xhi, Math.max(xlo, v))), cy, r: 5, fill: (typeof m.filled === "function" ? m.filled(r) : m.filled) ? c : css("--surface-1"), stroke: c, "stroke-width": 2 }, g); }
+    g.addEventListener("pointermove", e => showTip(e, r.label, tipFn(r))); g.addEventListener("pointerleave", hideTip);
+  });
+}
+// ---- 03c ----
+const RO = { set: "wang2015" };
+const WANG_ORDER = ["V1", "V1_fovea", "V1_periph", "V2", "V2_fovea", "V2_periph", "V3", "V3_fovea", "V3_periph", "hV4", "VO", "LO", "TO(MT+)", "V3ab", "IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"];
+const get = (atlas, roi, m) => E.runpos.find(r => r.atlas === atlas && r.roi === roi && r.m === m);
+function roRows() {
+  let pairs;
+  if (RO.set === "wang2015") pairs = WANG_ORDER.map(r => ["wang2015", r]);
+  else if (RO.set === "schaeferNet") pairs = [...new Set(E.runpos.filter(r => r.atlas === "schaefer2018" && !r.roi.includes("_")).map(r => r.roi))].map(r => ["schaefer2018", r]);
+  else pairs = [...new Set(E.runpos.filter(r => r.atlas === "glasser2016").map(r => r.roi))].map(r => ["glasser2016", r]);
+  return pairs.map(([a, roi]) => { const A = get(a, roi, "slopeA"), C = get(a, roi, "slopeC"), Cm = get(a, roi, "slopeC_mc"), R = get(a, roi, "runB");
+    return A && C ? { label: roi, a: A.eff, c: C.eff, cse: C.se, sigC: C.q < 0.05, dir: C.eff, A, C, Cm, R } : null; }).filter(Boolean)
+    .sort((x, y) => RO.set === "wang2015" ? 0 : y.c - x.c);
+}
+function renderRunOrder() {
+  const rows = roRows(), lo = Math.min(-0.8, ...rows.map(r => Math.min(r.a, r.c - r.cse))), hi = Math.max(1.2, ...rows.map(r => Math.max(r.a, r.c + r.cse)));
+  const col = r => r.sigC ? (r.c > 0 ? css("--series-1") : css("--neg")) : css("--text-muted");
+  dotRows(document.getElementById("roChart"), rows, { xlo: lo, xhi: hi, ref: 0, xTitle: "Load effect (% signal change, fitted 10% → 46%, run-level betas)", yTitle: "ROI",
+    marks: [{ key: "a", color: css("--context"), filled: true }, { key: "c", err: "cse", color: col, filled: r => r.sigC }],
+    tipFn: r => [{ label: "Uncontrolled (load only)", value: `${fmt(r.A.eff)}%, p ${fmtP(r.A.p)}` }, { label: "Controlled (run position + day)", value: `${fmt(r.C.eff)}% ± ${r.C.se.toFixed(2)}, p ${fmtP(r.C.p)}, q ${fmtP(r.C.q)}` },
+      { label: "Controlled + motion", value: `${fmt(r.Cm.eff)}%, p ${fmtP(r.Cm.p)}` }, { label: "Run-position term (per SD of run)", value: `${fmt(r.R.eff, 3)}, p ${fmtP(r.R.p)}` }] });
+  legend("roLegend", [{ color: css("--context"), label: "Uncontrolled (load only)" }, { color: css("--series-1"), label: "Controlled, increase (q < .05)" }, { color: css("--neg"), label: "Controlled, decrease (q < .05)" }, { kind: "key-ring", label: "Controlled, not significant (± SEM)" }]);
+  table("roTable", ["ROI", "Uncontrolled", "p", "Controlled", "p", "q", "Controlled + motion", "p", "Run-position term", "p"],
+    rows.map(r => [r.label, fmt(r.A.eff), fmtP(r.A.p), fmt(r.C.eff), fmtP(r.C.p), fmtP(r.C.q), fmt(r.Cm.eff), fmtP(r.Cm.p), fmt(r.R.eff, 3), fmtP(r.R.p)]));
+  const c = Object.values(E.corrRatioRun).map(Math.abs); document.getElementById("roCorr").textContent = (c.reduce((a, b) => a + b, 0) / c.length).toFixed(2);
+  const pick = roi => ({ A: get("wang2015", roi, "slopeA"), C: get("wang2015", roi, "slopeC") }), ip = pick("IPS2"), fe = pick("FEF"), v1 = pick("V1_fovea"), v2 = pick("V2_periph"), dm = { A: get("schaefer2018", "DefaultA", "slopeA"), C: get("schaefer2018", "DefaultA", "slopeC") };
+  const tk = document.getElementById("roTakeaway"); tk.replaceChildren(); h("b", { text: "Takeaway" }, tk);
+  tk.appendChild(document.createTextNode(` Refitting every run separately and modeling run position (plus scan day, and motion in a variant) leaves the load effects essentially unchanged: IPS2 ${fmt(ip.A.eff)}% → ${fmt(ip.C.eff)}%, FEF ${fmt(fe.A.eff)} → ${fmt(fe.C.eff)}, foveal V1 ${fmt(v1.A.eff)} → ${fmt(v1.C.eff)}, default mode A ${fmt(dm.A.eff)} → ${fmt(dm.C.eff)}. Run position itself has no reliable effect: no ROI survives FDR (smallest q = ${E.runTermMc.minQ.toFixed(2)}, although ${E.runTermMc.nP05} of ${E.runTermMc.nRois} ROIs reach uncorrected p < .05 in the motion variant). Peripheral V2 suppression becomes slightly clearer: ${fmt(v2.A.eff)} (p ${fmtP(v2.A.p)}) → ${fmt(v2.C.eff)} (p ${fmtP(v2.C.p)}, q ${fmtP(v2.C.q)}).`));
+}
+document.querySelectorAll("#roTabs button").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#roTabs button").forEach(o => o.setAttribute("aria-pressed", String(o === b))); RO.set = b.dataset.a; renderRunOrder(); }));
+// ---- 05b ----
+const AX = [["ratio", "Minority share", "--series-1"], ["evidence", "Evidence (log margin)", "--series-3"], ["behavior", "Behavioral difficulty", "--series-2"]];
+const ARF_ROIS = ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF", "LO", "Dorsal composite", "Foveal V1–V3"];
+function renderArf() {
+  const rows = ARF_ROIS.map(roi => { const o = { label: roi }; for (const [k] of AX) { const r = E.arf.find(a => a.roi === roi && a.axis === k); o[k] = r.q_subject_geomean; o[k + "_r"] = r; } return o; });
+  dotRows(document.getElementById("arfQ"), rows, { W: 520, xlo: 0.1, xhi: 5, log: true, ref: 1, xTitle: "Power-law exponent q (log scale; 1 = linear)", yTitle: "ROI",
+    marks: AX.map(([k, , c]) => ({ key: k, color: css(c), filled: r => r[k + "_r"].p_logq < 0.05 })),
+    tipFn: r => AX.map(([k, name, c]) => { const a = r[k + "_r"]; return { label: name, color: css(c), value: `q = ${a.q_subject_geomean.toFixed(2)} · ${a.n_compressive}/8 < 1 · p ${fmtP(a.p_logq)} · ΔAICc vs flat ${a.sum_dAICc_flat_minus_best.toFixed(0)}` }; }) });
+  legend("arfQLegend", AX.map(([, name, c]) => ({ color: css(c), label: name })).concat([{ kind: "key-ring", label: "Hollow: q not different from 1 (p ≥ .05)" }]));
+  // dorsal composite group-mean curve on the three axes
+  const keys = ["IPS0", "IPS1", "IPS2", "IPS3", "IPS4/5", "SPL1", "FEF"].map(r => "wang2015|" + r);
+  const y = D.ratios.map((_, i) => keys.reduce((s, k) => s + D.curves[k].group.all8[i].m, 0) / keys.length);
+  const box = document.getElementById("arfCurve"); box.replaceChildren();
+  const W = 440, M = { t: 14, r: 20, b: 58, l: 70 }, iw = W - M.l - M.r, ih = iw, H = M.t + ih + M.b;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Dorsal attention composite response plotted against three load axes" }, box);
+  const ylo = Math.floor(Math.min(...y) * 4) / 4 - 0.25, yhi = Math.ceil(Math.max(...y) * 4) / 4 + 0.25;
+  const X = v => M.l + v * iw, Y = v => M.t + ih - (v - ylo) / (yhi - ylo) * ih;
+  for (const tv of niceTicks(ylo, yhi, 5)) { el("line", { x1: M.l, x2: M.l + iw, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }, svg); txt(svg, M.l - 8, Y(tv) + 4, tv.toFixed(1), { "text-anchor": "end" }); }
+  for (const tv of [0, 0.25, 0.5, 0.75, 1]) txt(svg, X(tv), M.t + ih + 20, String(tv), { "text-anchor": "middle" });
+  el("line", { x1: M.l, x2: M.l + iw, y1: M.t + ih, y2: M.t + ih, stroke: css("--axis") }, svg);
+  txt(svg, M.l + iw / 2, H - 8, "Load, rescaled 0 (10%) to 1 (46%)", { "text-anchor": "middle", class: "axt" });
+  const yt = M.t + ih / 2; txt(svg, 18, yt, "Response (% signal change)", { "text-anchor": "middle", class: "axt", transform: `rotate(-90 18 ${yt})` });
+  for (const [k, , c] of AX) { const xs = E.arfAxes.map(a => a["x_" + k]);
+    el("path", { d: xs.map((x, i) => `${i ? "L" : "M"}${X(x).toFixed(1)},${Y(y[i]).toFixed(1)}`).join(""), fill: "none", stroke: css(c), "stroke-width": 2.5 }, svg);
+    xs.forEach((x, i) => { const g = el("g", {}, svg); el("circle", { cx: X(x), cy: Y(y[i]), r: 4, fill: css(c), stroke: css("--surface-1"), "stroke-width": 1.5 }, g);
+      g.addEventListener("pointermove", e => showTip(e, `${Math.round(D.ratios[i] * 100)}% minority`, [{ label: AX.find(a => a[0] === k)[1], color: css(c), value: `x = ${x.toFixed(2)}, ${y[i].toFixed(2)}%` }])); g.addEventListener("pointerleave", hideTip); }); }
+  legend("arfCurveLegend", AX.map(([k, name, c]) => ({ kind: "key-line", color: css(c), label: k === "behavior" ? name + " (10% and 30% both sit at 0)" : name })));
+  table("arfTable", ["ROI", "Axis", "q (geo. mean)", "Subjects q < 1", "p (log q ≠ 0)", "Group-curve q", "Summed ΔAICc vs flat"],
+    E.arf.map(a => [a.roi, AX.find(x => x[0] === a.axis)[1], a.q_subject_geomean.toFixed(2), `${a.n_compressive}/${a.n}`, fmtP(a.p_logq), a.q_group_curve.toFixed(2), a.sum_dAICc_flat_minus_best.toFixed(1)]));
+}
+const render = () => { renderRunOrder(); renderArf(); };
+document.getElementById("themeBtn").addEventListener("click", render);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+render();
 })();
 </script>
 </body>
