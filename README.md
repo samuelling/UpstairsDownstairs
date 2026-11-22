@@ -36,6 +36,8 @@ A reanalysis of the dual-task psychophysics study that preceded the fMRI (cluste
 - **Trial by trial**, holding tilt constant, a tilt judgment is more often correct when the central judgment on that trial was correct (7 of 7 subjects, p = .018).
 - **Reliability:** following the original criteria, the main analyses use the 7 subjects with more than 70% usable staircases; all 10 are shown as a check.
 
+- **Contrast-discrimination pilots (section 06):** TvC functions from 2 pilot subjects (coded A and B). A Naka-Rushton response-gain change explains load better than contrast gain: Rmax ×0.76 from 5% to 48% load in both subjects, ×0.52 across 12–48% in B. Code: `scripts/rsf_extract.py` (cluster) and `scripts/rsf_tvc.py` (local).
+
 Rebuild: `rsync -a scc:/projectnb/vision/AttentionManipulation_reanalysis/outputs/ data/psychophysics/ && python3 scripts/build_psy_data.py`.
 
 ## Caveats

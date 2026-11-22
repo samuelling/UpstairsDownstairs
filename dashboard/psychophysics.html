@@ -42,7 +42,8 @@
         <li><a href="#paradigm"><span class="cl-n">01</span><span class="cl-t">The dual task, interactive</span></a></li>
         <li><a href="#thresholds"><span class="cl-n">03</span><span class="cl-t">Peripheral thresholds rise modestly with load</span></a></li>
         <li><a href="#coupling"><span class="cl-n">05</span><span class="cl-t">Central and peripheral judgments succeed together</span></a></li>
-        <li><a href="#meaning"><span class="cl-n">06</span><span class="cl-t">Interpretation and relation to the fMRI</span></a></li>
+        <li><a href="#pilot"><span class="cl-n">06</span><span class="cl-t">Pilot: load acts as response gain</span></a></li>
+        <li><a href="#meaning"><span class="cl-n">07</span><span class="cl-t">Interpretation and relation to the fMRI</span></a></li>
       </ul>
     </div>
   </header>
@@ -175,13 +176,24 @@
     </details>
   </section>
 
+  <section class="card" id="pilot">
+    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Pilot · attentional response function</span><h2>In two pilot subjects, central load scales down the peripheral contrast response</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Before the tilt study, two subjects did a contrast-discrimination version of the dual task: two peripheral gratings, one at a pedestal contrast, and a judgment of which was higher. Measuring thresholds across pedestals (a TvC function) at easy and hard central loads shows how load acts on the underlying contrast response function. In both subjects, and in every pilot set that reaches hard loads, a <b>response-gain</b> change (lower Rmax) fits clearly better than a contrast-gain change (shifted c50): from 5% to 48% load, Rmax falls by about a quarter (×0.76 in both subjects), and by about half across 12–48% in subject B's wider-range set. Hard load raises thresholds most at the highest pedestal and least in the dip. A narrower 28–44% set from subject A shows the same direction but no reliable effect. These are pilot data from two subjects, one of them the experimenter, so they suggest a mechanism rather than establish one.</div>
+    <div class="multiples" id="rsfPanels" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));"></div>
+    <div class="legend" id="rsfLegend"></div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Each trial flashed the central red/blue squares (100 or 200) for 50 ms together with two 6 cycle/deg gratings left and right of fixation, one at a fixed pedestal contrast and one at a higher test contrast; subjects reported the majority color and which grating had higher contrast. QUEST tracked the test contrast separately for each blue-square count; the threshold is the final estimate minus the pedestal (staircases pinned at the 99% contrast ceiling were dropped). Pedestals varied across runs, and each run interleaved two loads, each with both majority colors. Central accuracy fell from about 100% at a 5% minority share to 54–58% at 48%. The model is a Naka-Rushton contrast response R(c) = Rmax·cⁿ/(cⁿ + c50ⁿ); the threshold ΔC is the increment that raises R by one unit, which produces the dipper-shaped TvC. All staircases' log thresholds were fit with one exponent n per set and four hypotheses about load: none, contrast gain (c50 depends on load), response gain (Rmax depends on load), or both. With two loads the load-dependent parameter is free; with more, it is log-linear in load. Models were compared by AICc. Caveats: two subjects; pedestal changes across runs, so it is partly confounded with session order; and response gain vs contrast gain inferred from TvC data depends on the assumed noise (here constant).</p>
+      <div id="rsfTable"></div>
+    </details>
+  </section>
+
   <section class="card" id="meaning">
-    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Interpretation</span><h2>Interpretation and relation to the fMRI</h2></div></div>
+    <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">Interpretation</span><h2>Interpretation and relation to the fMRI</h2></div></div>
     <div class="verdict">
       <div>
         <h3>Where things stand</h3>
         <p>Raising central load sharply impairs the central judgment but only modestly impairs the concurrent peripheral orientation judgment. Thresholds rise by about a third on average, consistently in direction but not significantly, and the cost is concentrated in a subset of subjects.</p>
-        <p>This lines up with the fMRI: there, foveal visual cortex rose with load while <b>peripheral suppression was weak</b>. Both datasets point to a limited, variable cost to the periphery rather than a strong push-pull trade-off, and both show the effect dipping at the hardest load, where central performance approaches chance and subjects may stop trying.</p>
+        <p>This lines up with the fMRI: there, foveal visual cortex rose with load while <b>peripheral suppression was weak</b>. Both datasets point to a limited, variable cost to the periphery rather than a strong push-pull trade-off. The contrast-discrimination pilots (section 06) suggest what form that cost takes: a reduction in response gain, which mainly affects high-contrast stimuli such as the fMRI noise annulus, and both show the effect dipping at the hardest load, where central performance approaches chance and subjects may stop trying.</p>
       </div>
       <div>
         <h3>Caveats</h3>
@@ -195,6 +207,7 @@
       <div>
         <h3>Possible next steps</h3>
         <ul>
+          <li><b>Confirm the response-gain result.</b> Run the contrast-discrimination version in more subjects, with pedestals interleaved within runs and a single-task baseline.</li>
           <li><b>Model the lapses directly.</b> Fit lapse rate per load to ask whether load causes all-or-none failures in the periphery rather than graded sensitivity loss.</li>
           <li><b>Relate to the fMRI subjects.</b> If any subjects did both studies, compare their behavioral costs with their peripheral fMRI responses.</li>
           <li><b>Power analysis.</b> Use the observed effect and variability to size a confirmatory study with a single-task baseline.</li>
@@ -435,7 +448,46 @@ function renderCoupling() {
 }
 function renderOriginal() { table("origTable", ["Minority share", "Subjects", "Threshold (deg, mean ± SEM)", "Central accuracy (%)"], D.original.map(r => [pct(r.ratio) + "%", r.n, `${r.thr_m.toFixed(2)} ± ${r.thr_se.toFixed(2)}`, `${r.rb_m.toFixed(1)} ± ${r.rb_se.toFixed(1)}`])); }
 
-function renderAll() { renderTiles(); renderCentral(); renderThresholds(); renderIndividuals(); renderCoupling(); renderOriginal(); drawTrialTimeline(); drawStim(); }
+
+// ---------- 06 pilot TvC (contrast gain vs response gain) ----------
+const SET_NAME = { "A-100": "Subject A · 100 squares", "B-100": "Subject B · 100 squares", "A-200": "Subject A · 200 squares", "B-200": "Subject B · 200 squares" };
+const HYP_NAME = { none: "No load effect", cg: "Contrast gain", rg: "Response gain", both: "Both" };
+function renderRsf() {
+  const R = D.rsf; if (!R) return;
+  const box = document.getElementById("rsfPanels"); box.replaceChildren();
+  const col = [css("--series-1"), css("--series-2")];
+  for (const set of ["B-100", "A-100", "B-200", "A-200"]) {
+    const [lo, hi] = R.extremes[set], loads = [lo, hi];
+    const mods = R.models.filter(m => m[0] === set), d = Object.fromEntries(mods.map(m => [m[1], m[2]]));
+    const best = mods.reduce((a, b) => a[2] <= b[2] ? a : b)[1];
+    const f = h => R.fits.filter(r => r.set === set && r.hyp === h);
+    const rg = f("rg"), rmaxRatio = rg.find(r => r.load === hi).rmax / rg.find(r => r.load === lo).rmax;
+    const p = h("div", {}, box);
+    h("p", { class: "panel-title", text: SET_NAME[set] }, p);
+    h("p", { class: "panel-stat", text: `best: ${HYP_NAME[best]} · ΔAICc vs contrast gain ${(d.cg - d.rg).toFixed(1)}, vs none ${(d.none - d.rg).toFixed(1)} · Rmax ×${rmaxRatio.toFixed(2)}` }, p);
+    const holder = h("div", {}, p);
+    chart(holder, { W: 330, x: { lo: 0.004, hi: 0.7, log: true, ticks: [0.01, 0.03, 0.1, 0.3], fmt: v => Math.round(100 * v) + "%", title: "Pedestal contrast (log)" },
+      y: { lo: 0.008, hi: 0.35, log: true, ticks: [0.01, 0.02, 0.05, 0.1, 0.2], fmt: v => Math.round(100 * v) + "%", title: "Threshold ΔC (log)" },
+      draw(svg, X, Y) {
+        loads.forEach((L, k) => {
+          const cv = R.curves.filter(c => c.set === set && c.hyp === "rg" && c.load === L && c.thr >= 0.008 && c.thr <= 0.35);
+          el("path", { d: pathOf(cv.map(c => [c.ped, c.thr]), X, Y), fill: "none", stroke: col[k], "stroke-width": 2 }, svg);
+          for (const c of R.cells.filter(c => c.set === set && c.ratio === L)) {
+            const lo2 = Math.max(0.008, c.lo), hi2 = Math.min(0.35, c.hi), y = Math.min(0.35, Math.max(0.008, c.thr));
+            el("line", { x1: X(c.ped), x2: X(c.ped), y1: Y(lo2), y2: Y(hi2), stroke: col[k], "stroke-width": 1.5 }, svg);
+            const g = el("g", {}, svg); el("circle", { cx: X(c.ped), cy: Y(y), r: 4, fill: col[k], stroke: css("--surface-1"), "stroke-width": 1.5 }, g);
+            g.addEventListener("pointermove", e => showTip(e, `${SET_NAME[set]} · pedestal ${(100 * c.ped).toFixed(1)}%`, [{ label: `${pct(L)}% minority`, color: col[k], value: `ΔC ${(100 * c.thr).toFixed(2)}% (n = ${c.n} staircases; central ${Math.round(100 * c.rg_acc)}% correct)` }]));
+            g.addEventListener("pointerleave", hideTip);
+          }
+        });
+      } });
+  }
+  legend("rsfLegend", [{ label: "Easiest load in the set", color: col[0] }, { label: "Hardest load in the set", color: col[1] }, { label: "Lines: response-gain fit · points: geometric mean ± SEM across staircases", kind: "key-ring" }]);
+  table("rsfTable", ["Pilot set", "Loads", "No load effect", "Contrast gain", "Response gain", "Both", "Staircases"],
+    ["A-100", "B-100", "A-200", "B-200"].map(set => { const m = Object.fromEntries(R.models.filter(x => x[0] === set).map(x => [x[1], x[2]])), N = R.models.find(x => x[0] === set)[4], [lo, hi] = R.extremes[set];
+      return [SET_NAME[set], `${pct(lo)}–${pct(hi)}%`, ...["none", "cg", "rg", "both"].map(k => "ΔAICc " + m[k].toFixed(1)), N]; }));
+}
+function renderAll() { renderRsf(); renderTiles(); renderCentral(); renderThresholds(); renderIndividuals(); renderCoupling(); renderOriginal(); drawTrialTimeline(); drawStim(); }
 function seg(id, attr, fn) { document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => { document.querySelectorAll(`#${id} button`).forEach(o => o.setAttribute("aria-pressed", String(o === b))); fn(b.dataset[attr]); })); }
 seg("setSeg", "set", v => { state.set = v; renderCentral(); renderThresholds(); renderIndividuals(); renderCoupling(); });
 seg("measSeg", "m", v => { state.meas = v; renderThresholds(); renderIndividuals(); });

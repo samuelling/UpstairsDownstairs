@@ -45,6 +45,19 @@ D = {
     "nRuns": len({(r["subject"], r["run"]) for r in runs}),
     "nTrials": int(sum(r["n_trials"] for r in cells)),
 }
+# AttRSF contrast-discrimination pilots (scripts/rsf_extract.py on the cluster, then scripts/rsf_tvc.py)
+if os.path.exists(os.path.join(SRC, "rsf_fits.csv")):
+    fits = rows("rsf_fits.csv")
+    ext = {}
+    for r in fits:
+        e = ext.setdefault(r["set"], [r["load"], r["load"]]); e[0] = min(e[0], r["load"]); e[1] = max(e[1], r["load"])
+    D["rsf"] = {
+        "cells": [r for r in rows("rsf_cells.csv")],
+        "curves": [r for r in rows("rsf_curves.csv") if r["hyp"] in ("rg", "cg", "none") and r["load"] in ext.get(r["set"], [])],
+        "fits": [r for r in fits if r["load"] in ext[r["set"]]],
+        "models": sorted({(r["set"], r["hyp"], r["dAICc"], int(r["k"]), int(r["N"])) for r in fits}),
+        "extremes": ext,
+    }
 with open(OUT, "w") as f:
     f.write("window.PSY_DATA = " + json.dumps(D, separators=(",", ":")) + ";\n")
 print("wrote", OUT, os.path.getsize(OUT), "bytes;", len(D["subjects"]), "subjects,", D["nRuns"], "runs,", D["nTrials"], "trials")
