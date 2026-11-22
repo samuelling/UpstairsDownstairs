@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upstairs / Downstairs: brain maps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.viewer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.viewer-grid.single { grid-template-columns: 1fr; }
+.viewport { position: relative; background: var(--surface-1); border: 2px solid var(--rule); aspect-ratio: 4 / 3; width: 100%; touch-action: none; }
+.viewport canvas { display: block; width: 100% !important; height: 100% !important; cursor: grab; }
+.viewport .vp-label { position: absolute; left: 10px; top: 8px; font-family: var(--ui); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-secondary); pointer-events: none; }
+.viewport .loading { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--ui); font-size: 13px; color: var(--text-muted); }
+.map-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px 24px; margin: 14px 0 16px; }
+.roi-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 4px 14px; margin-top: 14px; }
+.roi-item { display: flex; align-items: center; gap: 8px; font-family: var(--ui); font-size: 12.5px; color: var(--text-secondary); background: none; border: 1px solid transparent; border-radius: 4px; padding: 3px 6px; cursor: pointer; text-align: left; }
+.roi-item:hover, .roi-item[aria-pressed="true"] { border-color: var(--rule); color: var(--text-primary); }
+.roi-item i { width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.roi-item .eff { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--text-muted); }
+.colorbar { display: flex; align-items: center; gap: 10px; font-family: var(--ui); font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
+.colorbar .bar { height: 12px; flex: 0 0 240px; border-radius: 2px; border: 1px solid var(--border); }
+.hint { font-family: var(--ui); font-size: 12px; color: var(--text-muted); margin: 8px 0 0; }
+@media (max-width: 760px) { .viewer-grid { grid-template-columns: 1fr; } }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+  <header class="masthead">
+    <div class="mast-strip">
+      <span>Central load × attention</span><span>Brain maps</span><span>Updated November 2026</span><span class="grow"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Dark</button>
+    </div>
+    <nav class="study-tabs" aria-label="Studies">
+      <a href="index.html">fMRI<span>central load × attention networks</span></a>
+      <a href="psychophysics.html">Psychophysics<span>dual task: central load × peripheral tilt</span></a>
+      <a href="maps.html" aria-current="page">Brain maps<span>ROIs and load effects on the inflated cortex</span></a>
+    </nav>
+    <h1 class="wordmark"><span class="up">Upstairs</span><span class="slash">/</span><span class="down">Downstairs</span></h1>
+    <div class="mast-row">
+      <div>
+        <p class="tagline">Where the regions of interest are, and where load raises or lowers activity.</p>
+        <p class="sub">Every ROI used in the fMRI analyses, drawn on the inflated fsaverage cortex, together with the vertex-wise group map of the load effect. Drag to rotate, scroll or pinch to zoom, and hover over the cortex to see each region's load effect.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="card" id="viewer">
+    <div class="sec-head"><span class="sec-num">◐</span><div><span class="kicker">Interactive</span><h2>Regions of interest and load effects on the inflated cortex</h2></div></div>
+    <div class="map-controls">
+      <div class="ctl-group"><span class="lbl">Show</span>
+        <div class="seg" id="layerSeg"><button type="button" data-v="roi" aria-pressed="true">ROIs</button><button type="button" data-v="effect" aria-pressed="false">Load-effect map</button></div></div>
+      <div class="ctl-group" id="atlasGroup"><span class="lbl">ROI set</span>
+        <div class="seg" id="atlasSeg">
+          <button type="button" data-v="wang2015" aria-pressed="true">Wang 2015</button>
+          <button type="button" data-v="bands" aria-pressed="false">Fovea / periphery</button>
+          <button type="button" data-v="schaeferNet" aria-pressed="false">Schaefer networks</button>
+          <button type="button" data-v="glasser2016" aria-pressed="false">Glasser areas</button>
+        </div></div>
+      <div class="ctl-group" id="colorGroup"><span class="lbl">Color ROIs by</span>
+        <div class="seg" id="colorSeg"><button type="button" data-v="id" aria-pressed="true">Region</button><button type="button" data-v="eff" aria-pressed="false">Load effect</button></div></div>
+      <div class="ctl-group" id="threshGroup" hidden><span class="lbl">Load-effect map</span>
+        <div class="seg" id="threshSeg"><button type="button" data-v="all" aria-pressed="true">All vertices</button><button type="button" data-v="p05" aria-pressed="false">Only p &lt; .05</button></div></div>
+      <div class="ctl-group"><span class="lbl">Hemisphere</span>
+        <div class="seg" id="hemiSeg"><button type="button" data-v="both" aria-pressed="true">Both</button><button type="button" data-v="lh" aria-pressed="false">Left</button><button type="button" data-v="rh" aria-pressed="false">Right</button></div></div>
+      <div class="ctl-group"><span class="lbl">View</span>
+        <div class="seg" id="viewSeg"><button type="button" data-v="posterolateral" aria-pressed="true">Back-side</button><button type="button" data-v="lateral" aria-pressed="false">Lateral</button><button type="button" data-v="medial" aria-pressed="false">Medial</button><button type="button" data-v="posterior" aria-pressed="false">Posterior</button><button type="button" data-v="dorsal" aria-pressed="false">Dorsal</button><button type="button" data-v="ventral" aria-pressed="false">Ventral</button></div></div>
+    </div>
+    <div class="viewer-grid" id="viewerGrid">
+      <div class="viewport" id="vp-lh"><span class="vp-label">Left hemisphere</span><div class="loading">Loading surfaces…</div></div>
+      <div class="viewport" id="vp-rh"><span class="vp-label">Right hemisphere</span><div class="loading">Loading surfaces…</div></div>
+    </div>
+    <div class="colorbar" id="colorbar" hidden></div>
+    <p class="hint">Drag to rotate · scroll or pinch to zoom · hover for details · click a region in the list to highlight it.</p>
+    <div class="roi-list" id="roiList"></div>
+    <details class="method"><summary>About these maps</summary>
+      <p><b>Surface.</b> The fsaverage6 inflated cortex (40,962 vertices per hemisphere), shaded by sulcal depth (darker = sulcus). fsaverage6 is nested in fsaverage, so ROIs and maps from the analyses transfer exactly.</p>
+      <p><b>ROIs</b> are the ones used in the analyses: Wang et al. (2015) maximum-probability retinotopic areas (IPS4 and IPS5 merged); V1–V3 split into a fovea band (0.5–1.5°, the task ring) and a periphery band (3–7.5°, the noise annulus) by the Benson (2014) template (the per-subject pRF versions are not shown); the 12 Schaefer (2018) 17-network networks analyzed; and the selected Glasser HCP-MMP1 areas. "Load effect" colors each ROI by its group load effect (fitted change from 10% to 46% load, both hemispheres averaged, 8 subjects), the same numbers as on the fMRI tab.</p>
+      <p><b>Load-effect map.</b> For each subject and vertex, the 7 load betas from the original GLMs (5 mm smoothing) were regressed on load and expressed as the fitted change from 10% to 46%; the map shows the mean across the 8 subjects. "Only p &lt; .05" hides vertices with |t(7)| &lt; 2.36, uncorrected for the number of vertices, so treat it as descriptive.</p>
+    </details>
+  </section>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+</div>
+
+<script src="data.js"></script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const D = window.CAM_DATA;
+const qTheme = new URLSearchParams(location.search).get("theme");
+if (qTheme === "light" || qTheme === "dark") document.documentElement.dataset.theme = qTheme;
+const css = n => getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(n).trim();
+const h = (t, pr = {}, p) => { const n = document.createElement(t); for (const k in pr) { if (k === "text") n.textContent = pr[k]; else n.setAttribute(k, pr[k]); } if (p) p.appendChild(n); return n; };
+const fmt = (v, d = 2) => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d);
+const fmtP = p => p < 0.001 ? "< .001" : "= " + p.toFixed(3).replace(/^0/, "");
+const state = { layer: "roi", atlas: "wang2015", color: "id", thresh: "all", hemi: "both", view: "posterolateral", sel: null };
+const STAT_ATLAS = { wang2015: "wang2015", bands: "wang2015", schaeferNet: "schaefer2018", glasser2016: "glasser2016" };
+const ATLAS_NAME = { wang2015: "Wang 2015", bands: "Fovea / periphery bands", schaeferNet: "Schaefer 17-network", glasser2016: "Glasser HCP-MMP1" };
+const LOAD_SPAN = D.ratios[D.ratios.length - 1] - D.ratios[0];
+const stat = (atlas, roi) => D.slopes.find(s => s.set === "all8" && s.atlas === STAT_ATLAS[atlas] && s.roi === roi);
+const pretty = r => r.replace("_fovea", " fovea").replace("_periph", " periphery");
+
+// ---------- colors ----------
+const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+function roiPalette(n) {   // evenly spaced hues, alternating lightness for neighbours
+  return Array.from({ length: n }, (_, i) => { const c = new THREE.Color(); c.setHSL((i * 0.618034 + 0.05) % 1, 0.62, i % 2 ? 0.52 : 0.6); return c; });
+}
+function diverge(v, lim = 1) {   // blue = increase with load, red = decrease (matches the fMRI tab)
+  const x = Math.max(-1, Math.min(1, v / lim)), w = new THREE.Color(isDark() ? "#3a3733" : "#e9e3d6");
+  const up = new THREE.Color(isDark() ? "#7593ff" : "#1f49d1"), dn = new THREE.Color(isDark() ? "#ff6d8a" : "#c2264a");
+  return w.clone().lerp(x >= 0 ? up : dn, Math.pow(Math.abs(x), 0.8));
+}
+
+// ---------- data ----------
+let META, HEMI = {};
+async function load() {
+  META = await (await fetch("brain/meta.json")).json();
+  for (const hm of ["lh", "rh"]) {
+    const buf = await (await fetch(`brain/${hm}.bin`)).arrayBuffer(), P = META.hemis[hm].parts;
+    const arr = (name, T) => new T(buf, P[name].offset, P[name].length);
+    HEMI[hm] = { pos: arr("positions", Float32Array), sulc: arr("sulc", Float32Array), effect: arr("effect", Float32Array), t: arr("t", Float32Array), faces: arr("faces", Uint16Array),
+      labels: Object.fromEntries(Object.keys(META.atlases).map(a => [a, arr("label:" + a, Uint8Array)])) };
+  }
+}
+
+// ---------- viewers ----------
+const VIEWS = {   // camera direction (from target) per hemisphere, FreeSurfer RAS: +x right, +y anterior, +z superior
+  posterolateral: { lh: [-0.62, -0.72, 0.32], rh: [0.62, -0.72, 0.32] }, lateral: { lh: [-1, 0, 0], rh: [1, 0, 0] }, medial: { lh: [1, 0, 0], rh: [-1, 0, 0] },
+  posterior: { lh: [0, -1, 0], rh: [0, -1, 0] }, dorsal: { lh: [0, 0, 1], rh: [0, 0, 1] }, ventral: { lh: [0, 0, -1], rh: [0, 0, -1] } };
+const viewers = {};
+function makeViewer(hm) {
+  const host = document.getElementById("vp-" + hm); host.querySelector(".loading")?.remove();
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio)); host.appendChild(renderer.domElement);
+  const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 4 / 3, 1, 2000);
+  scene.add(new THREE.AmbientLight(0xffffff, 1.6)); const key = new THREE.DirectionalLight(0xffffff, 1.6); camera.add(key); key.position.set(0.3, 0.6, 1); scene.add(camera);
+  const H = HEMI[hm], g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(H.pos, 3)); g.setIndex(new THREE.BufferAttribute(H.faces, 1)); g.computeVertexNormals();
+  const colors = new Float32Array(H.pos.length); g.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  g.computeBoundingSphere(); const center = g.boundingSphere.center.clone(), rad = g.boundingSphere.radius;
+  const mesh = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true })); scene.add(mesh);
+  const controls = new OrbitControls(camera, renderer.domElement); controls.target.copy(center); controls.enableDamping = true; controls.dampingFactor = 0.12;
+  const v = { hm, host, renderer, scene, camera, controls, mesh, g, colors, center, rad, ray: new THREE.Raycaster(), ptr: new THREE.Vector2() };
+  renderer.domElement.addEventListener("pointermove", e => hover(v, e)); renderer.domElement.addEventListener("pointerleave", hideTip);
+  viewers[hm] = v; resize(v); setView(v); return v;
+}
+function resize(v) { const w = v.host.clientWidth, hgt = v.host.clientHeight; v.renderer.setSize(w, hgt, false); v.camera.aspect = w / hgt; v.camera.updateProjectionMatrix(); }
+function setView(v) {
+  const d = new THREE.Vector3(...VIEWS[state.view][v.hm]).normalize();
+  v.camera.up.set(0, 0, 1); if (state.view === "dorsal" || state.view === "ventral") v.camera.up.set(0, 1, 0);
+  v.camera.position.copy(v.center).addScaledVector(d, v.rad * 2.9); v.controls.target.copy(v.center); v.controls.update();
+}
+let hoverVertex = {};
+function vertexColor(hm, i, roiCols) {
+  const H = HEMI[hm], s = H.sulc[i], base = isDark() ? (s > 0 ? 0.24 : 0.36) : (s > 0 ? 0.62 : 0.8), c = new THREE.Color(base, base, base * 0.97);
+  if (state.layer === "effect") {
+    const e = H.effect[i], show = state.thresh === "all" || Math.abs(H.t[i]) > 2.365;
+    if (show && Math.abs(e) > 0.02) { const k = diverge(e, 1); const a = Math.min(1, Math.abs(e) / 0.25); c.lerp(k, a); }
+    return c;
+  }
+  const lab = H.labels[state.atlas][i];
+  if (!lab) return c;
+  const roi = META.atlases[state.atlas][lab - 1];
+  let k = state.color === "id" ? roiCols[lab - 1] : (() => { const st = stat(state.atlas, roi); return st ? diverge(st.slope * LOAD_SPAN, 1) : c; })();
+  if (state.sel && state.sel !== roi) return c.lerp(k, 0.18);
+  return c.lerp(k, 0.92);
+}
+function recolor() {
+  const roiCols = roiPalette(META.atlases[state.atlas].length);
+  for (const v of Object.values(viewers)) {
+    const n = HEMI[v.hm].sulc.length;
+    for (let i = 0; i < n; i++) { const c = vertexColor(v.hm, i, roiCols); v.colors[3 * i] = c.r; v.colors[3 * i + 1] = c.g; v.colors[3 * i + 2] = c.b; }
+    v.g.attributes.color.needsUpdate = true;
+  }
+  renderList(roiCols); renderColorbar();
+}
+const tip = document.getElementById("tip");
+function showTip(e, head, rows) { tip.replaceChildren(); h("div", { class: "t-head", text: head }, tip); for (const r of rows) { const row = h("div", { class: "t-row" }, tip); h("span", { class: "k", text: r.label }, row); h("strong", { text: r.value }, row); } tip.style.display = "block"; let x = e.clientX + 14, y = e.clientY + 14; if (x + tip.offsetWidth > innerWidth - 8) x = e.clientX - tip.offsetWidth - 14; if (y + tip.offsetHeight > innerHeight - 8) y = e.clientY - tip.offsetHeight - 14; tip.style.left = x + "px"; tip.style.top = y + "px"; }
+function hideTip() { tip.style.display = "none"; }
+function hover(v, e) {
+  if (e.buttons) { hideTip(); return; }
+  const r = v.renderer.domElement.getBoundingClientRect(); v.ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  v.ray.setFromCamera(v.ptr, v.camera); const hit = v.ray.intersectObject(v.mesh)[0];
+  if (!hit) { hideTip(); return; }
+  const f = hit.face, P = HEMI[v.hm].pos, cand = [f.a, f.b, f.c];
+  const i = cand.reduce((best, k) => { const d = (P[3 * k] - hit.point.x) ** 2 + (P[3 * k + 1] - hit.point.y) ** 2 + (P[3 * k + 2] - hit.point.z) ** 2; return d < best[1] ? [k, d] : best; }, [cand[0], Infinity])[0];
+  const H = HEMI[v.hm], side = v.hm === "lh" ? "left" : "right";
+  if (state.layer === "effect") { showTip(e, `Vertex ${i} · ${side} hemisphere`, [{ label: "Load effect", value: `${fmt(H.effect[i])}%` }, { label: "t(7)", value: H.t[i].toFixed(2) }]); return; }
+  const lab = H.labels[state.atlas][i];
+  if (!lab) { showTip(e, `${side} hemisphere`, [{ label: "Not in a " + ATLAS_NAME[state.atlas] + " ROI", value: "" }, { label: "Vertex load effect", value: `${fmt(H.effect[i])}%` }]); return; }
+  const roi = META.atlases[state.atlas][lab - 1], st = stat(state.atlas, roi);
+  showTip(e, `${pretty(roi)} · ${ATLAS_NAME[state.atlas]}`, st ? [{ label: "ROI load effect (both hemispheres)", value: `${fmt(st.slope * LOAD_SPAN)}%` }, { label: `t(${st.n - 1})`, value: `${st.t.toFixed(2)}, q ${fmtP(st.q)}` }, { label: "This vertex", value: `${fmt(H.effect[i])}%` }] : [{ label: "This vertex", value: `${fmt(H.effect[i])}%` }]);
+}
+function renderList(roiCols) {
+  const box = document.getElementById("roiList"); box.replaceChildren();
+  if (state.layer !== "roi") return;
+  META.atlases[state.atlas].forEach((roi, i) => {
+    const st = stat(state.atlas, roi), b = h("button", { type: "button", class: "roi-item", "aria-pressed": String(state.sel === roi) }, box);
+    const sw = h("i", {}, b); sw.style.background = "#" + (state.color === "id" ? roiCols[i] : st ? diverge(st.slope * LOAD_SPAN, 1) : new THREE.Color(0.7, 0.7, 0.7)).getHexString();
+    b.appendChild(document.createTextNode(pretty(roi))); if (st) h("span", { class: "eff", text: `${fmt(st.slope * LOAD_SPAN)}%${st.q < 0.05 ? " *" : ""}` }, b);
+    b.addEventListener("click", () => { state.sel = state.sel === roi ? null : roi; recolor(); });
+  });
+}
+function renderColorbar() {
+  const cb = document.getElementById("colorbar"); const on = state.layer === "effect" || state.color === "eff"; cb.hidden = !on; if (!on) return;
+  cb.replaceChildren(); h("span", { text: "−1%" }, cb); const bar = h("span", { class: "bar" }, cb);
+  bar.style.background = `linear-gradient(90deg, #${diverge(-1).getHexString()}, #${diverge(-0.5).getHexString()}, #${diverge(0).getHexString()}, #${diverge(0.5).getHexString()}, #${diverge(1).getHexString()})`;
+  h("span", { text: "+1%  load effect (fitted 10% → 46%; red = decreases, blue = increases)" }, cb);
+}
+function layout() {
+  const grid = document.getElementById("viewerGrid"); grid.classList.toggle("single", state.hemi !== "both");
+  for (const hm of ["lh", "rh"]) document.getElementById("vp-" + hm).hidden = !(state.hemi === "both" || state.hemi === hm);
+  for (const v of Object.values(viewers)) resize(v);
+}
+function seg(id, key, after) { document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => { document.querySelectorAll(`#${id} button`).forEach(o => o.setAttribute("aria-pressed", String(o === b))); state[key] = b.dataset.v; after(); })); }
+seg("layerSeg", "layer", () => { document.getElementById("atlasGroup").hidden = document.getElementById("colorGroup").hidden = state.layer !== "roi"; document.getElementById("threshGroup").hidden = state.layer !== "effect"; recolor(); });
+seg("atlasSeg", "atlas", () => { state.sel = null; recolor(); });
+seg("colorSeg", "color", recolor);
+seg("threshSeg", "thresh", recolor);
+seg("hemiSeg", "hemi", layout);
+seg("viewSeg", "view", () => Object.values(viewers).forEach(setView));
+const themeBtn = document.getElementById("themeBtn"), syncTheme = () => { themeBtn.textContent = isDark() ? "Light" : "Dark"; };
+themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncTheme(); if (META) recolor(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { syncTheme(); if (META) recolor(); });
+syncTheme();
+addEventListener("resize", () => Object.values(viewers).forEach(resize));
+(function loop() { for (const v of Object.values(viewers)) { if (v.host.hidden) continue; v.controls.update(); v.renderer.render(v.scene, v.camera); } requestAnimationFrame(loop); })();
+const qs = new URLSearchParams(location.search);
+load().then(() => {
+  makeViewer("lh"); makeViewer("rh");
+  for (const [k, id] of [["atlas", "atlasSeg"], ["layer", "layerSeg"], ["view", "viewSeg"]]) { const v = qs.get(k); const b = v && document.querySelector(`#${id} button[data-v="${v}"]`); if (b) b.click(); }
+  recolor(); layout();
+}).catch(err => { document.querySelectorAll(".viewport .loading").forEach(n => { n.textContent = "Could not load the surfaces (" + err.message + "). Open this page from the website, not as a local file."; }); });
+</script>
+</body>
+</html>

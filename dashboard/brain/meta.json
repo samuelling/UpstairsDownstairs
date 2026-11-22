@@ -1,0 +1,177 @@
+{
+ "nV": 40962,
+ "atlases": {
+  "wang2015": [
+   "V1",
+   "V2",
+   "V3",
+   "hV4",
+   "VO",
+   "LO",
+   "TO(MT+)",
+   "V3ab",
+   "IPS0",
+   "IPS1",
+   "IPS2",
+   "IPS3",
+   "IPS4/5",
+   "SPL1",
+   "FEF"
+  ],
+  "bands": [
+   "V1_fovea",
+   "V1_periph",
+   "V2_fovea",
+   "V2_periph",
+   "V3_fovea",
+   "V3_periph"
+  ],
+  "schaeferNet": [
+   "VisCent",
+   "VisPeri",
+   "DorsAttnA",
+   "DorsAttnB",
+   "SalVentAttnA",
+   "SalVentAttnB",
+   "ContA",
+   "ContB",
+   "ContC",
+   "DefaultA",
+   "DefaultB",
+   "DefaultC"
+  ],
+  "glasser2016": [
+   "IPS1",
+   "IP0",
+   "IP1",
+   "IP2",
+   "LIPv",
+   "LIPd",
+   "VIP",
+   "MIP",
+   "AIP",
+   "7PC",
+   "7AL",
+   "7Am",
+   "7PL",
+   "7Pm",
+   "FEF",
+   "PEF",
+   "6a",
+   "PGp",
+   "PFt",
+   "V3CD",
+   "V7",
+   "MST",
+   "MT"
+  ]
+ },
+ "hemis": {
+  "lh": {
+   "nF": 81920,
+   "parts": {
+    "positions": {
+     "offset": 0,
+     "length": 122886,
+     "dtype": "float32"
+    },
+    "sulc": {
+     "offset": 491544,
+     "length": 40962,
+     "dtype": "float32"
+    },
+    "effect": {
+     "offset": 655392,
+     "length": 40962,
+     "dtype": "float32"
+    },
+    "t": {
+     "offset": 819240,
+     "length": 40962,
+     "dtype": "float32"
+    },
+    "faces": {
+     "offset": 983088,
+     "length": 245760,
+     "dtype": "uint16"
+    },
+    "label:wang2015": {
+     "offset": 1474608,
+     "length": 40962,
+     "dtype": "uint8"
+    },
+    "label:bands": {
+     "offset": 1515572,
+     "length": 40962,
+     "dtype": "uint8"
+    },
+    "label:schaeferNet": {
+     "offset": 1556536,
+     "length": 40962,
+     "dtype": "uint8"
+    },
+    "label:glasser2016": {
+     "offset": 1597500,
+     "length": 40962,
+     "dtype": "uint8"
+    }
+   },
+   "bytes": 1638464
+  },
+  "rh": {
+   "nF": 81920,
+   "parts": {
+    "positions": {
+     "offset": 0,
+     "length": 122886,
+     "dtype": "float32"
+    },
+    "sulc": {
+     "offset": 491544,
+     "length": 40962,
+     "dtype": "float32"
+    },
+    "effect": {
+     "offset": 655392,
+     "length": 40962,
+     "dtype": "float32"
+    },
+    "t": {
+     "offset": 819240,
+     "length": 40962,
+     "dtype": "float32"
+    },
+    "faces": {
+     "offset": 983088,
+     "length": 245760,
+     "dtype": "uint16"
+    },
+    "label:wang2015": {
+     "offset": 1474608,
+     "length": 40962,
+     "dtype": "uint8"
+    },
+    "label:bands": {
+     "offset": 1515572,
+     "length": 40962,
+     "dtype": "uint8"
+    },
+    "label:schaeferNet": {
+     "offset": 1556536,
+     "length": 40962,
+     "dtype": "uint8"
+    },
+    "label:glasser2016": {
+     "offset": 1597500,
+     "length": 40962,
+     "dtype": "uint8"
+    }
+   },
+   "bytes": 1638464
+  }
+ },
+ "effect": {
+  "subjects": 8,
+  "units": "fitted change 10% -> 46% load (% signal)"
+ }
+}
