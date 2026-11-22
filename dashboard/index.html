@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Upstairs / Downstairs — the central-load issue</title>
+<title>Upstairs / Downstairs: central load and attention</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -138,7 +138,8 @@ h3 { font-family: var(--ui); font-size: 13px; font-weight: 700; letter-spacing: 
 .panel-title { font-family: var(--display); font-size: 18px; font-weight: 700; margin: 0; }
 .panel-stat { font-family: var(--ui); font-size: 12px; color: var(--text-secondary); margin: 0 0 2px; }
 svg { display: block; max-width: 100%; height: auto; overflow: visible; }
-svg text { fill: var(--text-muted); font-family: var(--ui); font-size: 11px; font-variant-numeric: tabular-nums; }
+svg text { fill: var(--text-secondary); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 300; font-style: italic; font-size: 13px; font-variant-numeric: tabular-nums; }
+svg text.axt { font-size: 15.5px; fill: var(--text-primary); }
 svg .ink2 { fill: var(--text-secondary); }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-family: var(--ui); font-size: 12px; color: var(--text-secondary); margin: 8px 0 0; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
@@ -244,36 +245,36 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
 <div class="wrap">
   <header class="masthead">
     <div class="mast-strip">
-      <span>Vol. 1 · Issue 01</span><span>November 2026</span><span>The central-load issue</span><span class="grow"></span>
+      <span>Central load × attention</span><span>fMRI reanalysis</span><span>Updated November 2026</span><span class="grow"></span>
       <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Dark</button>
     </div>
     <h1 class="wordmark"><span class="up">Upstairs</span><span class="slash">/</span><span class="down">Downstairs</span></h1>
     <div class="mast-row">
       <div>
-        <p class="tagline">What happens in your brain when a tiny task in the middle of your vision gets really, really hard?</p>
+        <p class="tagline">When a demanding task occupies central vision, how does the brain redistribute its resources between the attention network, the attended location and the periphery?</p>
         <p class="sub">A reanalysis of the NJP central-load fMRI study: 8 subjects and 151 task runs. Subjects watch a little ring of red and blue squares and report whenever the majority color flips. Load is the minority share, from 10% (easy) to 46% (nearly 50/50). Meanwhile a task-irrelevant noise annulus fills the periphery (3–7.5°). Responses come from the original per-subject FS-FAST GLMs on fsaverage.</p>
       </div>
-      <ul class="cover-lines" aria-label="In this issue">
-        <li><a href="#task"><span class="cl-n">01</span><span class="cl-t">Play the task yourself: can you beat the 46% ring?</span></a></li>
-        <li><a href="#ips"><span class="cl-n">03</span><span class="cl-t">Your parietal cortex on hard mode</span></a></li>
-        <li><a href="#visual"><span class="cl-n">04</span><span class="cl-t">The periphery that refused to go quiet</span></a></li>
-        <li><a href="#meaning"><span class="cl-n">07</span><span class="cl-t">The verdict, and what's still open</span></a></li>
+      <ul class="cover-lines" aria-label="Highlights">
+        <li><a href="#task"><span class="cl-n">01</span><span class="cl-t">The paradigm, interactive</span></a></li>
+        <li><a href="#ips"><span class="cl-n">03</span><span class="cl-t">Parietal cortex scales with load</span></a></li>
+        <li><a href="#visual"><span class="cl-n">04</span><span class="cl-t">Peripheral suppression is weak</span></a></li>
+        <li><a href="#meaning"><span class="cl-n">07</span><span class="cl-t">Interpretation and open questions</span></a></li>
       </ul>
     </div>
   </header>
 
   <section class="headline" aria-label="Main findings">
     <div class="hl-left">
-      <span class="kicker">The short of it</span>
+      <span class="kicker">Summary</span>
       <h2>Harder central judgments turn the brain's attention network up, but barely turn the periphery down</h2>
       <p class="caveat">Not yet controlled: load is confounded with run position (one ratio per run, in a fixed order). A refit with run position as a covariate is the next step, and it could change these numbers.</p>
     </div>
     <ol class="takeaways">
-      <li><a href="#behavior"><span><b>The task gets genuinely hard.</b> At 46%, subjects catch only about half of the flips (100% at 10–30%).</span></a></li>
-      <li><a href="#ips"><span><b>Upstairs climbs.</b> Every dorsal attention area (IPS, SPL, FEF) rises with load, in every atlas. IPS2 gains about +1.2% signal. The default mode network falls.</span></a></li>
-      <li><a href="#models"><span><b>It's a ramp, not a ceiling.</b> The rise is linear over 10–46%, with no sign of saturation (though 7 levels can't fully rule it out).</span></a></li>
-      <li><a href="#visual"><span><b>Downstairs barely budges.</b> Visual cortex for the task ring goes up; for the periphery it only trends down (V2, uncorrected).</span></a></li>
-      <li><a href="#hemis"><span><b>The right side leads.</b> Load effects in attention and control networks are bigger on the right, along with a bigger right-hemisphere response overall.</span></a></li>
+      <li><a href="#behavior"><span><b>Load degrades performance.</b> At 46%, subjects detect about half of the flips, compared with all of them at 10–30%.</span></a></li>
+      <li><a href="#ips"><span><b>Dorsal attention activity scales with load.</b> Every IPS, SPL and FEF region rises with load, across three atlases; IPS2 gains about 1.2% signal. The default mode network declines.</span></a></li>
+      <li><a href="#models"><span><b>The scaling is linear.</b> Over 10–46% the response rises linearly, with no evidence of saturation, although 7 levels limit how well saturation can be detected.</span></a></li>
+      <li><a href="#visual"><span><b>Peripheral suppression is weak.</b> Foveal V1–V3 increase with load; peripheral V1–V3 only trend downward (V2, uncorrected).</span></a></li>
+      <li><a href="#hemis"><span><b>Effects are right-lateralized.</b> Load effects in attention and control networks are larger on the right, alongside a larger right-hemisphere response overall.</span></a></li>
     </ol>
   </section>
 
@@ -284,11 +285,11 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   <div class="part-head"><span class="kicker">Part one</span><h2 class="part-title">The experiment</h2><p>What subjects did in the scanner, and whether the difficulty manipulation worked.</p></div>
 
   <section class="card" id="task">
-    <div class="sec-head"><span class="sec-num">01</span><div><span class="kicker">How it works</span><h2>The task: count the colors (fast)</h2></div></div>
+    <div class="sec-head"><span class="sec-num">01</span><div><span class="kicker">Paradigm</span><h2>A numerosity judgment at fixation, with parametric load</h2></div></div>
     <div class="story-intro">
-      <p>Keep your eyes on the black dot. Around it, a ring of 173 tiny squares sparkles red and blue, reshuffling to new positions about every half second. Your job: notice when the <b>majority color flips</b>, and press its key within 1.5 seconds. Every 5–6 reshuffles a coin is tossed for the majority color, so a flip comes along only every few seconds, about 2–3 times per block.</p>
+      <p>Subjects fixated a central dot surrounded by a ring of 173 small squares, each red or blue, between 0.5° and 1.5° eccentricity. The squares reshuffled to new random positions about twice a second. Every 5–6 reshuffles the majority color was redrawn at random; when it changed, subjects had 1.5 s to report the new <b>majority color</b>. That produced 2–3 flips per 16-s block.</p>
+      <p>Load was set by the share of the minority color. At 10% the majority is obvious at a glance; at 46% the ring is close to an even mix and each judgment requires sustained, effortful integration. During every task block, a task-irrelevant 1/f noise annulus filled the periphery (3–7.5°). It was identical across load levels, which lets us ask whether its cortical representation is suppressed as central demands rise.</p>
       <p style="font-size:12.5px; color: var(--text-muted)">The demo shows the 2016–17 setup used for 6 of the 8 subjects: 173 squares, red at RGB 185, 56 px per degree. S12 and S13 were scanned in 2018 on a newer display: 185 squares, red at RGB 255, and the noise texture fixed at 0° and refreshed at 15 Hz. Stimulus sizes in degrees match across setups.</p>
-      <p>That's easy when only 10% of the squares are the odd color out. It gets brutal at 46%, where the ring is nearly a 50/50 mix. Meanwhile, out in the periphery, a crackling field of 1/f "pink" noise plays during every task block. It's the same in every condition and has nothing to do with the task. That's the "downstairs" this issue keeps coming back to.</p>
     </div>
     <div class="stage">
       <div>
@@ -329,7 +330,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
           <li><b>Stare at the dot.</b> In the scanner, eyes stayed put the whole run.</li>
           <li><b>Track the majority.</b> Which color is winning right now?</li>
           <li><b>Flip? Press.</b> Hit the new majority color within 1.5 s. Presses at other times don't count.</li>
-          <li><b>Ignore the noise.</b> The periphery is task-irrelevant… or is it?</li>
+          <li><b>Ignore the noise.</b> The peripheral annulus is irrelevant to the task.</li>
         </ol>
       </div>
     </div>
@@ -346,14 +347,14 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
       </div>
     </div>
 
-    <h3 style="margin-top:30px">Seven flavors of hard (tap one to load it above)</h3>
+    <h3 style="margin-top:30px">The seven load levels (select one to load it above)</h3>
     <div class="gallery" id="gallery"></div>
-    <p class="pullquote">"At 46%, subjects caught only about <span>half</span> of the flips, and the ones they caught, they got right just two times in three."</p>
+    <p class="pullquote">At the hardest ratio, subjects detected only about <span>half</span> of the flips, and identified the new majority correctly on two-thirds of those they caught.</p>
   </section>
 
 
   <section class="card" id="behavior">
-    <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">Manipulation check</span><h2>Harder rings mean many more missed flips</h2></div></div>
+    <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">Manipulation check</span><h2>Harder ratios cost detections more than accuracy</h2></div></div>
     <div class="tldr"><b>Takeaway</b> The load manipulation works in all 8 subjects. From the 30% to the 46% ring, the task score falls from about 95% to 33%. Most of that drop comes from flips that go unnoticed (detected 100% → 53%). Flips that are caught are still usually answered correctly (96% → 66%).</div>
     <div class="grid-2" style="margin-top:8px">
       <div>
@@ -373,7 +374,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
     </details>
   </section>
 
-  <div class="part-head"><span class="kicker">Part two</span><h2 class="part-title">What the brain did</h2><p>Three questions: what goes <em>upstairs</em> (attention networks), what goes <em>downstairs</em> (visual cortex for the center vs the periphery), and what shape the load response takes.</p></div>
+  <div class="part-head"><span class="kicker">Part two</span><h2 class="part-title">What the brain did</h2><p>Three questions: what happens <em>upstairs</em> (attention networks), what goes <em>downstairs</em> (visual cortex for the center vs the periphery), and what shape the load response takes.</p></div>
 
   <div class="filters" role="group" aria-label="Hemisphere filter">
     <span class="lbl">Hemisphere</span>
@@ -387,7 +388,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </div>
 
   <section class="card" id="ips">
-    <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Upstairs</span><h2>The dorsal attention network climbs with load <span class="hemi-tag"></span></h2></div></div>
+    <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Upstairs</span><h2>Dorsal attention activity scales with load <span class="hemi-tag"></span></h2></div></div>
     <div class="tldr"><b>Takeaway</b> Every dorsal attention area rises as the ring gets harder (t = 4.6–8.1). The rise is largest in IPS2–IPS3 (about +1.2% signal from 10% to 46%) and smallest in FEF. Most areas peak at 44% and dip slightly at 46%, where subjects miss half of the flips.</div>
     <div class="multiples" id="ipsPanels"></div>
     <div class="legend" id="ipsLegend"></div>
@@ -398,7 +399,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </section>
 
   <section class="card" id="forest">
-    <div class="sec-head"><span class="sec-num">03b</span><div><span class="kicker">Second opinion</span><h2>Same answer in every atlas, and the default mode goes the other way <span class="hemi-tag"></span></h2></div></div>
+    <div class="sec-head"><span class="sec-num">03b</span><div><span class="kicker">Robustness</span><h2>The effect replicates across atlases; the default mode network declines <span class="hemi-tag"></span></h2></div></div>
     <div class="tldr"><b>Takeaway</b> The rise in IPS, SPL and FEF doesn't depend on how the brain is parcellated. It holds in Glasser (IPS1, MIP, VIP, 7PL, LIP, FEF, PEF) and in Schaefer (dorsal attention SPL and FEF, control PFCd, anterior insula). Default mode A goes <em>down</em> with load. MT shows no load effect.</div>
     <div class="tabs" id="atlasTabs" role="group" aria-label="Atlas">
       <button type="button" data-atlas="wang2015" aria-pressed="true">Wang 2015</button>
@@ -426,7 +427,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </section>
 
   <section class="card" id="visual">
-    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Downstairs</span><h2>The center turns up; the periphery barely turns down <span class="hemi-tag"></span></h2></div></div>
+    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Downstairs</span><h2>Foveal cortex increases; peripheral suppression is weak <span class="hemi-tag"></span></h2></div></div>
     <div class="tldr"><b>Takeaway</b> Visual cortex representing the task ring (the fovea) rises with load in V1, V2 and V3 (p = .003–.007). Visual cortex representing the noise annulus (the periphery) trends down in all three areas. Only V2 reaches p &lt; .05, and it doesn't survive FDR. So the predicted suppression of the periphery is, at most, weak. Subject-specific pRF maps and the anatomical template give the same answer.</div>
     <div class="tabs" id="visTabs" role="group" aria-label="Eccentricity source">
       <button type="button" data-src="prf" aria-pressed="true">Subject pRF (S9: template)</button>
@@ -441,7 +442,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </section>
 
   <section class="card" id="models">
-    <div class="sec-head"><span class="sec-num">05</span><div><span class="kicker">The shape of things</span><h2>A steady ramp, not a ceiling <span class="hemi-tag"></span></h2></div></div>
+    <div class="sec-head"><span class="sec-num">05</span><div><span class="kicker">Load function</span><h2>Load responses are linear, not saturating <span class="hemi-tag"></span></h2></div></div>
     <div class="tldr"><b>Takeaway</b> In IPS0–IPS4/5, SPL1, FEF, LO and dorsal attention A, a load function decisively beats a flat line (summed ΔAICc 33–64; 5–8 of 8 subjects each). About 60–75% of their vertices prefer a load function, and about 95% of those increase. The winning shape is <b>linear, not saturating</b>: even the group-average curves choose linear. One limit: with only 7 load levels, a saturating curve can't be reliably told apart from a straight line (see the simulation below).</div>
     <div class="tabs" id="modelTabs" role="group" aria-label="ROI set">
       <button type="button" data-set="wang2015" aria-pressed="true">Wang 2015</button>
@@ -478,7 +479,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </section>
 
   <section class="card" id="hemis">
-    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Left vs. right</span><h2>The right hemisphere leads</h2></div></div>
+    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Lateralization</span><h2>Load effects are right-lateralized</h2></div></div>
     <div class="tldr"><b>Takeaway</b> Load effects are larger on the right in the dorsal attention network (+0.32%, p = .035, 6 of 8 subjects) and the control network (p = .017; only the right side is significant on its own). The right hemisphere also responds about 35% more overall, and relative to that baseline the load effects are similar on both sides (0.76 vs 0.82). So this looks like the task engaging the right hemisphere more, not a right-only load mechanism. Default mode shows no asymmetry, and V1–V3 show only a tiny one.</div>
     <h3>Load effect by hemisphere (fitted 10% → 46%, % signal), network composites</h3>
     <div id="hemiChart"></div>
@@ -490,7 +491,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </section>
 
   <section class="card" id="meaning">
-    <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">The verdict</span><h2>What it adds up to, and what's still open</h2></div></div>
+    <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">Interpretation</span><h2>Interpretation and open questions</h2></div></div>
     <div class="verdict">
       <div>
         <h3>Where things stand</h3>
@@ -516,7 +517,7 @@ details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 8
   </section>
 
   <section class="card notes" id="appendix">
-    <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Fine print</span><h2>Methods, data checks &amp; provenance</h2></div></div>
+    <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Appendix</span><h2>Methods, data checks &amp; provenance</h2></div></div>
     <ul>
       <li id="audit"><strong>Data &amp; label audit.</strong> Each scan run's condition file (<code>CAM.par</code>) was checked against the ratio stored in its behavioral file: <span id="auditN"></span> of <span id="auditN2"></span> runs match. Raw <code>f.nii</code>, motion-corrected and surface-sampled data exist for every run, so a full rerun from raw data is possible. Preprocessing and GLM settings were confirmed from the original FS-FAST configs: fsaverage surface, 5 mm FWHM smoothing, SPM HRF, 16 s blocks, TR 2 s.</li>
       <li><strong>Two display setups.</strong> S1–S11 were scanned in 2016–17 (41.9 cm screen at 104 cm), and S12 and S13 in 2018 on a newer setup (51.2 cm at 82 cm). The 2018 setup differs in square count (185 vs 173), red luminance (RGB 255 vs 185), noise refresh and orientation, and button mapping. Stimulus sizes in degrees match, but setup is confounded with these two subjects. Their load effects look like everyone else's, as the per-subject dots in the ROI chart show.</li>
@@ -587,8 +588,8 @@ function bindTip(node, head, rowsFn) {
 }
 // axis titles: x centered under the axis, y rotated and centered on the plot height
 function axisTitles(svg, xt, yt) {
-  if (xt && xt.text) text(svg, xt.x, xt.y, xt.text, { "text-anchor": "middle", class: "ink2", "font-size": 11.5 });
-  if (yt && yt.text) text(svg, yt.x, yt.y, yt.text, { "text-anchor": "middle", class: "ink2", "font-size": 11.5, transform: `rotate(-90 ${yt.x} ${yt.y})` });
+  if (xt && xt.text) text(svg, xt.x, xt.y, xt.text, { "text-anchor": "middle", class: "axt" });
+  if (yt && yt.text) text(svg, yt.x, yt.y, yt.text, { "text-anchor": "middle", class: "axt", transform: `rotate(-90 ${yt.x} ${yt.y})` });
 }
 function table(container, head, rows) {
   container.replaceChildren(); const t = h("table", {}, container);
@@ -600,7 +601,7 @@ function table(container, head, rows) {
 // ---------- line chart (ordinal x) ----------
 function lineChart(container, { series, yDomain, yLabel = "Response (% signal change)", xLabel = "Minority-color ratio (%)", W = 300, H = 300, unit = "", endLabels = false, decimals = 2 }) {
   container.replaceChildren();
-  const M = { t: 12, r: endLabels ? 56 : 14, b: 44, l: 58 };
+  const M = { t: 12, r: endLabels ? 60 : 14, b: 58, l: 66 };
   const iw = W - M.l - M.r, ih = iw;          // square plotting area
   H = M.t + ih + M.b;
   const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img" }, container);
@@ -611,7 +612,7 @@ function lineChart(container, { series, yDomain, yLabel = "Response (% signal ch
     text(svg, M.l - 6, y(tv) + 3.5, (Math.abs(tv) < 1e-9 ? "0" : String(+tv.toFixed(2))).replace("-", "−"), { "text-anchor": "end" });
   }
   R.forEach((r, i) => text(svg, x(i), M.t + ih + 16, RLAB[i], { "text-anchor": "middle" }));
-  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: xLabel }, { x: 14, y: M.t + ih / 2, text: yLabel });
+  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: xLabel }, { x: 16, y: M.t + ih / 2, text: yLabel });
   const path = arr => arr.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
   for (const s of series) if (s.ctx) for (const c of s.ctx) el("path", { d: path(c), fill: "none", stroke: css("--context"), "stroke-width": 1, "stroke-linejoin": "round" }, svg);
   for (const s of series) {
@@ -779,7 +780,7 @@ function forestRows() {
 function renderForest() {
   const box = document.getElementById("forestChart"); box.replaceChildren();
   const diff = state.hemi === "diff";
-  const rows = forestRows(), rowH = 22, W = 580, M = { t: 10, r: 16, b: 44, l: 170 };
+  const rows = forestRows(), rowH = 22, W = 580, M = { t: 10, r: 16, b: 58, l: 170 };
   const H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
   const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Load effect by ROI with 95% confidence intervals" }, box);
   let lo = 0, hi = 0;
@@ -788,9 +789,9 @@ function renderForest() {
   const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
   for (const tv of ticks) {
     el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg);
-    text(svg, x(tv), H - M.b + 16, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, step < 0.5 ? 2 : 1), { "text-anchor": "middle" });
+    text(svg, x(tv), H - M.b + 19, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, step < 0.5 ? 2 : 1), { "text-anchor": "middle" });
   }
-  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: diff ? "Right − left load effect (% signal change, fitted 10% → 46%)" : "Load effect (% signal change, fitted 10% → 46%)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI (sorted by effect)" });
+  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: diff ? "Right − left load effect (% signal change, fitted 10% → 46%)" : "Load effect (% signal change, fitted 10% → 46%)" }, { x: 16, y: M.t + rows.length * rowH / 2, text: "ROI (sorted by effect)" });
   rows.forEach((r, i) => {
     const cy = M.t + i * rowH + rowH / 2, sig = r.q < 0.05, key = `${r.atlas}|${r.roi}`;
     const color = sig ? (r.slope > 0 ? css("--series-1") : css("--neg")) : css("--text-muted");
@@ -853,14 +854,14 @@ function segBar(g, x0, iw, cy, th, vert, C) {
 function renderModels() {
   const rows = modelRows(), C = MODEL_COLOR(), diff = state.hemi === "diff", rowH = diff ? 26 : 20;
   { const box = document.getElementById("modelBars"); box.replaceChildren();
-    const W = 520, M = { t: 10, r: 56, b: 44, l: 128 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+    const W = 520, M = { t: 10, r: 56, b: 58, l: 128 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
     const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Summed AICc evidence for a load function by ROI" }, box);
     const vals = diff ? rows.flatMap(r => [r.L.dSummed, r.R.dSummed]) : rows.map(r => r.d);
     let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
     const { ticks } = niceTicks(lo, hi, 5); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
     const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
-    for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - M.b + 16, String(tv).replace("-", "−"), { "text-anchor": "middle" }); }
-    axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "ΔAICc, flat − best load model (summed over subjects)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI" });
+    for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - M.b + 19, String(tv).replace("-", "−"), { "text-anchor": "middle" }); }
+    axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "ΔAICc, flat − best load model (summed over subjects)" }, { x: 16, y: M.t + rows.length * rowH / 2, text: "ROI" });
     rows.forEach((r, i) => {
       const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
       el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
@@ -887,10 +888,10 @@ function renderModels() {
     });
   }
   { const box = document.getElementById("vertBars"); box.replaceChildren();
-    const W = 520, M = { t: 10, r: 56, b: 44, l: 128 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+    const W = 520, M = { t: 10, r: 56, b: 58, l: 128 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
     const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Fraction of vertices best fit by each model" }, box);
-    for (const tv of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: M.l + tv * iw, x2: M.l + tv * iw, y1: M.t - 4, y2: H - M.b, stroke: css("--grid"), "stroke-width": 1 }, svg); text(svg, M.l + tv * iw, H - M.b + 16, `${tv * 100}%`, { "text-anchor": "middle" }); }
-    axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "Share of vertices best fit by each model (%)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI" });
+    for (const tv of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: M.l + tv * iw, x2: M.l + tv * iw, y1: M.t - 4, y2: H - M.b, stroke: css("--grid"), "stroke-width": 1 }, svg); text(svg, M.l + tv * iw, H - M.b + 19, `${tv * 100}%`, { "text-anchor": "middle" }); }
+    axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "Share of vertices best fit by each model (%)" }, { x: 16, y: M.t + rows.length * rowH / 2, text: "ROI" });
     rows.forEach((r, i) => {
       const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
       el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
@@ -921,13 +922,13 @@ function renderRecovery() {
 // ---------- hemispheric composites ----------
 function renderHemi() {
   const box = document.getElementById("hemiChart"); box.replaceChildren();
-  const rows = D.hemi.composites, rowH = 30, W = 900, M = { t: 22, r: 250, b: 44, l: 270 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+  const rows = D.hemi.composites, rowH = 30, W = 900, M = { t: 22, r: 250, b: 58, l: 270 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
   const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Left vs right load effect for network composites" }, box);
   let lo = Math.floor(Math.min(0, ...rows.flatMap(r => [r.L, r.R])) * 5) / 5, hi = Math.max(0, ...rows.flatMap(r => [r.L, r.R]));
   const { ticks } = niceTicks(lo, hi, 6); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
   const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
-  for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - M.b + 16, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, 1), { "text-anchor": "middle" }); }
-  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "Load effect (% signal change, fitted 10% → 46%)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI composite" });
+  for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - M.b + 19, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, 1), { "text-anchor": "middle" }); }
+  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "Load effect (% signal change, fitted 10% → 46%)" }, { x: 16, y: M.t + rows.length * rowH / 2, text: "ROI composite" });
   text(svg, M.l + iw + 12, M.t - 6, "right − left (paired)", { "text-anchor": "start", "font-size": 10 });
   rows.forEach((r, i) => {
     const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
@@ -1160,7 +1161,7 @@ function respond(col) {
   const f = activeFlip(S.t);
   if (!f || f.t < S.countFrom || S.answered.has(f)) { S.feedback = { txt: "No flip right now", bg: "#e2d9c8", at: performance.now() }; return; }
   S.answered.add(f); S.score.caught++; const ok = col === f.more; if (ok) S.score.right++;
-  S.feedback = { txt: ok ? "✓ Nailed it" : `✗ It was ${f.more}`, bg: ok ? "#9fe3b8" : "#ffb3a8", at: performance.now() };
+  S.feedback = { txt: ok ? "✓ Correct" : `✗ It was ${f.more}`, bg: ok ? "#9fe3b8" : "#ffb3a8", at: performance.now() };
   renderScore();
 }
 function tickScore() {
@@ -1168,7 +1169,7 @@ function tickScore() {
   while (S.fp < S.run.flips.length && S.run.flips[S.fp].t + T.resp <= S.t) {
     const f = S.run.flips[S.fp];
     if (f.t >= S.countFrom) { S.score.flips++; changed = true;
-      if (!S.answered.has(f)) S.feedback = { txt: "Missed one!", bg: "#ffd84a", at: performance.now() }; }
+      if (!S.answered.has(f)) S.feedback = { txt: "Missed", bg: "#ffd84a", at: performance.now() }; }
     S.fp++;
   }
   if (changed) renderScore();
@@ -1178,7 +1179,7 @@ function tickScore() {
 let heads = [];
 function buildTimeline() {
   const box = document.getElementById("timeline"); box.replaceChildren();
-  const W = 900, M = { l: 92, r: 14 }, iw = W - M.l - M.r, H = 190;
+  const W = 900, M = { l: 100, r: 14 }, iw = W - M.l - M.r, H = 200;
   const svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", W);
   svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "Timeline of one 176-second run: 16 s fixation, then five 16-s ON blocks alternating with 16-s OFF blocks; a lower track zooms into the current ON block showing reshuffles, flips and response windows");
   box.appendChild(svg);
@@ -1193,17 +1194,17 @@ function buildTimeline() {
   for (let b = 0; b < T.blocks; b++) tx(X(blockStart(b) + T.on / 2), y1 + h1 / 2 + 4, "ON", { "text-anchor": "middle", fill: "#fff", style: "fill:#fff;font-weight:700" });
   for (const f of S.run.flips) mk("circle", { cx: X(f.t), cy: y1 + h1 + 6, r: 2.6, fill: f.more === "blue" ? "#0000ff" : "#b90000" });
   for (const t of [0, 16, 48, 80, 112, 144, 176]) tx(X(t), y1 + h1 + 22, String(t), { "text-anchor": "middle" });
-  tx(M.l + iw / 2, y1 + h1 + 38, "Time in run (s), TR = 2 s, 88 volumes", { "text-anchor": "middle", class: "ink2", "font-size": 11.5 });
-  tx(M.l - 10, y1 + h1 / 2 + 4, "Condition", { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
+  tx(M.l + iw / 2, y1 + h1 + 38, "Time in run (s), TR = 2 s, 88 volumes", { "text-anchor": "middle", class: "axt" });
+  tx(M.l - 10, y1 + h1 / 2 + 4, "Condition", { "text-anchor": "end", class: "axt" });
   const seek = mk("rect", { class: "seek", x: X(0), y: y1 - 4, width: iw, height: h1 + 14, fill: "transparent" });
   seek.addEventListener("click", e => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); jump(Math.max(0, Math.min(RUN - 0.01, ((q.x - M.l) / iw) * RUN))); });
   const ph1 = mk("line", { y1: y1 - 6, y2: y1 + h1 + 4, stroke: css("--pop"), "stroke-width": 3 });
   // row 2: inside the current/next ON block
   const y2 = 110, h2 = 34, BX = t => M.l + (t / T.on) * iw;
   const g2 = mk("g", {});
-  tx(M.l - 10, y2 + h2 / 2 + 4, "Events", { "text-anchor": "end", class: "ink2", "font-size": 11.5 });
+  tx(M.l - 10, y2 + h2 / 2 + 4, "Events", { "text-anchor": "end", class: "axt" });
   for (let t = 0; t <= 16; t += 2) tx(BX(t), y2 + h2 + 16, String(t), { "text-anchor": "middle" });
-  const t2 = tx(M.l + iw / 2, y2 + h2 + 32, "", { "text-anchor": "middle", class: "ink2", "font-size": 11.5 });
+  const t2 = tx(M.l + iw / 2, y2 + h2 + 36, "", { "text-anchor": "middle", class: "axt" });
   const ph2 = mk("line", { y1: y2 - 6, y2: y2 + h2 + 4, stroke: css("--pop"), "stroke-width": 3 });
   let shownBlock = -1;
   function drawBlock(b) {
@@ -1217,7 +1218,7 @@ function buildTimeline() {
       const x = BX(f.t - t0), c = f.more === "blue" ? "#0000ff" : "#b90000";
       mk("path", { d: `M${x},${y2 - 7} l7,7 l-7,7 l-7,-7z`, fill: c, stroke: css("--surface-1"), "stroke-width": 1.5 }, g2);
     }
-    t2.textContent = `Time in ON block ${b + 1} (s): ${blk.shuffles.length} reshuffles, ${S.run.flips.filter(f => f.block === b).length} majority flips`;
+    t2.textContent = `Time in ON block ${b + 1} (s) · ${blk.shuffles.length} reshuffles, ${S.run.flips.filter(f => f.block === b).length} majority flips`;
   }
   heads = [t => {
     ph1.setAttribute("x1", X(t)); ph1.setAttribute("x2", X(t));
@@ -1234,7 +1235,6 @@ function updatePlayheads() { for (const f of heads) f(S.t); }
 function jump(t) { S.t = t; S.countFrom = t; syncPointer(); draw(); }
 
 // ---------- gallery ----------
-const NAMES = ["Obvious", "Fine", "Squint", "Hmm…", "Hard", "Brutal", "Coin flip"];
 const galCanvases = [];
 function buildGallery() {
   const box = document.getElementById("gallery"); box.replaceChildren();
@@ -1244,7 +1244,7 @@ function buildGallery() {
     cv.setAttribute("role", "img"); cv.setAttribute("aria-label", `${Math.round(r * 100)}% ring: ${k} red and ${NSQ - k} blue squares`);
     b.appendChild(cv);
     const span = (cls, s) => { const e = document.createElement("span"); e.className = cls; e.textContent = s; b.appendChild(e); };
-    span("g-r", `${Math.round(r * 100)}%`); span("g-n", NAMES[i]); span("g-c", `${k} red vs ${NSQ - k} blue`);
+    span("g-r", `${Math.round(r * 100)}%`); span("g-c", `${k} red vs ${NSQ - k} blue`);
     span("g-b", `subjects caught ${Math.round(D.behavior.resp.group[i].m)}% of flips`);
     b.addEventListener("click", () => { setRatio(i); document.getElementById("task").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }); });
     box.appendChild(b); galCanvases.push({ cv, mask: randomMask(k) });
