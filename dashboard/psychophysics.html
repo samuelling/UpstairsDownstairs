@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upstairs / Downstairs: dual-task psychophysics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.resp-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.resp-pair button { font-family: var(--display); font-size: 18px; font-weight: 800; padding: 10px 8px; border: 3px solid var(--rule); border-radius: 6px; cursor: pointer; box-shadow: 3px 3px 0 var(--rule); background: var(--surface-1); color: var(--text-primary); }
+.resp-pair button:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--rule); }
+.resp-pair button.b { background: #0000ff; color: #fff; } .resp-pair button.r { background: #b90000; color: #fff; }
+.resp-pair button:disabled { opacity: .35; cursor: not-allowed; }
+.range-row { display: flex; align-items: center; gap: 10px; font-family: var(--ui); font-size: 13px; }
+.range-row input { flex: 1; accent-color: var(--series-1); }
+.charts-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+@media (max-width: 900px) { .charts-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+  <header class="masthead">
+    <div class="mast-strip">
+      <span>Central load × attention</span><span>Psychophysics reanalysis</span><span>Updated November 2026</span><span class="grow"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Dark</button>
+    </div>
+    <nav class="study-tabs" aria-label="Studies">
+      <a href="index.html">fMRI<span>central load × attention networks</span></a>
+      <a href="psychophysics.html" aria-current="page">Psychophysics<span>dual task: central load × peripheral tilt</span></a>
+    </nav>
+    <h1 class="wordmark"><span class="up">Upstairs</span><span class="slash">/</span><span class="down">Downstairs</span></h1>
+    <div class="mast-row">
+      <div>
+        <p class="tagline">Does a harder judgment at fixation cost perception in the periphery?</p>
+        <p class="sub">A reanalysis of the dual-task psychophysics study that preceded the fMRI experiment: 10 subjects, 300 runs, 48,000 trials. On every trial a 50-ms display showed 200 red and blue squares at fixation and a tilted grating in the periphery, and subjects reported both the majority color and the tilt. A QUEST staircase measured the tilt threshold separately at each central load.</p>
+      </div>
+      <ul class="cover-lines" aria-label="Highlights">
+        <li><a href="#paradigm"><span class="cl-n">01</span><span class="cl-t">The dual task, interactive</span></a></li>
+        <li><a href="#thresholds"><span class="cl-n">03</span><span class="cl-t">Peripheral thresholds rise modestly with load</span></a></li>
+        <li><a href="#coupling"><span class="cl-n">05</span><span class="cl-t">Central and peripheral judgments succeed together</span></a></li>
+        <li><a href="#meaning"><span class="cl-n">06</span><span class="cl-t">Interpretation and relation to the fMRI</span></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="headline" aria-label="Main findings">
+    <div class="hl-left">
+      <span class="kicker">Summary</span>
+      <h2>Central load costs peripheral orientation sensitivity a little, and not in everyone</h2>
+      <p class="caveat">Main analyses use the 7 subjects who met the original study's reliability criteria; all 10 are shown as a check. There is no single-task baseline, so these are costs relative to easy central loads, not relative to no central task.</p>
+    </div>
+    <ol class="takeaways">
+      <li><a href="#central"><span><b>The central manipulation works.</b> Majority-color accuracy falls from 97% at an 18% minority share to 61% at 48%, in every subject.</span></a></li>
+      <li><a href="#thresholds"><span><b>Peripheral tilt thresholds rise modestly.</b> Thresholds are about 1.3× higher at hard (44–48%) than easy (18–36%) loads; 6 of 7 subjects rise, but the group effect is not significant (p = .08).</span></a></li>
+      <li><a href="#individuals"><span><b>The cost is concentrated in a few subjects.</b> Three subjects' thresholds rise 1.6–2×; the others are essentially flat.</span></a></li>
+      <li><a href="#coupling"><span><b>The two tasks succeed together.</b> Holding tilt constant, a peripheral judgment is more likely correct when the central judgment on the same trial was correct (7 of 7 subjects).</span></a></li>
+      <li><a href="#thresholds"><span><b>Costs dip at the hardest load.</b> Thresholds peak at 44–46% and fall back at 48%, where central accuracy nears chance, echoing the fMRI dip at 46%.</span></a></li>
+    </ol>
+  </section>
+
+  <p class="numbers-head">By the numbers</p>
+  <section class="tiles" id="tiles" aria-label="Key numbers"></section>
+
+  <div class="part-head"><span class="kicker">Part one</span><h2 class="part-title">The experiment</h2><p>Two judgments from one brief glimpse: a numerosity judgment at fixation, an orientation judgment in the periphery.</p></div>
+
+  <section class="card" id="paradigm">
+    <div class="sec-head"><span class="sec-num">01</span><div><span class="kicker">Paradigm</span><h2>A dual task from a single 50-ms display</h2></div></div>
+    <div class="story-intro">
+      <p>Each trial flashed, for 50 ms, 200 small squares scattered over a grid around fixation (within about 2° of the center), each red or blue, together with a 2 cycle/deg, 40%-contrast grating filling an annulus from about 5.5° to 12° eccentricity. The grating was tilted slightly left or right of vertical. In the following 2.5 s, subjects reported which color was in the majority (with a tone after errors) and which way the grating was tilted.</p>
+      <p>Central load was set by the minority share, from 18% (easy) to 48% (nearly even). Each run interleaved two load levels, both majority colors, and 40 trials of each, with a separate QUEST staircase per condition adjusting the tilt to reach 80% correct. The tilt threshold therefore measures peripheral orientation sensitivity at each central load.</p>
+    </div>
+    <div class="stage">
+      <div>
+        <div class="screen"><canvas id="psyCanvas" role="img" aria-label="Reconstruction of the dual-task display: central red and blue squares around fixation and a tilted peripheral grating annulus"></canvas><span class="bezel" id="psyBezel">Full display, to scale</span></div>
+        <p class="status" id="psyStatus"></p>
+      </div>
+      <div>
+        <div class="ctl-group">
+          <span class="lbl">Central load (minority share)</span>
+          <div class="ctl-row" id="psyRatios" role="group" aria-label="Central load"></div>
+        </div>
+        <div class="ctl-group">
+          <span class="lbl">Peripheral tilt</span>
+          <div class="range-row"><input type="range" id="tiltRange" min="0" max="100" value="55" aria-label="Tilt magnitude"><span id="tiltVal"></span></div>
+        </div>
+        <div class="ctl-group">
+          <span class="lbl">Display</span>
+          <div class="ctl-row">
+            <button type="button" class="pill big" id="flashBtn">Flash a trial (50 ms)</button>
+            <button type="button" class="pill" id="holdBtn" aria-pressed="true">Hold the display</button>
+            <button type="button" class="pill" id="psyZoomBtn" aria-pressed="false">Zoom on the center</button>
+          </div>
+        </div>
+        <div class="ctl-group">
+          <span class="lbl">Your answers</span>
+          <div class="resp-pair"><button type="button" class="b" id="ansB" disabled>Blue</button><button type="button" class="r" id="ansR" disabled>Red</button></div>
+          <div class="resp-pair"><button type="button" id="ansL" disabled>↖ Left</button><button type="button" id="ansRt" disabled>Right ↗</button></div>
+          <div class="scorecard" id="psyScore" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-wrap">
+      <h3>One trial</h3>
+      <div id="trialTimeline"></div>
+    </div>
+  </section>
+
+  <section class="card" id="central">
+    <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">Manipulation check</span><h2>Central accuracy falls steeply with load</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Majority-color accuracy drops from about 97% at an 18% minority share to 61% at 48% (−31 points across the range, t(6) = −9.8; all 10 subjects show the drop). Unlike the fMRI task, subjects almost never skipped a response, so the cost appears as errors rather than misses.</div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Central accuracy</h3><div id="chCentral"></div><div class="legend" id="lgCentral"></div></div>
+      <div><h3>Peripheral accuracy (held near 80% by QUEST)</h3><div id="chOd"></div><div class="legend" id="lgOd"></div></div>
+    </div>
+    <details class="method"><summary>How this was measured</summary>
+      <p>Central accuracy is the proportion of trials with the correct majority color, pooling both majority colors (each load level was tested with blue and with red in the majority). Peripheral accuracy is plotted to show that the staircases did their job: QUEST adjusted tilt so that accuracy stayed near 80% at every load, which is why the threshold, not accuracy, carries the load effect.</p>
+    </details>
+  </section>
+
+  <div class="part-head"><span class="kicker">Part two</span><h2 class="part-title">What happened in the periphery</h2><p>Whether peripheral sensitivity changes with central load, in whom, and how the two judgments relate trial by trial.</p></div>
+
+  <div class="filters" role="group" aria-label="Subject set">
+    <span class="lbl">Subjects</span>
+    <div class="seg" id="setSeg">
+      <button type="button" data-set="reliable" aria-pressed="true">Reliable (7)</button>
+      <button type="button" data-set="all" aria-pressed="false">All (10)</button>
+    </div>
+    <span class="lbl" style="margin-left:10px">Threshold</span>
+    <div class="seg" id="measSeg">
+      <button type="button" data-m="pf_thr" aria-pressed="true">Psychometric fit</button>
+      <button type="button" data-m="quest_thr_median" aria-pressed="false">QUEST staircase</button>
+    </div>
+  </div>
+
+  <section class="card" id="thresholds">
+    <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Downstairs</span><h2>Peripheral tilt thresholds rise modestly with central load</h2></div></div>
+    <div class="tldr" id="thrTakeaway"></div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Tilt threshold by central load</h3><div id="chThr"></div><div class="legend" id="lgThr"></div></div>
+      <div><h3>Pooled psychometric functions, easy vs hard load</h3><div id="chPf"></div><div class="legend" id="lgPf"></div></div>
+    </div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Two threshold estimates were computed for each subject and load. The <b>psychometric fit</b> pools all trials at a load and fits a Weibull function (guess rate 50%) with one slope and one lapse rate per subject and a separate threshold per load; the threshold is the Weibull scale parameter, the tilt giving about 82% correct in the absence of lapses. The <b>QUEST staircase</b> estimate is the median across runs of each staircase's final estimate. Thresholds are averaged geometrically (in log units), so a few very high values don't dominate. Load effects are tested per subject as the change in log threshold from 18% to 48% (regression across all tested loads) and as the hard (44–48%) vs easy (18–36%) ratio, then t-tested across subjects.</p>
+      <div id="thrTable"></div>
+    </details>
+  </section>
+
+  <section class="card" id="individuals">
+    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Individual differences</span><h2>The peripheral cost is concentrated in a few subjects</h2></div></div>
+    <div class="tldr" id="indTakeaway"></div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Threshold change vs central-accuracy change, per subject</h3><div id="chInd"></div><div class="legend" id="lgInd"></div></div>
+      <div><h3>Each subject's threshold by load</h3><div id="chSubj"></div><div class="legend" id="lgSubj"></div></div>
+    </div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>The x axis is each subject's fitted change in central accuracy from 18% to 48%; the y axis is the hard/easy threshold ratio (log scale; 1 = no change). The association across subjects is a Spearman correlation. Subjects marked as unreliable had fewer than 70% usable staircases under the original criteria (central accuracy ≥ 50% and threshold ≤ 20° in a run).</p>
+      <div id="indTable"></div>
+    </details>
+  </section>
+
+  <section class="card" id="coupling">
+    <div class="sec-head"><span class="sec-num">05</span><div><span class="kicker">Trial by trial</span><h2>Peripheral judgments are better when the central judgment succeeds</h2></div></div>
+    <div class="tldr" id="cplTakeaway"></div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Peripheral accuracy by central outcome</h3><div id="chCpl"></div><div class="legend" id="lgCpl"></div></div>
+      <div><h3>Logistic model of peripheral correctness</h3><div id="chGlm"></div><div class="legend" id="lgGlm"></div></div>
+    </div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>For each subject, a logistic regression predicted whether the tilt judgment was correct from the log tilt on that trial, the central load, and whether the central judgment on the same trial was correct. Because QUEST sets the tilt, raw accuracy split by central outcome (left chart) is only approximate; the model coefficient for central correctness (right chart) is the cleaner estimate because it holds tilt constant. Coefficients are in log-odds and were t-tested across subjects.</p>
+      <div id="glmTable"></div>
+    </details>
+  </section>
+
+  <section class="card" id="meaning">
+    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Interpretation</span><h2>Interpretation and relation to the fMRI</h2></div></div>
+    <div class="verdict">
+      <div>
+        <h3>Where things stand</h3>
+        <p>Raising central load sharply impairs the central judgment but only modestly impairs the concurrent peripheral orientation judgment. Thresholds rise by about a third on average, consistently in direction but not significantly, and the cost is concentrated in a subset of subjects.</p>
+        <p>This lines up with the fMRI: there, foveal visual cortex rose with load while <b>peripheral suppression was weak</b>. Both datasets point to a limited, variable cost to the periphery rather than a strong push-pull trade-off, and both show the effect dipping at the hardest load, where central performance approaches chance and subjects may stop trying.</p>
+      </div>
+      <div>
+        <h3>Caveats</h3>
+        <ul>
+          <li><b>No single-task baseline.</b> Costs are relative to easy central loads; the overall cost of doing two tasks at once can't be estimated.</li>
+          <li><b>Unreliable staircases.</b> Three subjects often could not do the tilt task at all (many thresholds above 20°), so they are set aside in the main analysis, as in the original study.</li>
+          <li><b>Small sample and heterogeneity.</b> With 7 subjects and a 2-fold range of individual effects, the study is underpowered for a cost of this size.</li>
+          <li><b>Trial-level coupling is ambiguous.</b> Joint success may reflect momentary alertness or lapses that affect both tasks, not a trade-off between them.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Possible next steps</h3>
+        <ul>
+          <li><b>Model the lapses directly.</b> Fit lapse rate per load to ask whether load causes all-or-none failures in the periphery rather than graded sensitivity loss.</li>
+          <li><b>Relate to the fMRI subjects.</b> If any subjects did both studies, compare their behavioral costs with their peripheral fMRI responses.</li>
+          <li><b>Power analysis.</b> Use the observed effect and variability to size a confirmatory study with a single-task baseline.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card notes" id="appendix">
+    <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Appendix</span><h2>Methods, data checks &amp; provenance</h2></div></div>
+    <ul>
+      <li><strong>Data.</strong> <span id="apxData"></span> Subjects are coded P01–P10; the code key stays on the cluster. Five subjects were tested at 8 loads (18, 28, 36, 40, 42, 44, 46, 48%) and five at 16 loads (18–48% in 2% steps); group curves use the 8 shared loads, and per-subject load effects use every tested load.</li>
+      <li><strong>Display.</strong> 1280 × 1024 screen, 55 cm wide at 57 cm; squares 3 px (about 0.13°) on an 18 × 18 grid within about 2° of fixation; grating 2 cycles/deg nominal, 40% contrast, vertical ± tilt; 50 ms per trial, 2.5 s response window.</li>
+      <li><strong>Reliability criteria</strong> (from the original analysis script): a run × condition staircase is usable if central accuracy is at least 50% and the final threshold is at most 20°; a subject is included if more than 70% of staircases are usable. Seven subjects pass.</li>
+      <li><strong>Original pipeline.</strong> The original figures averaged the usable staircase thresholds arithmetically. That pipeline is reproduced below and gives the same pattern: thresholds rise from about 2.7° to 4.2° at 44% and fall back at 48%.</li>
+      <li><strong>Run order.</strong> Load pairs were cycled in a fixed shuffled order, so load and run position are partly confounded. Including run number in the regression leaves the load effect similar (QUEST log-threshold slope p = .07), and thresholds show no reliable practice trend.</li>
+      <li><strong>Code.</strong> <code>scripts/psy_analysis.py</code> (cluster analysis) and <code>scripts/build_psy_data.py</code> (this page's data).</li>
+    </ul>
+    <details class="method"><summary>Original-pipeline thresholds (arithmetic mean of usable staircases, 7 subjects)</summary><div id="origTable"></div></details>
+  </section>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+</div>
+
+<script src="psy_data.js"></script>
+<script>
+(() => {
+"use strict";
+const D = window.PSY_DATA;
+const NS = "http://www.w3.org/2000/svg";
+const state = { set: "reliable", meas: "pf_thr" };
+const qTheme = new URLSearchParams(location.search).get("theme");
+if (qTheme === "light" || qTheme === "dark") document.documentElement.dataset.theme = qTheme;
+const css = n => getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(n).trim();
+const el = (tag, a = {}, p) => { const n = document.createElementNS(NS, tag); for (const k in a) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
+const txt = (p, x, y, s, a = {}) => { const t = el("text", { x, y, ...a }, p); t.textContent = s; return t; };
+const h = (tag, props = {}, p) => { const n = document.createElement(tag); for (const k in props) { if (k === "text") n.textContent = props[k]; else n.setAttribute(k, props[k]); } if (p) p.appendChild(n); return n; };
+const fmtP = p => p < 0.001 ? "< .001" : "= " + p.toFixed(3).replace(/^0/, "");
+const pct = r => Math.round(r * 100);
+const SUBJ = s => D.subjects.find(x => x.subject === s);
+const subsIn = set => D.subjects.filter(s => set === "all" || s.reliable).map(s => s.subject);
+const test = (set, m) => D.tests.find(t => t.set === set && t.measure === m);
+const MEAS_NAME = { pf_thr: "psychometric fit", quest_thr_median: "QUEST staircase" };
+
+// ---------- tooltip ----------
+const tip = document.getElementById("tip");
+function showTip(e, head, rows) {
+  tip.replaceChildren(); h("div", { class: "t-head", text: head }, tip);
+  for (const r of rows) { const row = h("div", { class: "t-row" }, tip), k = h("span", { class: "k" }, row); if (r.color) { const sw = h("i", { class: "key-line" }, k); sw.style.background = r.color; } k.appendChild(document.createTextNode(r.label)); h("strong", { text: r.value }, row); }
+  tip.style.display = "block";
+  let x = e.clientX + 14, y = e.clientY + 14; if (x + tip.offsetWidth > innerWidth - 8) x = e.clientX - tip.offsetWidth - 14; if (y + tip.offsetHeight > innerHeight - 8) y = e.clientY - tip.offsetHeight - 14;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => { tip.style.display = "none"; };
+function legend(id, items) { const b = document.getElementById(id); b.replaceChildren(); for (const it of items) { const s = h("span", {}, b), k = h("i", { class: it.kind || "key-line" }, s); if (it.color) k.style.background = it.color; if (it.border) k.style.border = it.border; s.appendChild(document.createTextNode(it.label)); } }
+function table(id, head, rows) { const c = document.getElementById(id); c.replaceChildren(); const t = h("table", {}, c), tr = h("tr", {}, h("thead", {}, t)); head.forEach(x => h("th", { text: x }, tr)); const tb = h("tbody", {}, t); rows.forEach(r => { const row = h("tr", {}, tb); r.forEach(x => h("td", { text: x }, row)); }); }
+
+// ---------- generic square x–y chart ----------
+// opts: x:{lo,hi,log,ticks,fmt,title}, y:{...}, draw(svg, X, Y), hover: [{x, head, rows}] (snap to nearest x)
+function chart(container, { W = 440, x, y, draw, hover }) {
+  container.replaceChildren();
+  const M = { t: 14, r: 76, b: 58, l: 70 }, iw = W - M.l - M.r, ih = iw, H = M.t + ih + M.b;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img" }, container);
+  const sc = (ax, lo0, span) => v => ax.log ? lo0 + (Math.log10(v) - Math.log10(ax.lo)) / (Math.log10(ax.hi) - Math.log10(ax.lo)) * span : lo0 + (v - ax.lo) / (ax.hi - ax.lo) * span;
+  const X = sc(x, M.l, iw), Yr = sc(y, 0, ih), Y = v => M.t + ih - Yr(v);
+  for (const tv of y.ticks) { el("line", { x1: M.l, x2: M.l + iw, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }, svg); txt(svg, M.l - 8, Y(tv) + 4, (y.fmt || String)(tv), { "text-anchor": "end" }); }
+  for (const tv of x.ticks) { el("line", { x1: X(tv), x2: X(tv), y1: M.t + ih, y2: M.t + ih + 5, stroke: css("--axis") }, svg); txt(svg, X(tv), M.t + ih + 20, (x.fmt || String)(tv), { "text-anchor": "middle" }); }
+  el("line", { x1: M.l, x2: M.l + iw, y1: M.t + ih, y2: M.t + ih, stroke: css("--axis") }, svg);
+  txt(svg, M.l + iw / 2, H - 8, x.title, { "text-anchor": "middle", class: "axt" });
+  const yt = M.t + ih / 2; txt(svg, 18, yt, y.title, { "text-anchor": "middle", class: "axt", transform: `rotate(-90 18 ${yt})` });
+  draw(svg, X, Y, { M, iw, ih });
+  if (hover && hover.length) {
+    const cross = el("line", { y1: M.t, y2: M.t + ih, stroke: css("--axis"), visibility: "hidden" }, svg);
+    const hit = el("rect", { x: M.l, y: M.t, width: iw, height: ih, fill: "transparent", tabindex: 0 }, svg);
+    const pick = e => { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const p = pt.matrixTransform(svg.getScreenCTM().inverse()); let best = hover[0]; for (const hv of hover) if (Math.abs(X(hv.x) - p.x) < Math.abs(X(best.x) - p.x)) best = hv; return best; };
+    hit.addEventListener("pointermove", e => { const hv = pick(e); cross.setAttribute("x1", X(hv.x)); cross.setAttribute("x2", X(hv.x)); cross.setAttribute("visibility", "visible"); showTip(e, hv.head, hv.rows); });
+    hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+  }
+  return svg;
+}
+// spread end-labels vertically so they don't collide (min gap in px)
+function spread(items, gap = 13) { const a = items.slice().sort((p, q) => p.y - q.y); for (let i = 1; i < a.length; i++) if (a[i].y - a[i - 1].y < gap) a[i].y = a[i - 1].y + gap; return items; }
+const pathOf = (pts, X, Y) => pts.map((p, i) => `${i ? "L" : "M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join("");
+const bandOf = (xs, lo, hi, X, Y) => xs.map((x, i) => `${i ? "L" : "M"}${X(x).toFixed(1)},${Y(hi[i]).toFixed(1)}`).join("") + xs.slice().reverse().map((x, i) => `L${X(x).toFixed(1)},${Y(lo[lo.length - 1 - i]).toFixed(1)}`).join("") + "Z";
+const RX = { lo: 15, hi: 50, ticks: [18, 28, 36, 40, 44, 48], title: "Minority-color share (%)" };
+const logTicks = (lo, hi) => [0.5, 1, 2, 3, 5, 10, 20, 30, 50].filter(v => v >= lo && v <= hi);
+const fmtDeg = v => (v < 1 ? v.toFixed(1) : String(v)) + "°";
+
+// ---------- tiles ----------
+function renderTiles() {
+  const box = document.getElementById("tiles"); box.replaceChildren();
+  const g = D.group.reliable, f = g[0], l = g[g.length - 1];
+  const eh = test("reliable", "log_easy_hard_pf"), cpl = D.glmGroup.find(r => r.set === "reliable" && r.term === "b_central_correct");
+  const S7 = D.subjects.filter(s => s.reliable), nUp = S7.filter(s => s.easy_hard_ratio_pf > 1.5).length;
+  const tiles = [
+    { hero: true, label: "Peripheral threshold, hard vs easy central load", value: "×" + Math.pow(10, eh.mean).toFixed(2), note: `psychometric fit · ${eh.n_pos} of ${eh.n} subjects up · t(${eh.n - 1}) = ${eh.t.toFixed(2)}, p ${fmtP(eh.p)}` },
+    { label: "Central accuracy, 18% → 48%", value: `${Math.round(f.rb_acc_m)}% → ${Math.round(l.rb_acc_m)}%`, note: "majority-color judgment, 7 subjects" },
+    { label: "Subjects with a ≥1.5× threshold rise", value: `${nUp} / ${S7.length}`, note: "the others are close to flat" },
+    { label: "Central-correct bonus on tilt (log-odds)", value: "+" + cpl.mean.toFixed(2), note: `tilt held constant · ${cpl.n_pos}/${cpl.n} subjects · p ${fmtP(cpl.p)}` },
+    { label: "Trials analyzed", value: D.nTrials.toLocaleString(), note: `${D.nRuns} runs · 10 subjects` },
+  ];
+  for (const t of tiles) { const d = h("div", { class: "tile" + (t.hero ? " hero" : "") }, box); h("div", { class: "label", text: t.label }, d); h("div", { class: "value", text: t.value }, d); h("div", { class: "note", text: t.note }, d); }
+  document.getElementById("apxData").textContent = `${D.nTrials.toLocaleString()} trials in ${D.nRuns} runs from 10 subjects; each run had 160 trials (2 loads × 2 majority colors × 40).`;
+}
+
+// ---------- 02 central ----------
+function groupSeries(key, scale = 1) { const g = D.group[state.set]; return { xs: g.map(r => pct(r.ratio)), m: g.map(r => r[key + "_m"]), se: g.map(r => r[key + "_se"]) }; }
+function subjLines(key, scale = 1) { return subsIn(state.set).map(s => D.cells.filter(c => c.subject === s && c.common).sort((a, b) => a.ratio - b.ratio).map(c => [pct(c.ratio), c[key] * scale])); }
+function renderCentral() {
+  for (const [id, key, lg, yr] of [["chCentral", "rb_acc", "lgCentral", [40, 100]], ["chOd", "od_acc", "lgOd", [40, 100]]]) {
+    const s = groupSeries(key), lines = subjLines(key, 100);
+    chart(document.getElementById(id), { x: RX, y: { lo: yr[0], hi: yr[1], ticks: [40, 50, 60, 70, 80, 90, 100], title: key === "rb_acc" ? "Central accuracy (% correct)" : "Peripheral accuracy (% correct)" },
+      draw(svg, X, Y) {
+        el("line", { x1: X(15), x2: X(50), y1: Y(50), y2: Y(50), stroke: css("--axis"), "stroke-dasharray": "4 4" }, svg);
+        txt(svg, X(50) + 6, Y(50) + 4, "chance", { "font-size": 12 });
+        if (key === "od_acc") { el("line", { x1: X(15), x2: X(50), y1: Y(80), y2: Y(80), stroke: css("--series-2"), "stroke-dasharray": "2 4" }, svg); txt(svg, X(50) + 6, Y(80) + 4, "QUEST target", { "font-size": 12 }); }
+        for (const l of lines) el("path", { d: pathOf(l, X, Y), fill: "none", stroke: css("--context") }, svg);
+        el("path", { d: bandOf(s.xs, s.m.map((v, i) => v - s.se[i]), s.m.map((v, i) => v + s.se[i]), X, Y), fill: css("--band") }, svg);
+        el("path", { d: pathOf(s.xs.map((x, i) => [x, s.m[i]]), X, Y), fill: "none", stroke: css("--series-1"), "stroke-width": 2.5 }, svg);
+        s.xs.forEach((x, i) => el("circle", { cx: X(x), cy: Y(s.m[i]), r: 3.5, fill: css("--series-1"), stroke: css("--surface-1"), "stroke-width": 1.5 }, svg));
+      },
+      hover: s.xs.map((x, i) => ({ x, head: `${x}% minority`, rows: [{ label: "Group mean", color: css("--series-1"), value: `${s.m[i].toFixed(1)}% ± ${s.se[i].toFixed(1)}` }] })) });
+    legend(lg, [{ label: `Group mean ± SEM (${state.set === "all" ? 10 : 7} subjects)`, color: css("--series-1") }, { label: "Individual subjects", color: css("--context") }]);
+  }
+}
+
+// ---------- 03 thresholds ----------
+function renderThresholds() {
+  const m = state.meas, g = D.group[state.set], xs = g.map(r => pct(r.ratio));
+  const gm = g.map(r => r[m + "_gm"]), lo = g.map(r => r[m + "_lo"]), hi = g.map(r => r[m + "_hi"]);
+  const lines = subjLines(m);
+  const yhi = state.set === "all" ? 60 : 12, ylo = state.set === "all" ? 0.4 : 0.4;
+  chart(document.getElementById("chThr"), { x: RX, y: { lo: ylo, hi: yhi, log: true, ticks: logTicks(ylo, yhi), fmt: fmtDeg, title: "Tilt threshold (deg, log scale)" },
+    draw(svg, X, Y) {
+      for (const l of lines) el("path", { d: pathOf(l.map(p => [p[0], Math.min(yhi, Math.max(ylo, p[1]))]), X, Y), fill: "none", stroke: css("--context") }, svg);
+      el("path", { d: bandOf(xs, lo, hi, X, Y), fill: css("--band-2") }, svg);
+      el("path", { d: pathOf(xs.map((x, i) => [x, gm[i]]), X, Y), fill: "none", stroke: css("--series-2"), "stroke-width": 2.5 }, svg);
+      xs.forEach((x, i) => el("circle", { cx: X(x), cy: Y(gm[i]), r: 3.5, fill: css("--series-2"), stroke: css("--surface-1"), "stroke-width": 1.5 }, svg));
+    },
+    hover: xs.map((x, i) => ({ x, head: `${x}% minority`, rows: [{ label: "Geometric mean", color: css("--series-2"), value: `${gm[i].toFixed(2)}° (±SEM ${lo[i].toFixed(2)}–${hi[i].toFixed(2)})` }] })) });
+  legend("lgThr", [{ label: `Geometric mean ± SEM, ${MEAS_NAME[m]}`, color: css("--series-2") }, { label: "Individual subjects", color: css("--context") }]);
+  // pooled psychometric functions (reliable subjects)
+  const P = D.psychometric, bins = ["easy (18–36%)", "hard (44–48%)"], col = [css("--series-1"), css("--series-2")];
+  chart(document.getElementById("chPf"), { x: { lo: 0.3, hi: 30, log: true, ticks: [0.5, 1, 2, 5, 10, 20], fmt: fmtDeg, title: "Grating tilt (deg, log scale)" }, y: { lo: 40, hi: 100, ticks: [40, 50, 60, 70, 80, 90, 100], title: "Tilt judgments correct (%)" },
+    draw(svg, X, Y) {
+      el("line", { x1: X(0.3), x2: X(30), y1: Y(50), y2: Y(50), stroke: css("--axis"), "stroke-dasharray": "4 4" }, svg);
+      bins.forEach((b, k) => { const r = P.filter(p => p.load_bin === b && p.count >= 4).sort((a, c) => a.tilt_center - c.tilt_center);
+        for (const p of r) el("line", { x1: X(p.tilt_center), x2: X(p.tilt_center), y1: Y(100 * (p.mean - p.sem)), y2: Y(100 * (p.mean + p.sem)), stroke: col[k], "stroke-width": 1.5 }, svg);
+        el("path", { d: pathOf(r.map(p => [p.tilt_center, 100 * p.mean]), X, Y), fill: "none", stroke: col[k], "stroke-width": 2.5 }, svg);
+        for (const p of r) el("circle", { cx: X(p.tilt_center), cy: Y(100 * p.mean), r: 3.5, fill: col[k], stroke: css("--surface-1"), "stroke-width": 1.5 }, svg); });
+    },
+    hover: [...new Set(P.map(p => p.tilt_center))].sort((a, b) => a - b).map(t => ({ x: t, head: `Tilt ≈ ${t.toFixed(1)}°`, rows: bins.map((b, k) => { const p = P.find(q => q.load_bin === b && q.tilt_center === t); return { label: b, color: col[k], value: p ? `${(100 * p.mean).toFixed(0)}% (n = ${p.count})` : "—" }; }) })) });
+  legend("lgPf", [{ label: "Easy loads (18–36%)", color: col[0] }, { label: "Hard loads (44–48%)", color: col[1] }, { label: "mean ± SEM across the 7 reliable subjects, binned by tilt", kind: "key-ring" }]);
+  const t1 = test(state.set, "log_easy_hard_" + (m === "pf_thr" ? "pf" : "quest")), t2 = test(state.set, "slope_log_" + m), t3 = test(state.set, "slope_log_quest_ctrl_run");
+  const peak = gm.indexOf(Math.max(...gm));
+  const tk = document.getElementById("thrTakeaway"); tk.replaceChildren();
+  h("b", { text: "Takeaway" }, tk);
+  tk.appendChild(document.createTextNode(` With the ${MEAS_NAME[m]}, thresholds at hard loads (44–48%) are ×${Math.pow(10, t1.mean).toFixed(2)} those at easy loads (18–36%); ${t1.n_pos} of ${t1.n} subjects rise, t(${t1.n - 1}) = ${t1.t.toFixed(2)}, p ${fmtP(t1.p)}. Across all loads the trend is ×${Math.pow(10, t2.mean).toFixed(2)} from 18% to 48% (p ${fmtP(t2.p)}). The group curve peaks at ${xs[peak]}% and falls back at 48%. The cost is consistent in direction but small relative to the differences between subjects.`));
+  table("thrTable", ["Measure (" + (state.set === "all" ? "10" : "7") + " subjects)", "Mean", "t", "p", "Wilcoxon p", "Subjects > 0"],
+    [["hard/easy ratio, psychometric", "×" + Math.pow(10, test(state.set, "log_easy_hard_pf").mean).toFixed(2)], ["hard/easy ratio, QUEST", "×" + Math.pow(10, test(state.set, "log_easy_hard_quest").mean).toFixed(2)],
+     ["log slope 18→48%, psychometric", "×" + Math.pow(10, test(state.set, "slope_log_pf_thr").mean).toFixed(2)], ["log slope 18→48%, QUEST", "×" + Math.pow(10, test(state.set, "slope_log_quest_thr_median").mean).toFixed(2)],
+     ["log slope, QUEST, controlling run number", "×" + Math.pow(10, t3.mean).toFixed(2)]]
+      .map((r, i) => { const key = ["log_easy_hard_pf", "log_easy_hard_quest", "slope_log_pf_thr", "slope_log_quest_thr_median", "slope_log_quest_ctrl_run"][i], t = test(state.set, key); return [...r, t.t.toFixed(2), fmtP(t.p), fmtP(t.wilcoxon_p), `${t.n_pos}/${t.n}`]; }));
+}
+
+// ---------- 04 individuals ----------
+function renderIndividuals() {
+  const m = state.meas, key = m === "pf_thr" ? "easy_hard_ratio_pf" : "easy_hard_ratio_quest";
+  const S = D.subjects.filter(s => state.set === "all" || s.reliable);
+  chart(document.getElementById("chInd"), { x: { lo: -50, hi: -15, ticks: [-45, -40, -35, -30, -25, -20], fmt: v => String(v).replace("-", "−"), title: "Central accuracy change, 18% → 48% (points)" },
+    y: { lo: 0.5, hi: 8, log: true, ticks: [0.5, 1, 2, 4, 8], fmt: v => "×" + v, title: "Threshold ratio, hard / easy (log scale)" },
+    draw(svg, X, Y) {
+      el("line", { x1: X(-50), x2: X(-15), y1: Y(1), y2: Y(1), stroke: css("--axis"), "stroke-dasharray": "4 4" }, svg);
+      txt(svg, X(-15) + 6, Y(1) + 4, "no change", { "font-size": 12 });
+      for (const s of S) { const cx = X(s.slope_rb_acc), cy = Y(Math.min(8, Math.max(0.5, s[key]))), g = el("g", { tabindex: 0 }, svg);
+        el("circle", { cx, cy, r: 6, fill: s.reliable ? css("--series-2") : css("--surface-1"), stroke: css("--series-2"), "stroke-width": 2 }, g);
+        const near = S.some(o => o !== s && Math.hypot(X(o.slope_rb_acc) - cx, Y(Math.min(8, Math.max(0.5, o[key]))) - cy) < 26 && o.slope_rb_acc > s.slope_rb_acc);
+        txt(g, near ? cx - 9 : cx + 9, cy - 7, s.subject, { "font-size": 12, "text-anchor": near ? "end" : "start" });
+        g.addEventListener("pointermove", e => showTip(e, s.subject + (s.reliable ? "" : " (unreliable staircases)"), [{ label: "Central change", value: s.slope_rb_acc.toFixed(1) + " pts" }, { label: "Threshold ratio", value: "×" + s[key].toFixed(2) }, { label: "Usable staircases", value: Math.round(100 * s.pct_valid) + "%" }, { label: "Lapse rate (fit)", value: Math.round(100 * s.pf_lapse) + "%" }]));
+        g.addEventListener("pointerleave", hideTip); }
+    } });
+  legend("lgInd", [{ kind: "key-dot", color: css("--series-2"), label: "Reliable subject" }, { kind: "key-ring", border: `2px solid ${css("--series-2")}`, label: "Unreliable staircases (excluded from main analysis)" }]);
+  const lines = subsIn(state.set).map(s => ({ s, pts: D.cells.filter(c => c.subject === s).sort((a, b) => a.ratio - b.ratio).map(c => [pct(c.ratio), c[m]]) }));
+  const top = new Set(S.filter(s => s[key] >= 1.5).map(s => s.subject));
+  const yhi = state.set === "all" ? 60 : 12;
+  chart(document.getElementById("chSubj"), { x: RX, y: { lo: 0.4, hi: yhi, log: true, ticks: logTicks(0.4, yhi), fmt: fmtDeg, title: "Tilt threshold (deg, log scale)" },
+    draw(svg, X, Y) {
+      const labs = [];
+      for (const l of lines) { const hl = top.has(l.s), p = l.pts.map(q => [q[0], Math.min(yhi, Math.max(0.4, q[1]))]);
+        el("path", { d: pathOf(p, X, Y), fill: "none", stroke: hl ? css("--series-2") : css("--context"), "stroke-width": hl ? 2 : 1.2 }, svg);
+        const last = p[p.length - 1]; labs.push({ x: X(last[0]) + 6, y: Y(last[1]) + 4, s: l.s }); }
+      for (const lb of spread(labs)) txt(svg, lb.x, lb.y, lb.s, { "font-size": 11.5 });
+    } });
+  legend("lgSubj", [{ label: "Threshold rises ≥ 1.5× (hard vs easy)", color: css("--series-2") }, { label: "Other subjects", color: css("--context") }]);
+  const rho = test(state.set, "spearman_central_drop_vs_threshold_rise"), n15 = S.filter(s => s[key] >= 1.5).length;
+  const tk = document.getElementById("indTakeaway"); tk.replaceChildren(); h("b", { text: "Takeaway" }, tk);
+  tk.appendChild(document.createTextNode(` ${n15} of ${S.length} subjects' thresholds rise at least 1.5× from easy to hard central loads; the rest change little. How much a subject's central accuracy fell does not predict how much their peripheral threshold rose (Spearman ρ = ${rho.mean.toFixed(2)}, p ${fmtP(rho.p)}), so the peripheral cost is not simply a matter of who found the central task hardest.`));
+  table("indTable", ["Subject", "Reliable", "Usable staircases", "Central change (pts)", "Threshold ratio, psychometric", "Threshold ratio, QUEST", "Lapse rate", "Loads tested"],
+    D.subjects.map(s => [s.subject, s.reliable ? "yes" : "no", Math.round(100 * s.pct_valid) + "%", s.slope_rb_acc.toFixed(1), "×" + s.easy_hard_ratio_pf.toFixed(2), "×" + s.easy_hard_ratio_quest.toFixed(2), Math.round(100 * s.pf_lapse) + "%", s.n_ratios]));
+}
+
+// ---------- 05 coupling ----------
+function renderCoupling() {
+  const G = D.glm.filter(g => state.set === "all" || g.reliable);
+  chart(document.getElementById("chCpl"), { x: { lo: -0.5, hi: 1.5, ticks: [0, 1], fmt: v => v ? "Central correct" : "Central wrong", title: "Central judgment on the same trial" },
+    y: { lo: 60, hi: 95, ticks: [60, 65, 70, 75, 80, 85, 90, 95], title: "Tilt judgments correct (%)" },
+    draw(svg, X, Y) {
+      const cLabs = [];
+      for (const g of G) { const a = 100 * g.od_acc_central_wrong, b = 100 * g.od_acc_central_correct, up = b > a, gg = el("g", {}, svg);
+        el("line", { x1: X(0), x2: X(1), y1: Y(a), y2: Y(b), stroke: up ? css("--series-1") : css("--context"), "stroke-width": 1.8 }, gg);
+        for (const [x, v] of [[0, a], [1, b]]) el("circle", { cx: X(x), cy: Y(v), r: 4, fill: g.reliable ? css("--series-1") : css("--surface-1"), stroke: css("--series-1"), "stroke-width": 1.5 }, gg);
+        cLabs.push({ x: X(1) + 9, y: Y(b) + 4, s: g.subject });
+        gg.addEventListener("pointermove", e => showTip(e, g.subject, [{ label: "When central wrong", value: a.toFixed(1) + "%" }, { label: "When central correct", value: b.toFixed(1) + "%" }])); gg.addEventListener("pointerleave", hideTip); }
+      for (const lb of spread(cLabs)) txt(svg, lb.x, lb.y, lb.s, { "font-size": 11.5 });
+    } });
+  legend("lgCpl", [{ label: "One line per subject (raw accuracy, tilt not controlled)", color: css("--series-1") }]);
+  const terms = [["b_logtilt", "Log tilt"], ["b_ratio", "Central load"], ["b_central_correct", "Central correct"]];
+  chart(document.getElementById("chGlm"), { x: { lo: -0.5, hi: 2.5, ticks: [0, 1, 2], fmt: v => terms[v][1], title: "Predictor (per-subject logistic regression)" },
+    y: { lo: -1, hi: 4, ticks: [-1, 0, 1, 2, 3, 4], fmt: v => String(v).replace("-", "−"), title: "Coefficient (log-odds)" },
+    draw(svg, X, Y) {
+      el("line", { x1: X(-0.5), x2: X(2.5), y1: Y(0), y2: Y(0), stroke: css("--axis") }, svg);
+      terms.forEach(([k, name], i) => {
+        G.forEach((g, j) => el("circle", { cx: X(i) + (j - (G.length - 1) / 2) * 5, cy: Y(Math.max(-1, Math.min(4, g[k]))), r: 3, fill: css("--context") }, svg));
+        const gr = D.glmGroup.find(r => r.set === state.set && r.term === k), gg = el("g", {}, svg);
+        el("line", { x1: X(i), x2: X(i), y1: Y(gr.mean - gr.sem), y2: Y(gr.mean + gr.sem), stroke: css("--series-1"), "stroke-width": 3 }, gg);
+        el("rect", { x: X(i) - 16, y: Y(gr.mean) - 2, width: 32, height: 4, fill: css("--series-1") }, gg);
+        txt(gg, X(i), Y(Math.max(gr.mean + gr.sem, ...G.map(g => g[k]))) - 10, `p ${fmtP(gr.p)}`, { "text-anchor": "middle", "font-size": 12 });
+        gg.addEventListener("pointermove", e => showTip(e, name, [{ label: "Mean ± SEM", value: `${gr.mean.toFixed(2)} ± ${gr.sem.toFixed(2)}` }, { label: `t(${gr.n - 1})`, value: gr.t.toFixed(2) }, { label: "Subjects > 0", value: `${gr.n_pos}/${gr.n}` }])); gg.addEventListener("pointerleave", hideTip);
+      });
+    } });
+  legend("lgGlm", [{ kind: "key-rect", color: css("--series-1"), label: "Group mean ± SEM" }, { kind: "key-dot", color: css("--context"), label: "Individual subjects" }]);
+  const c = D.glmGroup.find(r => r.set === state.set && r.term === "b_central_correct"), l = D.glmGroup.find(r => r.set === state.set && r.term === "b_ratio");
+  const or = Math.exp(c.mean);
+  const tk = document.getElementById("cplTakeaway"); tk.replaceChildren(); h("b", { text: "Takeaway" }, tk);
+  tk.appendChild(document.createTextNode(` With tilt held constant, the odds of a correct tilt judgment are ${or.toFixed(2)}× higher when the central judgment on the same trial was correct (${c.n_pos} of ${c.n} subjects, t(${c.n - 1}) = ${c.t.toFixed(2)}, p ${fmtP(c.p)}). Central load itself adds little once tilt is accounted for (p ${fmtP(l.p)}), as expected when QUEST adjusts tilt for each load. The two judgments tend to succeed or fail together, which points to shared moment-to-moment attentional state rather than a strict trade-off.`));
+  table("glmTable", ["Subject", "Log tilt", "Central load", "Central correct", "Tilt acc. | central wrong", "Tilt acc. | central correct"],
+    G.map(g => [g.subject, g.b_logtilt.toFixed(2), g.b_ratio.toFixed(2), g.b_central_correct.toFixed(2), (100 * g.od_acc_central_wrong).toFixed(1) + "%", (100 * g.od_acc_central_correct).toFixed(1) + "%"]));
+}
+function renderOriginal() { table("origTable", ["Minority share", "Subjects", "Threshold (deg, mean ± SEM)", "Central accuracy (%)"], D.original.map(r => [pct(r.ratio) + "%", r.n, `${r.thr_m.toFixed(2)} ± ${r.thr_se.toFixed(2)}`, `${r.rb_m.toFixed(1)} ± ${r.rb_se.toFixed(1)}`])); }
+
+function renderAll() { renderTiles(); renderCentral(); renderThresholds(); renderIndividuals(); renderCoupling(); renderOriginal(); drawTrialTimeline(); drawStim(); }
+function seg(id, attr, fn) { document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => { document.querySelectorAll(`#${id} button`).forEach(o => o.setAttribute("aria-pressed", String(o === b))); fn(b.dataset[attr]); })); }
+seg("setSeg", "set", v => { state.set = v; renderCentral(); renderThresholds(); renderIndividuals(); renderCoupling(); });
+seg("measSeg", "m", v => { state.meas = v; renderThresholds(); renderIndividuals(); });
+
+// ---------- 01 paradigm: stimulus reconstruction ----------
+const DPP = 6.13787340528617 / 142.10764773832474;   // deg per pixel on the original display
+const POS = []; for (let v = 6; v <= 46; v += 5) { POS.push(v, -v); }
+const GRID = []; for (const x of POS) for (const y of POS) GRID.push([x * DPP, y * DPP]);
+const SQ = 3 * DPP, GREY_R = 142.1 / 2 * DPP, RING_R = 154.1 / 2 * DPP, HOLE_R = 127 * DPP, OUTER_R = 287.5 * DPP, CPD = 48 / 600 / DPP;
+const RATIOS = D.common;
+const P = { ratioIdx: 5, tilt: 3, hold: false, zoom: false, visible: false, trial: null, score: { n: 0, c: 0, t: 0 }, ans: {} };
+const cv = document.getElementById("psyCanvas"), ctx = cv.getContext("2d");
+let gratingCache = { key: "", img: null };
+function newTrial() {
+  const r = RATIOS[P.ratioIdx], nMin = Math.round(r * 200), blueMajority = Math.random() < 0.5, idx = GRID.map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, 200);
+  const sq = idx.map((g, j) => ({ g, blue: blueMajority ? j >= nMin : j < nMin }));
+  P.trial = { sq, blueMajority, sign: Math.random() < 0.5 ? -1 : 1, tilt: P.tilt };
+  P.ans = {};
+}
+function grating(px, field, tilt) {
+  const key = `${px}|${field}|${tilt}|${document.documentElement.dataset.theme || ""}`;
+  if (gratingCache.key === key) return gratingCache.img;
+  const img = ctx.createImageData(px, px), d = img.data, dpp = field / px, th = tilt * Math.PI / 180, c = Math.cos(th), s = Math.sin(th);
+  for (let j = 0; j < px; j++) for (let i = 0; i < px; i++) {
+    const x = (i - px / 2) * dpp, y = (j - px / 2) * dpp, e = Math.hypot(x, y);
+    const mask = (1 / (1 + Math.exp((e - OUTER_R) / 0.35))) * (1 / (1 + Math.exp(-(e - HOLE_R) / 0.15)));
+    const xr = x * c + y * s, v = 128 + 51.2 * Math.cos(2 * Math.PI * CPD * xr) * (mask < 0.1 ? 0 : mask), k = 4 * (j * px + i);
+    d[k] = d[k + 1] = d[k + 2] = v; d[k + 3] = 255;
+  }
+  gratingCache = { key, img }; return img;
+}
+function drawStim() {
+  const w = cv.clientWidth || 300, dpr = Math.min(2, devicePixelRatio || 1), px = Math.round(w * dpr);
+  if (cv.width !== px) { cv.width = cv.height = px; }
+  const field = P.zoom ? 8 : 26, sc = px / field, c0 = px / 2;
+  const show = P.visible || P.hold;
+  if (show && P.trial) ctx.putImageData(grating(px, field, P.trial.sign * P.trial.tilt), 0, 0); else { ctx.fillStyle = "rgb(128,128,128)"; ctx.fillRect(0, 0, px, px); }
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(c0, c0, RING_R * sc, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = "rgb(128,128,128)"; ctx.beginPath(); ctx.arc(c0, c0, GREY_R * sc, 0, 2 * Math.PI); ctx.fill();
+  if (show && P.trial) { const s = Math.max(1.4, SQ * sc); for (const q of P.trial.sq) { ctx.fillStyle = q.blue ? "rgb(0,0,255)" : "rgb(185,0,0)"; const [x, y] = GRID[q.g]; ctx.fillRect(c0 + x * sc - s / 2, c0 - y * sc - s / 2, s, s); } }
+  ctx.fillStyle = "#fff"; const fd = Math.max(2, SQ * sc); ctx.beginPath(); ctx.arc(c0, c0, fd / 2, 0, 2 * Math.PI); ctx.fill();
+  document.getElementById("psyBezel").textContent = P.zoom ? "Zoomed on the center (8°)" : "Full display, to scale (26°)";
+  const st = document.getElementById("psyStatus");
+  st.textContent = P.trial ? `${pct(RATIOS[P.ratioIdx])}% minority (${Math.round(RATIOS[P.ratioIdx] * 200)} of 200 squares) · tilt ${P.tilt.toFixed(1)}° · ${show ? "display on" : "waiting for your answers"}` : "Press “Flash a trial” to start.";
+}
+function enableAnswers(on) { for (const id of ["ansB", "ansR", "ansL", "ansRt"]) document.getElementById(id).disabled = !on; }
+function renderScore() {
+  const s = P.score, box = document.getElementById("psyScore"); box.replaceChildren();
+  const g = D.group.reliable[Math.max(0, D.common.indexOf(RATIOS[P.ratioIdx]))];
+  h("span", { class: "big", text: s.n ? `Color ${s.c}/${s.n} · Tilt ${s.t}/${s.n}` : "No trials yet" }, box);
+  box.appendChild(document.createTextNode(s.n ? "" : "Flash a trial, then answer both questions."));
+  h("span", { class: "vs", text: `Subjects at ${pct(RATIOS[P.ratioIdx])}%: color ${Math.round(g.rb_acc_m)}% correct; typical tilt threshold ${g.pf_thr_gm.toFixed(1)}° (psychometric fit).` }, box);
+}
+function answer(kind, val) {
+  if (!P.trial || P.ans[kind] !== undefined) return;
+  P.ans[kind] = val;
+  if (P.ans.color !== undefined && P.ans.tilt !== undefined) {
+    P.score.n++; if (P.ans.color === (P.trial.blueMajority ? "blue" : "red")) P.score.c++; if (P.ans.tilt === P.trial.sign) P.score.t++;
+    enableAnswers(false); renderScore();
+  }
+}
+document.getElementById("flashBtn").addEventListener("click", () => {
+  newTrial(); P.visible = true; drawStim(); enableAnswers(true);
+  setTimeout(() => { P.visible = false; drawStim(); }, 50);
+});
+document.getElementById("holdBtn").addEventListener("click", e => { P.hold = !P.hold; e.currentTarget.setAttribute("aria-pressed", String(P.hold)); if (!P.trial) newTrial(); drawStim(); });
+document.getElementById("psyZoomBtn").addEventListener("click", e => { P.zoom = !P.zoom; e.currentTarget.setAttribute("aria-pressed", String(P.zoom)); drawStim(); });
+document.getElementById("ansB").addEventListener("click", () => answer("color", "blue"));
+document.getElementById("ansR").addEventListener("click", () => answer("color", "red"));
+document.getElementById("ansL").addEventListener("click", () => answer("tilt", -1));
+document.getElementById("ansRt").addEventListener("click", () => answer("tilt", 1));
+const tr = document.getElementById("tiltRange"), tv = document.getElementById("tiltVal");
+const tiltFromRange = v => Math.pow(10, -0.3 + (v / 100) * 1.6);            // 0.5° to 20°, log spaced
+tr.addEventListener("input", () => { P.tilt = tiltFromRange(+tr.value); tv.textContent = P.tilt.toFixed(1) + "°"; if (P.trial) P.trial.tilt = P.tilt; drawStim(); });
+P.tilt = tiltFromRange(+tr.value); tv.textContent = P.tilt.toFixed(1) + "°";
+const pills = document.getElementById("psyRatios");
+RATIOS.forEach((r, i) => { const b = h("button", { type: "button", class: "pill", text: pct(r) + "%", "aria-pressed": String(i === P.ratioIdx) }, pills); b.addEventListener("click", () => { P.ratioIdx = i; pills.querySelectorAll("button").forEach((o, j) => o.setAttribute("aria-pressed", String(j === i))); newTrial(); drawStim(); renderScore(); }); });
+
+function drawTrialTimeline() {
+  const box = document.getElementById("trialTimeline"); box.replaceChildren();
+  const W = 900, M = { l: 100, r: 20 }, iw = W - M.l - M.r, H = 120, T = 2.6, X = t => M.l + t / T * iw;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "One trial: a 50 ms display of the squares and grating, then a 2.5 s blank response window with fixation" }, box);
+  el("rect", { x: X(0), y: 14, width: X(0.05) - X(0) + 2, height: 34, fill: css("--series-2") }, svg);
+  el("rect", { x: X(0.05) + 2, y: 14, width: X(2.55) - X(0.05) - 2, height: 34, fill: css("--paper-2"), stroke: css("--axis") }, svg);
+  txt(svg, X(0.05) + 10, 36, "50 ms: squares + grating", { "font-size": 13, style: `fill:${css("--text-primary")}` });
+  txt(svg, X(1.3), 36, "2.5 s: fixation only · report color (B/R) and tilt (←/→) · tone after a color error", { "text-anchor": "middle", "font-size": 13 });
+  for (const t of [0, 0.5, 1, 1.5, 2, 2.5]) txt(svg, X(t), 68, t.toFixed(1), { "text-anchor": "middle" });
+  txt(svg, M.l + iw / 2, 96, "Time from display onset (s)", { "text-anchor": "middle", class: "axt" });
+  txt(svg, M.l - 10, 36, "Display", { "text-anchor": "end", class: "axt" });
+}
+
+const themeBtn = document.getElementById("themeBtn");
+const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "Light" : "Dark"; };
+themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncThemeBtn(); renderAll(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { syncThemeBtn(); renderAll(); });
+addEventListener("resize", drawStim);
+syncThemeBtn(); newTrial(); P.hold = true; renderScore(); renderAll();
+})();
+</script>
+</body>
+</html>

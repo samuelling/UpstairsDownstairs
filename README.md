@@ -29,6 +29,15 @@ The page reads as a presentation of the results, not a log of analyses. It opens
 
 **Correction (2026-11-21):** the first version reported flat behavior for S12 and S13. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed changes as correct. Scored properly, they behave like the other subjects. No fMRI result changed.
 
+## Psychophysics tab (`dashboard/psychophysics.html`)
+A reanalysis of the dual-task psychophysics study that preceded the fMRI (cluster source: `AttentionManipulation`, read-only; outputs in `AttentionManipulation_reanalysis`). There are 10 subjects (coded P01–P10), 300 runs and 48,000 trials. Every 50-ms trial showed 200 red/blue squares at fixation (majority-color judgment, minority share 18–48%) together with a peripheral 2 cpd grating (tilt left or right). QUEST measured the tilt threshold at each central load.
+- **Central accuracy** falls from 97% to 61% across loads (t(6) = −9.8).
+- **Peripheral tilt thresholds** rise modestly with load: about 1.3× from easy (18–36%) to hard (44–48%) loads, in 6 of 7 reliable subjects, p = .08. Three subjects carry most of the effect, and thresholds dip at 48%.
+- **Trial by trial**, holding tilt constant, a tilt judgment is more often correct when the central judgment on that trial was correct (7 of 7 subjects, p = .018).
+- **Reliability:** following the original criteria, the main analyses use the 7 subjects with more than 70% usable staircases; all 10 are shown as a check.
+
+Rebuild: `rsync -a scc:/projectnb/vision/AttentionManipulation_reanalysis/outputs/ data/psychophysics/ && python3 scripts/build_psy_data.py`.
+
 ## Caveats
 - **Load is confounded with run position.** There is one ratio per run and each subject's order repeats, which the existing GLMs can't separate. Next step: refit with run position as a covariate.
 - At 46% subjects miss about half of the changes, which may mean they disengage; this would explain the dip at 46% in the attention ROIs.
@@ -45,6 +54,9 @@ The page reads as a presentation of the results, not a log of analyses. It opens
   - `hemi_stats.py`: per-hemisphere load slopes, paired right-minus-left tests, per-hemisphere model fits, and right-vs-left composites.
   - `model_recovery_and_prf_stats.py`: model-recovery simulation and pRF-ROI slope statistics.
   - `build_data.py`: builds `dashboard/data.js` from `data/` (stdlib only).
+  - `psy_analysis.py`: the psychophysics reanalysis (cluster).
+  - `build_psy_data.py`: builds `dashboard/psy_data.js` from `data/psychophysics/`.
+- `dashboard/style.css`: styles shared by both tabs.
 
 ## Atlases (fsaverage)
 - Wang, Mruczek, Arcaro & Kastner (2015) *Cereb Cortex*: probabilistic retinotopic ROIs, maximum-probability labels from neuropythy.
