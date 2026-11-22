@@ -77,11 +77,11 @@ button { font: inherit; }
 .notice { border-left: 3px solid var(--neg); padding: 6px 12px; font-size: 13px; color: var(--text-secondary); margin-top: 14px; }
 .notice b { color: var(--text-primary); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.multiples { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 14px; margin-top: 10px; }
+.multiples { display: grid; grid-template-columns: repeat(auto-fill, minmax(214px, 1fr)); gap: 10px 14px; margin-top: 10px; }
 .multiples.three { grid-template-columns: repeat(3, 1fr); }
 .panel-title { font-size: 13px; font-weight: 600; margin: 0; }
 .panel-stat { font-size: 12px; color: var(--text-secondary); margin: 0 0 2px; }
-svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg { display: block; max-width: 100%; height: auto; overflow: visible; }
 svg text { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
 svg .ink2 { fill: var(--text-secondary); }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin: 8px 0 0; }
@@ -365,6 +365,11 @@ function bindTip(node, head, rowsFn) {
   node.addEventListener("focus", () => { const b = node.getBoundingClientRect(); showTip({ clientX: b.left + 120, clientY: b.bottom }, head, rowsFn()); });
   node.addEventListener("blur", hideTip);
 }
+// axis titles: x centered under the axis, y rotated and centered on the plot height
+function axisTitles(svg, xt, yt) {
+  if (xt && xt.text) text(svg, xt.x, xt.y, xt.text, { "text-anchor": "middle", class: "ink2", "font-size": 11.5 });
+  if (yt && yt.text) text(svg, yt.x, yt.y, yt.text, { "text-anchor": "middle", class: "ink2", "font-size": 11.5, transform: `rotate(-90 ${yt.x} ${yt.y})` });
+}
 function table(container, head, rows) {
   container.replaceChildren(); const t = h("table", {}, container);
   const tr = h("tr", {}, h("thead", {}, t)); head.forEach(c => h("th", { text: c }, tr));
@@ -373,19 +378,20 @@ function table(container, head, rows) {
 }
 
 // ---------- line chart (ordinal x) ----------
-function lineChart(container, { series, yDomain, yLabel, W = 300, H = 190, unit = "", endLabels = false, decimals = 2 }) {
+function lineChart(container, { series, yDomain, yLabel = "Response (% signal change)", xLabel = "Minority-color ratio (%)", W = 300, H = 300, unit = "", endLabels = false, decimals = 2 }) {
   container.replaceChildren();
-  const M = { t: yLabel ? 22 : 10, r: endLabels ? 56 : 12, b: 26, l: 40 };
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" }, container);
-  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const M = { t: 12, r: endLabels ? 56 : 14, b: 44, l: 58 };
+  const iw = W - M.l - M.r, ih = iw;          // square plotting area
+  H = M.t + ih + M.b;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img" }, container);
   const x = i => M.l + (i / (R.length - 1)) * iw;
   const [y0, y1] = yDomain, y = v => M.t + ih - ((v - y0) / (y1 - y0)) * ih;
   for (const tv of niceTicks(y0, y1, 4).ticks) {
     el("line", { x1: M.l, x2: M.l + iw, y1: y(tv), y2: y(tv), stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg);
     text(svg, M.l - 6, y(tv) + 3.5, (Math.abs(tv) < 1e-9 ? "0" : String(+tv.toFixed(2))).replace("-", "−"), { "text-anchor": "end" });
   }
-  R.forEach((r, i) => text(svg, x(i), H - 8, RLAB[i], { "text-anchor": "middle" }));
-  if (yLabel) text(svg, M.l - 34, 10, yLabel, { "text-anchor": "start", "font-size": 10 });
+  R.forEach((r, i) => text(svg, x(i), M.t + ih + 16, RLAB[i], { "text-anchor": "middle" }));
+  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: xLabel }, { x: 14, y: M.t + ih / 2, text: yLabel });
   const path = arr => arr.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
   for (const s of series) if (s.ctx) for (const c of s.ctx) el("path", { d: path(c), fill: "none", stroke: css("--context"), "stroke-width": 1, "stroke-linejoin": "round" }, svg);
   for (const s of series) {
@@ -470,11 +476,11 @@ function renderTiles() {
 // ---------- behavior ----------
 function renderBeh() {
   const B = D.behavior;
-  lineChart(document.getElementById("behScore"), { series: [{ name: "Score", color: css("--series-1"), band: css("--band"), pts: B.score.group, ctx: D.subjects.map(s => B.score.subjects[s]) }], yDomain: [0, 100], W: 420, H: 240, unit: "%", yLabel: "% correct", decimals: 1 });
+  lineChart(document.getElementById("behScore"), { series: [{ name: "Score", color: css("--series-1"), band: css("--band"), pts: B.score.group, ctx: D.subjects.map(s => B.score.subjects[s]) }], yDomain: [0, 100], W: 400, unit: "%", yLabel: "Correct (% of all changes)", decimals: 1 });
   lineChart(document.getElementById("behSplit"), { series: [
     { name: "Detected", color: css("--series-1"), band: css("--band"), pts: B.resp.group },
     { name: "Accuracy", color: css("--series-2"), band: css("--band-2"), pts: B.acc.group },
-  ], yDomain: [0, 100], W: 420, H: 240, unit: "%", yLabel: "%", decimals: 1, endLabels: true });
+  ], yDomain: [0, 100], W: 442, unit: "%", yLabel: "Percent of changes", decimals: 1, endLabels: true });
   const rows = [];
   for (const s of D.subjects) rows.push([`S${s}${B.keyFlipped.includes(s) ? " (keys flipped)" : ""}`, ...R.map((_, i) => `${B.score.subjects[s][i].toFixed(0)} / ${B.resp.subjects[s][i].toFixed(0)} / ${B.acc.subjects[s][i].toFixed(0)}`)]);
   rows.push(["Mean", ...R.map((_, i) => `${B.score.group[i].m.toFixed(0)} / ${B.resp.group[i].m.toFixed(0)} / ${B.acc.group[i].m.toFixed(0)}`)]);
@@ -491,7 +497,7 @@ function renderIps() {
     const s = statRow("wang2015", r), p = h("div", {}, box);
     h("p", { class: "panel-title", text: r }, p);
     h("p", { class: "panel-stat", text: statText(s) }, p);
-    lineChart(h("div", {}, p), { series: all[i], yDomain: dom, W: 240, H: 160, unit: "%", yLabel: "% signal" });
+    lineChart(h("div", {}, p), { series: all[i], yDomain: dom, W: 214, unit: "%", yLabel: "% signal change" });
   });
   legend("ipsLegend", state.hemi === "diff"
     ? [{ label: "Left hemisphere ± SEM", color: css("--series-1") }, { label: "Right hemisphere ± SEM", color: css("--series-2") }]
@@ -517,7 +523,7 @@ function renderVis() {
       const d = hslope(A, `${pn.a}_${pn.b}`, "rh-lh"), p = h("div", {}, box);
       h("p", { class: "panel-title", text: `${pn.a} ${pn.b === "fovea" ? "fovea" : "periphery"}` }, p);
       h("p", { class: "panel-stat", text: statText(d) }, p);
-      lineChart(h("div", {}, p), { series: ss[i], yDomain: dom, W: 320, H: 190, unit: "%", endLabels: true, yLabel: "% signal" });
+      lineChart(h("div", {}, p), { series: ss[i], yDomain: dom, W: 330, unit: "%", endLabels: true });
       const L = hslope(A, `${pn.a}_${pn.b}`, "lh"), Rr = hslope(A, `${pn.a}_${pn.b}`, "rh");
       rows.push([`${pn.a} ${pn.b}`, fmt(L.slope * LOAD_SPAN), fmtP(L.p), fmt(Rr.slope * LOAD_SPAN), fmtP(Rr.p), fmt(d.slope * LOAD_SPAN), d.t.toFixed(2), fmtP(d.p)]);
     });
@@ -532,7 +538,7 @@ function renderVis() {
     const f = statRow(A, a + "_fovea"), pe = statRow(A, a + "_periph"), p = h("div", {}, box);
     h("p", { class: "panel-title", text: a }, p);
     h("p", { class: "panel-stat", text: `fovea ${fmt(f.slope * LOAD_SPAN)}% (p ${fmtP(f.p)}) · periph ${fmt(pe.slope * LOAD_SPAN)}% (p ${fmtP(pe.p)})` }, p);
-    lineChart(h("div", {}, p), { series: ser[i], yDomain: dom, W: 320, H: 210, unit: "%", endLabels: true, yLabel: "% signal" });
+    lineChart(h("div", {}, p), { series: ser[i], yDomain: dom, W: 330, unit: "%", endLabels: true });
     for (const [b, s, k] of [["fovea", f, 0], ["periph", pe, 1]]) rows.push([`${a} ${b}`, ...ser[i][k].pts.map(q => q.m.toFixed(2)), fmt(s.slope * LOAD_SPAN), s.t.toFixed(2), fmtP(s.p), fmtP(s.q)]);
   });
   legend("visLegend", [{ label: "Fovea 0.5–1.5°", color: css("--series-1") }, { label: "Periphery 3–7.5°", color: css("--series-2") }]);
@@ -553,18 +559,18 @@ function forestRows() {
 function renderForest() {
   const box = document.getElementById("forestChart"); box.replaceChildren();
   const diff = state.hemi === "diff";
-  const rows = forestRows(), rowH = 22, W = 560, M = { t: 18, r: 16, b: 26, l: 150 };
+  const rows = forestRows(), rowH = 22, W = 580, M = { t: 10, r: 16, b: 44, l: 170 };
   const H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Load effect by ROI with 95% confidence intervals" }, box);
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Load effect by ROI with 95% confidence intervals" }, box);
   let lo = 0, hi = 0;
   for (const r of rows) { const sv = Object.values(r.subj).map(v => v * LOAD_SPAN); lo = Math.min(lo, r.lo * LOAD_SPAN, ...sv); hi = Math.max(hi, r.hi * LOAD_SPAN, ...sv); }
   const { ticks, step } = niceTicks(lo, hi, 6); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
   const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
   for (const tv of ticks) {
     el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg);
-    text(svg, x(tv), H - 8, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, step < 0.5 ? 2 : 1), { "text-anchor": "middle" });
+    text(svg, x(tv), H - M.b + 16, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, step < 0.5 ? 2 : 1), { "text-anchor": "middle" });
   }
-  text(svg, M.l + iw, M.t - 6, diff ? "right − left load effect (% signal, fitted 10% → 46%)" : `% signal change, fitted 10% → 46% · ${HEMI_NAME[state.hemi]}`, { "text-anchor": "end", "font-size": 10 });
+  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: diff ? "Right − left load effect (% signal change, fitted 10% → 46%)" : "Load effect (% signal change, fitted 10% → 46%)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI (sorted by effect)" });
   rows.forEach((r, i) => {
     const cy = M.t + i * rowH + rowH / 2, sig = r.q < 0.05, key = `${r.atlas}|${r.roi}`;
     const color = sig ? (r.slope > 0 ? css("--series-1") : css("--neg")) : css("--text-muted");
@@ -600,7 +606,7 @@ function renderDetail() {
   let lo = 0, hi = -Infinity;
   for (const sr of series) for (const p of sr.pts) { lo = Math.min(lo, p.m - p.se); hi = Math.max(hi, p.m + p.se); }
   if (ctx) { lo = Math.min(lo, ...ctx.flat()); hi = Math.max(hi, ...ctx.flat()); }
-  lineChart(document.getElementById("detail"), { series, yDomain: [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2], W: 380, H: 250, unit: "%", yLabel: "% signal" });
+  lineChart(document.getElementById("detail"), { series, yDomain: [Math.floor(lo * 2) / 2, Math.ceil(hi * 2) / 2], W: 400, unit: "%" });
   legend("detailLegend", state.hemi === "diff" ? [{ label: "Left ± SEM", color: css("--series-1") }, { label: "Right ± SEM", color: css("--series-2") }]
     : state.hemi === "both" ? [{ label: "Group mean ± SEM", color: css("--series-1") }, { label: "Individual subjects", color: css("--context") }]
     : [{ label: `Group mean ± SEM, ${HEMI_NAME[state.hemi]}`, color: css("--series-1") }]);
@@ -627,14 +633,14 @@ function segBar(g, x0, iw, cy, th, vert, C) {
 function renderModels() {
   const rows = modelRows(), C = MODEL_COLOR(), diff = state.hemi === "diff", rowH = diff ? 26 : 20;
   { const box = document.getElementById("modelBars"); box.replaceChildren();
-    const W = 520, M = { t: 16, r: 56, b: 26, l: 110 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Summed AICc evidence for a load function by ROI" }, box);
+    const W = 520, M = { t: 10, r: 56, b: 44, l: 128 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+    const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Summed AICc evidence for a load function by ROI" }, box);
     const vals = diff ? rows.flatMap(r => [r.L.dSummed, r.R.dSummed]) : rows.map(r => r.d);
     let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
     const { ticks } = niceTicks(lo, hi, 5); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
     const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
-    for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - 8, String(tv).replace("-", "−"), { "text-anchor": "middle" }); }
-    text(svg, x(hi), M.t - 6, `ΔAICc (flat − best), summed over 8 subjects · ${HEMI_NAME[state.hemi]}`, { "text-anchor": "end", "font-size": 10 });
+    for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: tv === 0 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - M.b + 16, String(tv).replace("-", "−"), { "text-anchor": "middle" }); }
+    axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "ΔAICc, flat − best load model (summed over subjects)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI" });
     rows.forEach((r, i) => {
       const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
       el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
@@ -661,10 +667,10 @@ function renderModels() {
     });
   }
   { const box = document.getElementById("vertBars"); box.replaceChildren();
-    const W = 520, M = { t: 16, r: 56, b: 26, l: 110 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Fraction of vertices best fit by each model" }, box);
-    for (const tv of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: M.l + tv * iw, x2: M.l + tv * iw, y1: M.t - 4, y2: H - M.b, stroke: css("--grid"), "stroke-width": 1 }, svg); text(svg, M.l + tv * iw, H - 8, `${tv * 100}%`, { "text-anchor": "middle" }); }
-    text(svg, M.l + iw, M.t - 6, `share of vertices · ${HEMI_NAME[state.hemi]}`, { "text-anchor": "end", "font-size": 10 });
+    const W = 520, M = { t: 10, r: 56, b: 44, l: 128 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+    const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Fraction of vertices best fit by each model" }, box);
+    for (const tv of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: M.l + tv * iw, x2: M.l + tv * iw, y1: M.t - 4, y2: H - M.b, stroke: css("--grid"), "stroke-width": 1 }, svg); text(svg, M.l + tv * iw, H - M.b + 16, `${tv * 100}%`, { "text-anchor": "middle" }); }
+    axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "Share of vertices best fit by each model (%)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI" });
     rows.forEach((r, i) => {
       const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
       el("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent", rx: 4 }, g);
@@ -695,12 +701,13 @@ function renderRecovery() {
 // ---------- hemispheric composites ----------
 function renderHemi() {
   const box = document.getElementById("hemiChart"); box.replaceChildren();
-  const rows = D.hemi.composites, rowH = 30, W = 900, M = { t: 18, r: 250, b: 26, l: 250 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Left vs right load effect for network composites" }, box);
+  const rows = D.hemi.composites, rowH = 30, W = 900, M = { t: 22, r: 250, b: 44, l: 270 }, H = M.t + rows.length * rowH + M.b, iw = W - M.l - M.r;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Left vs right load effect for network composites" }, box);
   let lo = Math.floor(Math.min(0, ...rows.flatMap(r => [r.L, r.R])) * 5) / 5, hi = Math.max(0, ...rows.flatMap(r => [r.L, r.R]));
   const { ticks } = niceTicks(lo, hi, 6); lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
   const x = v => M.l + ((v - lo) / (hi - lo)) * iw;
-  for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - 8, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, 1), { "text-anchor": "middle" }); }
+  for (const tv of ticks) { el("line", { x1: x(tv), x2: x(tv), y1: M.t - 4, y2: H - M.b, stroke: Math.abs(tv) < 1e-9 ? css("--axis") : css("--grid"), "stroke-width": 1 }, svg); text(svg, x(tv), H - M.b + 16, Math.abs(tv) < 1e-9 ? "0" : fmt(tv, 1), { "text-anchor": "middle" }); }
+  axisTitles(svg, { x: M.l + iw / 2, y: H - 6, text: "Load effect (% signal change, fitted 10% → 46%)" }, { x: 14, y: M.t + rows.length * rowH / 2, text: "ROI composite" });
   text(svg, M.l + iw + 12, M.t - 6, "right − left (paired)", { "text-anchor": "start", "font-size": 10 });
   rows.forEach((r, i) => {
     const cy = M.t + i * rowH + rowH / 2, g = el("g", { class: "row-g", tabindex: 0 }, svg);
