@@ -66,7 +66,7 @@
     </div>
     <div class="stage">
       <div>
-        <div class="screen"><canvas id="stimCanvas" role="img" aria-label="Animated reconstruction of the stimulus: fixation dot, ring of red and blue squares, and a peripheral noise annulus during task blocks"></canvas><span class="bezel" id="bezel">Zoomed in ×2.2</span></div>
+        <div class="screen"><canvas id="stimCanvas" role="img" aria-label="Animated reconstruction of the stimulus: fixation dot, ring of red and blue squares, and a peripheral noise annulus during task blocks"></canvas><span class="bezel" id="bezel">Full display, to scale (15°)</span></div>
         <p class="status" id="stimStatus"></p>
       </div>
       <div>
@@ -85,7 +85,7 @@
         <div class="ctl-group">
           <span class="lbl">View</span>
           <div class="ctl-row">
-            <button type="button" class="pill" id="zoomBtn" aria-pressed="true">Zoom on the ring</button>
+            <button type="button" class="pill" id="zoomBtn" aria-pressed="false">Zoom on the ring</button>
             <button type="button" class="pill" id="answerBtn" aria-pressed="false">Show the flips</button>
             <button type="button" class="pill" id="flickerBtn" aria-pressed="false">Real noise speed</button>
           </div>
@@ -909,7 +909,7 @@ function makeTextures() {
 }
 
 // ---------- state ----------
-const S = { ratioIdx: 5, run: null, t: 14, playing: false, slow: false, zoom: true, answers: false, realFlicker: false,
+const S = { ratioIdx: 5, run: null, t: 14, playing: false, slow: false, zoom: false, answers: false, realFlicker: false,
   score: { flips: 0, caught: 0, right: 0 }, countFrom: 0, fp: 0, answered: new Set(), feedback: null };
 const canvas = document.getElementById("stimCanvas"), ctx = canvas.getContext("2d");
 const statusEl = document.getElementById("stimStatus"), scoreEl = document.getElementById("scorecard");
