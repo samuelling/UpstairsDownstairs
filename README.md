@@ -72,3 +72,8 @@ python3 scripts/build_data.py   # after refreshing data/ from the cluster output
 ```
 - **Attentional response function (`scripts/arf_demand.py`).** Power-law fits against three load axes: minority share (q ≈ 1.1–1.9, linear), evidence margin on a log axis (q ≈ 0.5–0.8, not different from linear) and behavioral difficulty (q ≈ 0.2–0.35, compressive but poorly fitting). There is no evidence of saturation within 10–46%.
 - Rebuild these two sections: `python3 scripts/build_extra_data.py` → `dashboard/extra_data.js`.
+
+## Eccentricity, localizer and run-level analyses
+- **Eccentricity profile (section 04b, `scripts/ecc_localizer.py`, cluster):** the load effect in V1–V3 by pRF eccentricity is positive in the fovea (+0.58% at 0.5–0.75°), crosses zero near 2.5°, and is negative from 3° out, reaching −0.41% at 6–7.5° (p = .032) and −0.34% at 9–11° (p = .027). It extends beyond the annulus, so it is a broad peripheral decrease rather than suppression of the ignored stimulus.
+- **Annulus localizer (04b):** annulus-driven V2 decreases (−0.37%, p = .046). The strongest-driven vertices decrease most, but that is confounded with eccentricity.
+- **Run level (section 06b, `scripts/run_level_coupling.py`):** within a load level, run-to-run detection does not predict dorsal attention activity. After removing shared fluctuations, dorsal attention is still positively coupled with peripheral V1–V3 (no push-pull) and trends negative with the default network (r = −.28, p = .052).

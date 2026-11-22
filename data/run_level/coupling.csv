@@ -1,0 +1,61 @@
+subject,a,b,r,r_partial_global,n_runs,kind,measure,mean_r,t,p,n_neg,n
+1.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.8649504564110567,0.7777841186265256,21.0,subject,,,,,,
+1.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.8853241298453381,0.8209028889082165,21.0,subject,,,,,,
+1.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.8252206843879417,0.615719267510017,21.0,subject,,,,,,
+1.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.7782451075995762,0.7362830780227549,21.0,subject,,,,,,
+1.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,0.4150305855929252,-0.6175436234261678,21.0,subject,,,,,,
+1.0,Foveal V1–V3,Peripheral V1–V3,0.9558638419573696,0.9307483732005529,21.0,subject,,,,,,
+3.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.5065340165889117,0.26159283940456085,35.0,subject,,,,,,
+3.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.6643823404950617,0.5430153628824026,35.0,subject,,,,,,
+3.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.41666007619170015,0.14345803334611276,35.0,subject,,,,,,
+3.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.37266041933730254,-0.0012915137450883402,35.0,subject,,,,,,
+3.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,-0.3823632738280155,-0.6544038302398817,35.0,subject,,,,,,
+3.0,Foveal V1–V3,Peripheral V1–V3,0.6237369826818524,0.1314768801002163,35.0,subject,,,,,,
+4.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.5151580545978257,0.5439060043737314,17.0,subject,,,,,,
+4.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.7634241608674576,0.8783635127065508,17.0,subject,,,,,,
+4.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.02882481527338259,-0.15108516409668557,17.0,subject,,,,,,
+4.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.4307108521519027,0.5077847712371949,17.0,subject,,,,,,
+4.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,-0.10991577552857952,-0.1936711936616162,17.0,subject,,,,,,
+4.0,Foveal V1–V3,Peripheral V1–V3,0.7203929310553691,0.7296995715379108,17.0,subject,,,,,,
+7.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,-0.32260615304928103,-0.6065251552282546,17.0,subject,,,,,,
+7.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.3671559414263263,0.28512302984985854,17.0,subject,,,,,,
+7.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,-0.06781445453332774,-0.3575096765737376,17.0,subject,,,,,,
+7.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,-0.41275675394124206,-0.6066153772417378,17.0,subject,,,,,,
+7.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,0.2686354764386748,0.16229463257072663,17.0,subject,,,,,,
+7.0,Foveal V1–V3,Peripheral V1–V3,0.20041885010351607,-0.04727582288922264,17.0,subject,,,,,,
+9.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.6899811154630281,0.12473952146295754,17.0,subject,,,,,,
+9.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.6283403776998051,0.24064505905201847,17.0,subject,,,,,,
+9.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.7165378689076013,0.2007607212184593,17.0,subject,,,,,,
+9.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.6588759147396878,0.16742807279193914,17.0,subject,,,,,,
+9.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,0.8681394200943736,0.0965699297791858,17.0,subject,,,,,,
+9.0,Foveal V1–V3,Peripheral V1–V3,0.8870917389542674,0.8184050575959916,17.0,subject,,,,,,
+11.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.9527431513902499,0.9543938176745865,12.0,subject,,,,,,
+11.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.41384731993702334,0.3558143793330381,12.0,subject,,,,,,
+11.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.9912727194675547,0.9951995903328172,12.0,subject,,,,,,
+11.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.8934378960816814,0.9729995999566773,12.0,subject,,,,,,
+11.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,0.1726839491315366,-0.12974815790152872,12.0,subject,,,,,,
+11.0,Foveal V1–V3,Peripheral V1–V3,0.11798596579927395,0.06082333762831981,12.0,subject,,,,,,
+12.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.7945426505257465,0.4336878434742922,18.0,subject,,,,,,
+12.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,0.8620093226089252,0.6395064853153566,18.0,subject,,,,,,
+12.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.7322330611774736,0.3290323022793127,18.0,subject,,,,,,
+12.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.7332522286308295,0.31189264346211626,18.0,subject,,,,,,
+12.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,0.658753028017586,-0.2721764478873443,18.0,subject,,,,,,
+12.0,Foveal V1–V3,Peripheral V1–V3,0.7581495996667186,0.395723511353214,18.0,subject,,,,,,
+13.0,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,0.6106897891598612,0.45612149375557065,14.0,subject,,,,,,
+13.0,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,-0.02614269755139965,-0.6744789333686483,14.0,subject,,,,,,
+13.0,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,0.7213058193260634,0.5524896306957491,14.0,subject,,,,,,
+13.0,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,0.446532442588569,0.3744245661184722,14.0,subject,,,,,,
+13.0,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,0.5316061393435532,-0.4132418340734063,14.0,subject,,,,,,
+13.0,Foveal V1–V3,Peripheral V1–V3,-0.4170755043304905,-0.76379483509363,14.0,subject,,,,,,
+,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,,,,group,r,0.6783340600232324,3.647413600198024,0.008206013441356734,1.0,8.0
+,Dorsal attention (Wang IPS–FEF),Peripheral V1–V3,,,,group,r_partial_global,0.47914159875496676,1.991723480705068,0.08667072380540226,1.0,8.0
+,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,,,,group,r,0.6384093035212512,4.435401618070456,0.003024448643980668,1.0,8.0
+,Dorsal attention (Wang IPS–FEF),Foveal V1–V3,,,,group,r_partial_global,0.460717933017777,2.107110899273378,0.07309961249189449,1.0,8.0
+,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,,,,group,r,0.7062277159314018,2.8671341119369544,0.0240905185733024,1.0,8.0
+,Dorsal attention (Wang IPS–FEF),wang2015|V1_periph,,,,group,r_partial_global,0.5115284518231271,1.5150736906789726,0.17352902586466512,2.0,8.0
+,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,,,,group,r,0.5631842656808321,3.2219408267439267,0.014614033743074486,1.0,8.0
+,Dorsal attention (Wang IPS–FEF),wang2015|V2_periph,,,,group,r_partial_global,0.445057714195264,1.6419835798912406,0.14459679880818477,2.0,8.0
+,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,,,,group,r,0.36777454255344766,2.0327709917214465,0.08157852735691705,2.0,8.0
+,Dorsal attention (Wang IPS–FEF),schaefer2018|DefaultA,,,,group,r_partial_global,-0.2785335346624214,-2.3346099224563703,0.05225799454535925,6.0,8.0
+,Foveal V1–V3,Peripheral V1–V3,,,,group,r,0.6209756012620365,2.7361697342793465,0.029078493876035876,1.0,8.0
+,Foveal V1–V3,Peripheral V1–V3,,,,group,r_partial_global,0.3909267328199608,1.4099378128335436,0.2014081174221849,2.0,8.0

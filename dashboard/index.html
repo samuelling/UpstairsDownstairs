@@ -30,7 +30,7 @@
       <ul class="cover-lines" aria-label="Highlights">
         <li><a href="#task"><span class="cl-n">01</span><span class="cl-t">The paradigm, interactive</span></a></li>
         <li><a href="#ips"><span class="cl-n">03</span><span class="cl-t">Parietal cortex scales with load</span></a></li>
-        <li><a href="#visual"><span class="cl-n">04</span><span class="cl-t">Peripheral suppression is weak</span></a></li>
+        <li><a href="#visual"><span class="cl-n">04</span><span class="cl-t">The periphery dips, broadly and modestly</span></a></li>
         <li><a href="#meaning"><span class="cl-n">07</span><span class="cl-t">Interpretation and open questions</span></a></li>
       </ul>
     </div>
@@ -46,7 +46,7 @@
       <li><a href="#behavior"><span><b>Load degrades performance.</b> At 46%, subjects detect about half of the flips, compared with all of them at 10–30%.</span></a></li>
       <li><a href="#ips"><span><b>Dorsal attention activity scales with load.</b> Every IPS, SPL and FEF region rises with load, across three atlases; IPS2 gains about 1.2% signal. The default mode network declines.</span></a></li>
       <li><a href="#models"><span><b>The scaling is linear.</b> Over 10–46% the response rises linearly with the minority share. A compressive, saturating response appears only when load is re-expressed as behavioral difficulty, and that description fits the data poorly.</span></a></li>
-      <li><a href="#visual"><span><b>Peripheral suppression is weak.</b> Foveal V1–V3 increase with load; peripheral V1–V3 trend downward, reliably only in V2 once run order is controlled.</span></a></li>
+      <li><a href="#ecc"><span><b>Peripheral suppression is modest and broad.</b> Foveal V1–V3 increase with load. From about 3° outward, responses decrease, by about 0.4% at 6–9°, and the decrease extends beyond the stimulated annulus to 11°, so it is not specific to the ignored stimulus.</span></a></li>
       <li><a href="#hemis"><span><b>Effects are right-lateralized.</b> Load effects in attention and control networks are larger on the right, alongside a larger right-hemisphere response overall.</span></a></li>
     </ol>
   </section>
@@ -216,7 +216,7 @@
   </section>
 
   <section class="card" id="visual">
-    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Downstairs</span><h2>Foveal cortex increases; peripheral suppression is weak <span class="hemi-tag"></span></h2></div></div>
+    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Downstairs</span><h2>Foveal cortex increases; the periphery decreases modestly <span class="hemi-tag"></span></h2></div></div>
     <div class="tldr"><b>Takeaway</b> Visual cortex representing the task ring (the fovea) rises with load in V1, V2 and V3 (p = .003–.007). Visual cortex representing the noise annulus (the periphery) trends down in all three areas. Only V2 reaches p &lt; .05, and it doesn't survive FDR. So the predicted suppression of the periphery is, at most, weak. Subject-specific pRF maps and the anatomical template give the same answer.</div>
     <div class="tabs" id="visTabs" role="group" aria-label="Eccentricity source">
       <button type="button" data-src="prf" aria-pressed="true">Subject pRF (S9: template)</button>
@@ -227,6 +227,20 @@
     <details class="method"><summary>How this was tested</summary>
       <p>Each subject's pRF eccentricity, R² and V1–V3 labels were resampled to fsaverage with FreeSurfer 6. Each area was split into a fovea band (0.5–1.5°, the task ring) and a periphery band (3–7.5°, the noise annulus), keeping vertices with pRF R² &gt; 10%. S9 has no pRF data, so the Benson 2014 template within Wang V1–V3 stands in for that subject. The "Template" tab uses the template for everyone.</p>
       <div id="visTable"></div>
+    </details>
+  </section>
+
+  <section class="card" id="ecc">
+    <div class="sec-head"><span class="sec-num">04b</span><div><span class="kicker">Downstairs, mapped</span><h2>The decrease grows with eccentricity and extends beyond the annulus</h2></div></div>
+    <div class="tldr" id="eccTakeaway"></div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Load effect across eccentricity, V1–V3</h3><div id="eccChart"></div><div class="legend" id="eccLegend"></div></div>
+      <div><h3>Regions defined by the annulus localizer</h3><div id="locChart"></div><div class="legend" id="locLegend"></div></div>
+    </div>
+    <details class="method"><summary>How this was tested</summary>
+      <p><b>Eccentricity profile.</b> Within each subject's pRF-defined V1, V2 and V3 (pRF R² &gt; 10%; S9 has no pRF data, so the Wang areas and Benson template eccentricity stand in), vertices were binned by pRF eccentricity from 0.25° to 14°. In each bin the 7 load betas from the original GLMs were averaged across vertices (hemispheres pooled), and the load slope was fit and expressed as the fitted change from 10% to 46% load. Areas were averaged within subject before testing; each bin is t-tested across subjects without correction for the number of bins.</p>
+      <p><b>Annulus localizer.</b> Each subject also ran two localizer runs in which the same peripheral noise annulus alternated with fixation. Within V1–V3, vertices were classed as annulus-driven (On vs fixation, p &lt; .001) or not driven (|sig| &lt; 1), and driven vertices were split into thirds by localizer strength. Strength is confounded with eccentricity: the weakest-driven third sits near 2.5°, where the load effect crosses zero, so these thirds do not isolate a response-gain effect.</p>
+      <div id="eccTable"></div>
     </details>
   </section>
 
@@ -292,13 +306,26 @@
     </details>
   </section>
 
+  <section class="card" id="runlevel">
+    <div class="sec-head"><span class="sec-num">06b</span><div><span class="kicker">Run by run</span><h2>Better runs don't recruit more attention, and IPS doesn't push the periphery down</h2></div></div>
+    <div class="tldr" id="rlTakeaway"></div>
+    <div class="charts-2" style="margin-top:8px">
+      <div><h3>Does a better-performed run show more activity?</h3><div id="rlBeh"></div><div class="legend" id="rlBehLegend"></div></div>
+      <div><h3>Run-to-run coupling with the dorsal attention network</h3><div id="rlCoup"></div><div class="legend" id="rlCoupLegend"></div></div>
+    </div>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Both analyses use the run-by-run block betas from the run-order refit (section 03c), hemispheres averaged. <b>Behavior → brain:</b> per subject and ROI, run betas were regressed on load-level dummies, run position, and the run's flip detection rate centered within load level and scaled by its within-subject SD (detection is unaffected by the key reversal in S12/S13); the detection coefficient (% signal per SD) was t-tested across subjects. Within-load variation in detection is modest (SD 4–14 points), which limits power. <b>Coupling:</b> per subject, run betas were residualized on load level and run position, and residuals were correlated across runs between the dorsal attention composite and each target. Because all regions share run-wide fluctuations (arousal, global signal), the same correlation was recomputed controlling a global covariate that shares no region with either member (the Schaefer default, control and salience networks, or control and salience only for pairs involving the default network). Correlations were Fisher-z transformed and t-tested across subjects.</p>
+      <div id="rlTable"></div>
+    </details>
+  </section>
+
   <section class="card" id="meaning">
     <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">Interpretation</span><h2>Interpretation and open questions</h2></div></div>
     <div class="verdict">
       <div>
         <h3>Where things stand</h3>
         <p>Making a small central judgment harder recruits the dorsal attention network in a graded, roughly linear way. It also raises activity in the visual cortex that represents the task ring and lowers activity in the default mode network. That fits the "upstairs" half of the story well, and it survives a run-by-run refit that controls run order. The response grows linearly with the minority share; it looks saturating only if load is measured by behavioral difficulty, a description the data fit poorly.</p>
-        <p>The "downstairs" half, where the periphery is suppressed as the center demands more, is <b>weak in this dataset</b>. Peripheral V1–V3 trend down; once run order is controlled the decrease is reliable only in V2 (−0.46% fitted, p = .024), and it remains much smaller than the foveal increase. The dual-task psychophysics agrees: peripheral tilt thresholds rise only modestly with central load. The task also loads the right hemisphere more than the left.</p>
+        <p>The "downstairs" half is <b>modest and spatially broad</b>. Responses fall from about 3° outward, by about 0.4% at 6–9° (vs +0.5% in the fovea), and the decrease extends beyond the annulus into cortex the stimulus barely drives. That looks like a general center-surround redistribution rather than suppression of the ignored stimulus. Run to run, IPS activity does not trade off against the periphery: once shared fluctuations are removed, the two still rise together, and only the default-mode network trends opposite. The dual-task psychophysics agrees that the peripheral cost is modest.</p>
       </div>
       <div>
         <h3>What could still change the picture</h3>
@@ -311,7 +338,7 @@
       <div>
         <h3>Next steps</h3>
         <ul>
-          <li><b>Vertex-wise maps with the run-order control</b>, to check that the controlled effects have the same spatial layout as the original maps.</li>
+          <li><b>Map the surround.</b> Use the full polar-angle and eccentricity pRF maps to test whether the peripheral decrease is uniform around the visual field or follows the attended ring's geometry.</li>
           <li><b>Test saturation directly</b> with more load levels between 44% and 50%, where a compressive attentional response function would flatten.</li>
           <li><b>Link to behavior in the periphery.</b> The earlier dual-task psychophysics study is now analyzed in the <a href="psychophysics.html">Psychophysics tab</a>: peripheral tilt thresholds rise modestly with central load, in line with the weak peripheral suppression here.</li>
         </ul>
@@ -1130,9 +1157,9 @@ function legend(id, items) { const b = document.getElementById(id); b.replaceChi
 function table(id, head, rows) { const c = document.getElementById(id); c.replaceChildren(); const t = h("table", {}, c), tr = h("tr", {}, h("thead", {}, t)); head.forEach(x => h("th", { text: x }, tr)); const tb = h("tbody", {}, t); rows.forEach(r => { const row = h("tr", {}, tb); r.forEach(x => h("td", { text: x }, row)); }); }
 function niceTicks(lo, hi, n = 6) { const span = hi - lo || 1, mag = Math.pow(10, Math.floor(Math.log10(span / n))), step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n + 0.5), out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10)); return out; }
 // horizontal dot chart: rows = ROIs, x = value; marks: [{key,label,color,filled}]
-function dotRows(box, rows, { xlo, xhi, log = false, xTitle, yTitle, marks, ref, tipFn, W = 760 }) {
+function dotRows(box, rows, { xlo, xhi, log = false, xTitle, yTitle, marks, ref, tipFn, W = 760, ml = 150 }) {
   box.replaceChildren();
-  const rowH = 24, M = { t: 10, r: 24, b: 58, l: 150 }, iw = W - M.l - M.r, H = M.t + rows.length * rowH + M.b;
+  const rowH = 24, M = { t: 10, r: 24, b: 58, l: ml }, iw = W - M.l - M.r, H = M.t + rows.length * rowH + M.b;
   const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img" }, box);
   const X = v => M.l + (log ? (Math.log10(v) - Math.log10(xlo)) / (Math.log10(xhi) - Math.log10(xlo)) : (v - xlo) / (xhi - xlo)) * iw;
   const ticks = log ? [0.1, 0.2, 0.5, 1, 2, 5].filter(v => v >= xlo && v <= xhi) : niceTicks(xlo, xhi, 6);
@@ -1210,7 +1237,78 @@ function renderArf() {
   table("arfTable", ["ROI", "Axis", "q (geo. mean)", "Subjects q < 1", "p (log q ≠ 0)", "Group-curve q", "Summed ΔAICc vs flat"],
     E.arf.map(a => [a.roi, AX.find(x => x[0] === a.axis)[1], a.q_subject_geomean.toFixed(2), `${a.n_compressive}/${a.n}`, fmtP(a.p_logq), a.q_group_curve.toFixed(2), a.sum_dAICc_flat_minus_best.toFixed(1)]));
 }
-const render = () => { renderRunOrder(); renderArf(); };
+
+// ---- 04b eccentricity + localizer ----
+function renderEcc() {
+  if (!E.ecc) return;
+  const G = E.ecc.group, pooled = G.filter(r => r.area === "V1–V3").sort((a, b) => a.ecc_mid - b.ecc_mid);
+  const box = document.getElementById("eccChart"); box.replaceChildren();
+  const W = 440, M = { t: 14, r: 20, b: 58, l: 70 }, iw = W - M.l - M.r, ih = iw, H = M.t + ih + M.b;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Load effect by pRF eccentricity in V1-V3" }, box);
+  const xlo = 0.25, xhi = 14, X = v => M.l + (Math.log10(v) - Math.log10(xlo)) / (Math.log10(xhi) - Math.log10(xlo)) * iw;
+  const ylo = -1, yhi = 1, Y = v => M.t + ih - (v - ylo) / (yhi - ylo) * ih;
+  el("rect", { x: X(0.5), y: M.t, width: X(1.5) - X(0.5), height: ih, fill: css("--band") }, svg);
+  el("rect", { x: X(3), y: M.t, width: X(7.5) - X(3), height: ih, fill: css("--band-2") }, svg);
+  txt(svg, (X(0.5) + X(1.5)) / 2, M.t + 14, "task ring", { "text-anchor": "middle", "font-size": 12 });
+  txt(svg, (X(3) + X(7.5)) / 2, M.t + 14, "noise annulus", { "text-anchor": "middle", "font-size": 12 });
+  for (const tv of [-1, -0.5, 0, 0.5, 1]) { el("line", { x1: M.l, x2: M.l + iw, y1: Y(tv), y2: Y(tv), stroke: tv === 0 ? css("--axis") : css("--grid") }, svg); txt(svg, M.l - 8, Y(tv) + 4, tv === 0 ? "0" : fmt(tv, 1), { "text-anchor": "end" }); }
+  for (const tv of [0.25, 0.5, 1, 2, 4, 8, 12]) txt(svg, X(tv), M.t + ih + 20, tv + "°", { "text-anchor": "middle" });
+  el("line", { x1: M.l, x2: M.l + iw, y1: M.t + ih, y2: M.t + ih, stroke: css("--axis") }, svg);
+  txt(svg, M.l + iw / 2, H - 8, "pRF eccentricity (deg, log scale)", { "text-anchor": "middle", class: "axt" });
+  const yt = M.t + ih / 2; txt(svg, 18, yt, "Load effect (% signal, 10% → 46%)", { "text-anchor": "middle", class: "axt", transform: `rotate(-90 18 ${yt})` });
+  const areaCol = { V1: css("--context"), V2: css("--context"), V3: css("--context") };
+  for (const a of ["V1", "V2", "V3"]) { const r = G.filter(x => x.area === a).sort((p, q) => p.ecc_mid - q.ecc_mid);
+    el("path", { d: r.map((x, i) => `${i ? "L" : "M"}${X(x.ecc_mid).toFixed(1)},${Y(Math.max(ylo, Math.min(yhi, x.mean))).toFixed(1)}`).join(""), fill: "none", stroke: areaCol[a], "stroke-width": 1.2, "stroke-dasharray": a === "V1" ? "" : a === "V2" ? "5 3" : "2 3" }, svg); }
+  el("path", { d: pooled.map((x, i) => `${i ? "L" : "M"}${X(x.ecc_mid).toFixed(1)},${Y(x.mean + x.sem).toFixed(1)}`).join("") + pooled.slice().reverse().map(x => `L${X(x.ecc_mid).toFixed(1)},${Y(x.mean - x.sem).toFixed(1)}`).join("") + "Z", fill: css("--band") }, svg);
+  el("path", { d: pooled.map((x, i) => `${i ? "L" : "M"}${X(x.ecc_mid).toFixed(1)},${Y(x.mean).toFixed(1)}`).join(""), fill: "none", stroke: css("--series-1"), "stroke-width": 2.5 }, svg);
+  for (const x of pooled) { const sig = x.p < 0.05, c = sig ? (x.mean > 0 ? css("--series-1") : css("--neg")) : css("--text-muted"), g = el("g", {}, svg);
+    el("circle", { cx: X(x.ecc_mid), cy: Y(x.mean), r: 4.5, fill: sig ? c : css("--surface-1"), stroke: c, "stroke-width": 2 }, g);
+    g.addEventListener("pointermove", e => showTip(e, `${x.ecc_lo}–${x.ecc_hi}°, V1–V3`, [{ label: "Load effect", value: `${fmt(x.mean)}% ± ${x.sem.toFixed(2)}` }, { label: `t(${x.n_subj - 1})`, value: `${x.t.toFixed(2)}, p ${fmtP(x.p)}` }, { label: "Subjects decreasing", value: `${x.n_neg}/${x.n_subj}` }, { label: "Mean response", value: `${x.mean_beta.toFixed(2)}%` }]));
+    g.addEventListener("pointerleave", hideTip); }
+  legend("eccLegend", [{ kind: "key-line", color: css("--series-1"), label: "V1–V3 mean ± SEM" }, { kind: "key-line", color: css("--context"), label: "V1 (solid), V2 (dashed), V3 (dotted)" }, { kind: "key-dot", color: css("--neg"), label: "p < .05 (uncorrected)" }]);
+  // localizer ROIs
+  const order = ["annulus-driven (localizer p < .001)", "annulus-driven, 3-7.5 deg", "driven, weakest third", "driven, middle third", "driven, strongest third", "not driven (|sig| < 1)"];
+  const L = E.loc.group, sub = E.loc.subjects;
+  const medEcc = roi => { const v = sub.filter(r => r.roi === roi).map(r => r.median_ecc).sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };
+  const rows = order.map(roi => { const o = { label: roi.replace(" (localizer p < .001)", "").replace("3-7.5 deg", "3–7.5°").replace(" (|sig| < 1)", "") };
+    for (const a of ["V1–V3", "V1", "V2", "V3"]) { const r = L.find(x => x.roi === roi && x.area === a); o[a] = r ? r.mean : null; o[a + "_r"] = r; }
+    o.se = o["V1–V3_r"].sem; o.ecc = medEcc(roi); return o; });
+  dotRows(document.getElementById("locChart"), rows, { W: 520, ml: 185, xlo: -1, xhi: 0.6, ref: 0, xTitle: "Load effect (% signal, 10% → 46%)", yTitle: "Region",
+    marks: [{ key: "V1", color: css("--context"), filled: true }, { key: "V2", color: css("--context"), filled: true }, { key: "V3", color: css("--context"), filled: true },
+            { key: "V1–V3", err: "se", color: r => r["V1–V3_r"].p < 0.05 ? css("--neg") : css("--series-1"), filled: r => r["V1–V3_r"].p < 0.05 }],
+    tipFn: r => [{ label: "V1–V3", value: `${fmt(r["V1–V3"])}% ± ${r.se.toFixed(2)}, p ${fmtP(r["V1–V3_r"].p)}` }, ...["V1", "V2", "V3"].map(a => ({ label: a, value: r[a + "_r"] ? `${fmt(r[a])}%, p ${fmtP(r[a + "_r"].p)}` : "—" })), { label: "Median eccentricity", value: r.ecc.toFixed(1) + "°" }] });
+  legend("locLegend", [{ kind: "key-dot", color: css("--neg"), label: "V1–V3, p < .05 (± SEM)" }, { kind: "key-ring", label: "V1–V3, not significant" }, { kind: "key-dot", color: css("--context"), label: "V1, V2, V3 separately" }]);
+  const at = (lo) => pooled.find(x => x.ecc_lo === lo), f1 = at(0.5), m = at(6), o = at(9);
+  const tk = document.getElementById("eccTakeaway"); tk.replaceChildren(); h("b", { text: "Takeaway" }, tk);
+  const drv = L.find(x => x.area === "V2" && x.roi === "annulus-driven (localizer p < .001)");
+  tk.appendChild(document.createTextNode(` Mapped continuously by each subject's pRF eccentricity, the load effect in V1–V3 is positive in the fovea (${fmt(f1.mean)}% at 0.5–0.75°), crosses zero near 2.5°, and turns negative from 3° outward, reaching ${fmt(m.mean)}% at 6–7.5° (p ${fmtP(m.p)}) and ${fmt(o.mean)}% at 9–11° (p ${fmtP(o.p)}), with ${o.n_neg} of ${o.n_subj} subjects decreasing. The decrease continues past the annulus's outer edge into cortex the annulus barely drives, so it is a broad peripheral decrease rather than suppression of the ignored stimulus alone. Defined by the annulus localizer instead, annulus-driven V2 decreases reliably (${fmt(drv.mean)}%, p ${fmtP(drv.p)}); the most strongly driven vertices decrease most, but they also sit farther out, so this does not isolate response gain.`));
+  table("eccTable", ["Eccentricity", "V1–V3 effect", "SEM", "t", "p", "Subjects decreasing", "Mean response"], pooled.map(x => [`${x.ecc_lo}–${x.ecc_hi}°`, fmt(x.mean), x.sem.toFixed(2), x.t.toFixed(2), fmtP(x.p), `${x.n_neg}/${x.n_subj}`, x.mean_beta.toFixed(2)]));
+}
+// ---- 06b run-level ----
+function renderRunLevel() {
+  if (!E.runlevel) return;
+  const nm = r => r.replace("wang2015|", "").replace("schaefer2018|", "").replace("_periph", " periphery").replace(" (Wang IPS–FEF)", "");
+  const beh = E.runlevel.beh.filter(r => r.kind === "group"), bs = E.runlevel.beh.filter(r => r.kind === "subject");
+  const keep = ["Dorsal attention (Wang IPS–FEF)", "wang2015|IPS0", "wang2015|IPS2", "wang2015|FEF", "Foveal V1–V3", "Peripheral V1–V3", "schaefer2018|DefaultA"];
+  const rows = keep.map(roi => { const g = beh.find(r => r.roi === roi); return { label: nm(roi), m: g.mean, se: g.sem, g, subs: bs.filter(r => r.roi === roi).map(r => r.b_detect) }; });
+  dotRows(document.getElementById("rlBeh"), rows, { W: 520, xlo: -0.2, xhi: 0.15, ref: 0, xTitle: "Change in response per SD better detection (% signal)", yTitle: "ROI",
+    marks: [{ key: "m", err: "se", color: r => r.g.p < 0.05 ? css("--series-1") : css("--text-muted"), filled: r => r.g.p < 0.05 }],
+    tipFn: r => [{ label: "Mean ± SEM", value: `${fmt(r.m, 3)} ± ${r.se.toFixed(3)}` }, { label: `t(${r.g.n - 1})`, value: `${r.g.t.toFixed(2)}, p ${fmtP(r.g.p)}` }, { label: "Subjects > 0", value: `${r.g.n_pos}/${r.g.n}` }] });
+  legend("rlBehLegend", [{ kind: "key-ring", label: "Group mean ± SEM (none significant)" }]);
+  const C = E.runlevel.coup.filter(r => r.kind === "group");
+  const pairs = [...new Map(C.map(r => [r.a + "|" + r.b, [r.a, r.b]])).values()];
+  const allRows = pairs.map(([a, b]) => { const raw = C.find(r => r.a === a && r.b === b && r.measure === "r"), par = C.find(r => r.a === a && r.b === b && r.measure === "r_partial_global"); return { label: a.startsWith("Dorsal") ? nm(b) : `${nm(a)} ↔ ${nm(b)}`, dorsal: a.startsWith("Dorsal"), raw: raw.mean_r, par: par.mean_r, R: raw, P: par }; });
+  const crow = allRows.filter(r => r.dorsal);
+  dotRows(document.getElementById("rlCoup"), crow, { W: 520, xlo: -0.6, xhi: 0.9, ref: 0, xTitle: "Correlation across runs with dorsal attention (r)", yTitle: "Region",
+    marks: [{ key: "raw", color: css("--context"), filled: true }, { key: "par", color: r => r.P.p < 0.06 ? (r.par > 0 ? css("--series-1") : css("--neg")) : css("--text-muted"), filled: r => r.P.p < 0.06 }],
+    tipFn: r => [{ label: "Raw r", value: `${r.raw.toFixed(2)} (p ${fmtP(r.R.p)})` }, { label: "Controlling shared fluctuations", value: `${r.par.toFixed(2)} (p ${fmtP(r.P.p)}; ${r.P.n_neg}/${r.P.n} negative)` }] });
+  legend("rlCoupLegend", [{ kind: "key-dot", color: css("--context"), label: "Raw correlation" }, { kind: "key-dot", color: css("--series-1"), label: "Controlling shared fluctuations (p ≤ .06 filled)" }]);
+  const dorsal = beh.find(r => r.roi === "Dorsal attention (Wang IPS–FEF)"), per = C.find(r => r.a.startsWith("Dorsal") && r.b === "Peripheral V1–V3" && r.measure === "r_partial_global"), dm = C.find(r => r.b === "schaefer2018|DefaultA" && r.measure === "r_partial_global");
+  const tk = document.getElementById("rlTakeaway"); tk.replaceChildren(); h("b", { text: "Takeaway" }, tk);
+  tk.appendChild(document.createTextNode(` Within a load level, runs in which subjects detected more flips do not show more dorsal attention activity (${fmt(dorsal.mean, 3)}% per SD, p ${fmtP(dorsal.p)}; ${dorsal.n_pos} of ${dorsal.n} subjects positive), so the load effect reflects stimulus demand rather than how well a run went. Run-to-run fluctuations are shared widely across cortex. Once those are removed, runs with more dorsal attention activity than expected still have more, not less, peripheral V1–V3 activity (r = ${per.mean_r.toFixed(2)}, p ${fmtP(per.p)}), so there is no sign of a push-pull between the attention network and the periphery; only the default-mode network trends opposite (r = ${dm.mean_r.toFixed(2)}, p ${fmtP(dm.p)}).`));
+  table("rlTable", ["Pair", "Raw r", "p", "Controlled r", "p", "Subjects negative (controlled)"], allRows.map(r => ({ ...r, label: r.dorsal ? "Dorsal attention ↔ " + r.label : r.label })).map(r => [r.label, r.raw.toFixed(2), fmtP(r.R.p), r.par.toFixed(2), fmtP(r.P.p), `${r.P.n_neg}/${r.P.n}`]));
+}
+const render = () => { renderRunOrder(); renderArf(); renderEcc(); renderRunLevel(); };
 document.getElementById("themeBtn").addEventListener("click", render);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 render();
