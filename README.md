@@ -11,7 +11,10 @@ Does making a central task harder pull attention inward, raising activity in the
 - **Central task (NJP):** a ring of red and blue squares at 0.5–1.5°. Subjects report changes in the majority color. Load is the minority proportion: 10, 30, 38, 40, 42, 44 or 46% (near 50% is hard).
 - **Periphery:** a task-irrelevant 1/f noise annulus at 3–7.5°, identical in every condition.
 
-## What's in the dashboard (one TL;DR per analysis)
+## How the dashboard is organized
+The page reads as a presentation of the results, not a log of analyses. It opens with five takeaways and the key numbers. **Part one, The experiment**, has the animated task (01) and the manipulation check (02). **Part two, What the brain did**, covers the attention network (03, with an across-atlas check), fovea vs periphery (04), the shape of the load function (05) and hemispheres (06). Then come **The verdict** (07: interpretation, open issues, next steps) and an appendix with methods, data checks and the S12/S13 correction. Each finding starts with a takeaway; the method and tables are in a collapsible "How this was tested" drawer.
+
+## Analyses (one TL;DR each)
 0. **The task, animated.** A canvas reconstruction of the stimulus built from the original experiment code (`Design/*.m`) and the parameters stored in the behavior files: 173 squares at 0.5–1.5°, reshuffles 25–29 times per 16-s block, a majority-color coin toss every 5–6 reshuffles, a 1.5-s response window, and the 1/f noise annulus at 3–7.5°. You can play along with Blue/Red buttons or the B/R keys and compare your score with the subjects'. A run timeline shows the ON/OFF blocks and each block's reshuffles, flips and response windows, and a gallery shows all seven load levels. The noise updates twice a second by default; real speed (about 30 Hz) is opt-in.
 1. **Data and label audit.** All 151 runs are correctly labelled, and raw and preprocessed data exist for every run.
 2. **Behavior.** The load manipulation works in all 8 subjects. The task score falls from 95% to 33% between the 30% and 46% ratios, mostly through missed changes: detection falls from 100% to 53%, while accuracy on answered changes falls from 96% to 66%.

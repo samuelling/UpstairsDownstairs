@@ -216,6 +216,27 @@ td.hl { font-weight: 700; color: var(--text-primary); }
   .sec-num { font-size: 48px; }
 }
 @media (max-width: 520px) { .gallery { grid-template-columns: repeat(3, 1fr); } .tile .value { font-size: 28px; } .tile.hero .value { font-size: 58px; } }
+/* ---------- structure: parts, takeaways, method drawers, verdict ---------- */
+.part-head { margin: 8px 0 30px; padding: 18px 0 0; border-top: 10px double var(--rule); }
+.part-title { font-size: clamp(36px, 6vw, 68px); font-weight: 900; letter-spacing: -0.03em; margin: 8px 0 6px; font-variation-settings: "opsz" 144; }
+.part-head p { font-family: var(--display); font-style: italic; font-size: 20px; color: var(--text-secondary); margin: 0; max-width: 760px; }
+.takeaways { list-style: none; counter-reset: tk; margin: 0; padding: 0; display: grid; gap: 10px; }
+.headline .takeaways li { counter-increment: tk; padding: 0; border: 0; }
+.takeaways a { display: grid; grid-template-columns: 44px 1fr; gap: 10px; text-decoration: none; font-size: 16.5px; color: var(--text-secondary); padding: 10px 12px 10px 0; border-bottom: 1px solid var(--border); }
+.takeaways a::before { content: counter(tk); font-family: var(--display); font-weight: 900; font-size: 38px; line-height: .9; color: var(--series-1); }
+.takeaways li:nth-child(even) a::before { color: var(--series-2); }
+.takeaways a:hover b { text-decoration: underline; text-decoration-thickness: 2px; }
+.takeaways b { color: var(--text-primary); font-family: var(--display); font-size: 19px; display: block; line-height: 1.2; }
+.tldr b:first-child { display: inline-block; background: var(--rule); color: var(--page); padding: 1px 6px; margin-right: 8px; }
+details.method { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 10px; }
+details.method p { font-size: 15.5px; color: var(--text-secondary); max-width: 860px; }
+.verdict { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 28px; }
+.verdict h3 { margin-top: 4px; }
+.verdict p, .verdict li { font-size: 16px; color: var(--text-secondary); }
+.verdict ul { padding-left: 18px; margin: 0; } .verdict li { margin-bottom: 8px; }
+.verdict b { color: var(--text-primary); }
+.verdict > div:first-child p:first-of-type { font-family: var(--display); font-size: 21px; line-height: 1.35; color: var(--text-primary); }
+@media (max-width: 900px) { .verdict { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -233,32 +254,37 @@ td.hl { font-weight: 700; color: var(--text-primary); }
         <p class="sub">A reanalysis of the NJP central-load fMRI study: 8 subjects and 151 task runs. Subjects watch a little ring of red and blue squares and report whenever the majority color flips. Load is the minority share, from 10% (easy) to 46% (nearly 50/50). Meanwhile a task-irrelevant noise annulus fills the periphery (3–7.5°). Responses come from the original per-subject FS-FAST GLMs on fsaverage.</p>
       </div>
       <ul class="cover-lines" aria-label="In this issue">
-        <li><a href="#task"><span class="cl-n">00</span><span class="cl-t">Play the task yourself: can you beat the 46% ring?</span></a></li>
+        <li><a href="#task"><span class="cl-n">01</span><span class="cl-t">Play the task yourself: can you beat the 46% ring?</span></a></li>
         <li><a href="#ips"><span class="cl-n">03</span><span class="cl-t">Your parietal cortex on hard mode</span></a></li>
-        <li><a href="#visual"><span class="cl-n">05</span><span class="cl-t">The periphery that refused to go quiet</span></a></li>
-        <li><a href="#hemis"><span class="cl-n">07</span><span class="cl-t">Right brain, bigger gains</span></a></li>
+        <li><a href="#visual"><span class="cl-n">04</span><span class="cl-t">The periphery that refused to go quiet</span></a></li>
+        <li><a href="#meaning"><span class="cl-n">07</span><span class="cl-t">The verdict, and what's still open</span></a></li>
       </ul>
     </div>
   </header>
 
   <section class="headline" aria-label="Main findings">
     <div class="hl-left">
-      <span class="kicker">Cover story</span>
-      <h2>Harder central judgments drive the dorsal attention network up, linearly with load, and more strongly on the right</h2>
+      <span class="kicker">The short of it</span>
+      <h2>Harder central judgments turn the brain's attention network up, but barely turn the periphery down</h2>
+      <p class="caveat">Not yet controlled: load is confounded with run position (one ratio per run, in a fixed order). A refit with run position as a covariate is the next step, and it could change these numbers.</p>
     </div>
-    <div>
-    <ul>
-      <li><b>The dorsal attention network scales with load.</b> Every IPS, SPL and FEF ROI rises as the majority judgment gets harder: IPS2 gains +1.16% signal from 10% to 46% (t(7) = 7.1). This replicates in Wang, Glasser and Schaefer parcels. The default mode network goes the other way (t = −4.2).</li>
-      <li><b>The load function is linear, not compressive.</b> A load function beats a flat line decisively in IPS, SPL and FEF (summed ΔAICc 33–64), but no model favors saturation over 10–46%. Seven load levels can't resolve a Naka-Rushton function.</li>
-      <li><b>There's a right-hemisphere bias.</b> The dorsal load effect is about 46% larger on the right (R − L +0.32%, t(7) = 2.6, p = .035, 6 of 8 subjects). This tracks a generally stronger right-hemisphere response, not a right-specific load effect. The control network's load effect is right-sided.</li>
-      <li><b>In visual cortex, the center goes up and the periphery barely goes down.</b> Foveal V1–V3 rise with load (p ≤ .007, using subject pRFs). The peripheral suppression the original hypothesis predicted is weak: only V2 reaches significance (p = .039), and it doesn't survive FDR.</li>
-    </ul>
-    <p class="caveat">Not yet controlled: load is confounded with run position (one ratio per run, in a fixed order). The next step is a refit with run position as a covariate.</p>
-    </div>
+    <ol class="takeaways">
+      <li><a href="#behavior"><span><b>The task gets genuinely hard.</b> At 46%, subjects catch only about half of the flips (100% at 10–30%).</span></a></li>
+      <li><a href="#ips"><span><b>Upstairs climbs.</b> Every dorsal attention area (IPS, SPL, FEF) rises with load, in every atlas. IPS2 gains about +1.2% signal. The default mode network falls.</span></a></li>
+      <li><a href="#models"><span><b>It's a ramp, not a ceiling.</b> The rise is linear over 10–46%, with no sign of saturation (though 7 levels can't fully rule it out).</span></a></li>
+      <li><a href="#visual"><span><b>Downstairs barely budges.</b> Visual cortex for the task ring goes up; for the periphery it only trends down (V2, uncorrected).</span></a></li>
+      <li><a href="#hemis"><span><b>The right side leads.</b> Load effects in attention and control networks are bigger on the right, along with a bigger right-hemisphere response overall.</span></a></li>
+    </ol>
   </section>
 
+  <p class="numbers-head">By the numbers</p>
+  <section class="tiles" id="tiles" aria-label="Key numbers"></section>
+
+
+  <div class="part-head"><span class="kicker">Part one</span><h2 class="part-title">The experiment</h2><p>What subjects did in the scanner, and whether the difficulty manipulation worked.</p></div>
+
   <section class="card" id="task">
-    <div class="sec-head"><span class="sec-num">00</span><div><span class="kicker">How it works</span><h2>The task: count the colors (fast)</h2></div></div>
+    <div class="sec-head"><span class="sec-num">01</span><div><span class="kicker">How it works</span><h2>The task: count the colors (fast)</h2></div></div>
     <div class="story-intro">
       <p>Keep your eyes on the black dot. Around it, a ring of 173 tiny squares sparkles red and blue, reshuffling to new positions about every half second. Your job: notice when the <b>majority color flips</b>, and press its key within 1.5 seconds. Every 5–6 reshuffles a coin is tossed for the majority color, so a flip comes along only every few seconds, about 2–3 times per block.</p>
       <p style="font-size:12.5px; color: var(--text-muted)">The demo shows the 2016–17 setup used for 6 of the 8 subjects: 173 squares, red at RGB 185, 56 px per degree. S12 and S13 were scanned in 2018 on a newer display: 185 squares, red at RGB 255, and the noise texture fixed at 0° and refreshed at 15 Hz. Stimulus sizes in degrees match across setups.</p>
@@ -325,22 +351,29 @@ td.hl { font-weight: 700; color: var(--text-primary); }
     <p class="pullquote">"At 46%, subjects caught only about <span>half</span> of the flips, and the ones they caught, they got right just two times in three."</p>
   </section>
 
-  <p class="numbers-head">By the numbers</p>
-  <section class="tiles" id="tiles" aria-label="Key numbers"></section>
 
-  <section class="card" id="overview">
-    <div class="sec-head"><span class="sec-num">☰</span><div><span class="kicker">Contents</span><h2>What was done, and the short version of each analysis</h2></div></div>
-    <ol class="overview">
-      <li><a href="#audit">Data &amp; label audit</a>: checked each run's condition file against the ratio saved in its behavioral file, and confirmed raw and preprocessed data exist for every run.<span class="t"><b>Short version</b> all 151 runs are correctly labelled, and the data are complete enough to rerun everything.</span></li>
-      <li><a href="#behavior">Behavior</a>: split performance into detecting the color change and naming the new majority color correctly, and fixed the scoring for the two subjects who pressed reversed keys.<span class="t"><b>Short version</b> the load manipulation works in all 8 subjects. Harder ratios mostly mean more missed changes (100% → 53% detected).</span></li>
-      <li><a href="#ips">Dorsal attention gradient</a>: averaged responses within Wang 2015 IPS0–IPS4/5, SPL1 and FEF, and fit each subject's slope against load.<span class="t"><b>Short version</b> every dorsal ROI rises with load (t = 4.6–8.1). IPS2 rises most, about +1.2% signal.</span></li>
-      <li><a href="#forest">Across atlases</a>: repeated the slope test in Glasser HCP-MMP1 and Schaefer 400/17 parcels.<span class="t"><b>Short version</b> the same IPS/SPL/FEF increase appears in every atlas. The default mode network goes down with load.</span></li>
-      <li><a href="#visual">Fovea vs periphery</a>: split V1–V3 by each subject's own pRF eccentricity (template for S9) into the central-task zone and the noise-annulus zone.<span class="t"><b>Short version</b> foveal V1–V3 go up with load. The periphery goes down, but significantly only in V2. Subject pRFs agree with the template.</span></li>
-      <li><a href="#models">Load-function models</a>: fit flat, linear, saturating-exponential and Naka-Rushton models, vertex by vertex and on ROI averages, and compared them with AICc.<span class="t"><b>Short version</b> load functions beat a flat line in IPS, SPL, FEF and LO. Their shape looks linear, not compressive, over 10–46%. Seven load levels can't support a 4-parameter Naka-Rushton.</span></li>
-      <li><a href="#hemis">Hemispheric effects</a>: tested every ROI's load effect separately in each hemisphere, paired right vs left. Composites pool the dorsal attention, control, default and early visual ROIs. The hemisphere control below switches sections 3–6 between Both, Left, Right and Right vs Left.<span class="t"><b>Short version</b> load effects are larger on the right in dorsal attention (+0.32%, p = .035) and control networks (p = .017), in step with a stronger right-hemisphere response overall.</span></li>
-    </ol>
-    <div class="notice"><b>Correction (earlier version):</b> an earlier version said S12 and S13 had flat behavior across load. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed changes as correct. Scored properly, both subjects show the same load effect as everyone else, so the "exclude S12/S13" filter has been removed. No fMRI result changed.</div>
+  <section class="card" id="behavior">
+    <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">Manipulation check</span><h2>Harder rings mean many more missed flips</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> The load manipulation works in all 8 subjects. From the 30% to the 46% ring, the task score falls from about 95% to 33%. Most of that drop comes from flips that go unnoticed (detected 100% → 53%). Flips that are caught are still usually answered correctly (96% → 66%).</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div>
+        <h3>Task score (correct / all flips)</h3>
+        <div id="behScore"></div>
+        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Group mean ± SEM</span><span><i class="key-line" style="background:var(--context)"></i>Individual subjects</span></div>
+      </div>
+      <div>
+        <h3>Spotting flips vs getting them right</h3>
+        <div id="behSplit"></div>
+        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Flips detected</span><span><i class="key-line" style="background:var(--series-2)"></i>Accuracy when answered</span></div>
+      </div>
+    </div>
+    <details class="method"><summary>How this was measured</summary>
+      <p>After each majority-color flip, subjects had 1.5 s (1.0 s in the earliest script version, used for S4 and part of S3) to press the key for the new majority color. The data were scored three ways. The <b>task score</b> is the original measure: correct / all flips, so misses count as wrong. <b>Detection</b> is the % of flips answered. <b>Accuracy</b> is the % correct among answered flips. S12 and S13 pressed reversed keys in every run (raw accuracy 0–46%), so their mapping is flipped. They are also the only two subjects scanned in 2018 on a newer display setup, so a different button-box mapping is the likely cause. Misses stay wrong, as in the original code.</p>
+      <div id="behTable"></div>
+    </details>
   </section>
+
+  <div class="part-head"><span class="kicker">Part two</span><h2 class="part-title">What the brain did</h2><p>Three questions: what goes <em>upstairs</em> (attention networks), what goes <em>downstairs</em> (visual cortex for the center vs the periphery), and what shape the load response takes.</p></div>
 
   <div class="filters" role="group" aria-label="Hemisphere filter">
     <span class="lbl">Hemisphere</span>
@@ -350,47 +383,23 @@ td.hl { font-weight: 700; color: var(--text-primary); }
       <button type="button" data-h="rh" aria-pressed="false">Right</button>
       <button type="button" data-h="diff" aria-pressed="false">Right vs Left</button>
     </div>
-    <span class="scope">applies to sections 3–6</span>
+    <span class="scope">applies to sections 03–05</span>
   </div>
 
-  <section class="card" id="audit">
-    <div class="sec-head"><span class="sec-num">01</span><div><span class="kicker">Fact check</span><h2>Data &amp; label audit</h2></div></div>
-    <p class="did"><b>What was done:</b> each scan run's condition file (<code>CAM.par</code>) was compared with the ratio stored in that run's behavioral file. The preprocessing and GLM settings were also confirmed from the original FS-FAST configs: fsaverage surface, 5 mm FWHM smoothing, SPM HRF, 16 s blocks, TR 2 s.</p>
-    <div class="tldr"><b>Short version</b> <span id="auditN"></span> of <span id="auditN2"></span> runs match. Raw <code>f.nii</code>, motion-corrected and surface-sampled data exist for every run, so a full rerun from raw data is possible.</div>
-  </section>
-
-  <section class="card" id="behavior">
-    <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">The scorecard</span><h2>Behavior</h2></div></div>
-    <p class="did"><b>What was done:</b> after each majority-color flip, subjects had 1.5 s (1.0 s in the earliest script version, used for S4 and part of S3) to press the key for the new majority color. The data were scored three ways: the original score (correct / all flips, so misses count as wrong), <b>detection</b> (% of flips answered), and <b>accuracy</b> (% correct among answered flips). S12 and S13 pressed reversed keys in every run (raw accuracy 0–46%), so their mapping is flipped. They are also the only two subjects scanned in 2018 on a newer scanner display setup, so a different button-box mapping is the likely cause. Misses stay wrong, as in the original code.</p>
-    <div class="tldr"><b>Short version</b> the load manipulation works. The original score falls from about 95% to 33% between the 30% and 46% ratios, mostly because subjects miss more changes (detection 100% → 53%). Accuracy on the changes they do catch drops less (96% → 66%).</div>
-    <div class="grid-2" style="margin-top:8px">
-      <div>
-        <h3>Original score (correct / all changes)</h3>
-        <div id="behScore"></div>
-        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Group mean ± SEM</span><span><i class="key-line" style="background:var(--context)"></i>Individual subjects</span></div>
-      </div>
-      <div>
-        <h3>Detection vs accuracy</h3>
-        <div id="behSplit"></div>
-        <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Changes detected</span><span><i class="key-line" style="background:var(--series-2)"></i>Accuracy when answered</span></div>
-      </div>
-    </div>
-    <details><summary>Table view</summary><div id="behTable"></div></details>
-  </section>
-
   <section class="card" id="ips">
-    <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Feature</span><h2>Dorsal attention gradient: IPS0 → FEF <span class="hemi-tag"></span></h2></div></div>
-    <p class="did"><b>What was done:</b> responses were averaged within Wang 2015 maximum-probability ROIs, with hemispheres averaged. Each subject's response was regressed on ratio, and the slopes were t-tested across subjects. The "fitted" value is the slope × 0.36, the predicted change from 10% to 46%. Units are roughly % signal change vs fixation. X positions are evenly spaced, but the ratios are not; the fits use the true ratios.</p>
-    <div class="tldr"><b>Short version</b> all 7 dorsal ROIs increase with load. The effect is largest in IPS2–IPS3 and smallest in FEF. Most areas peak at 44% and dip slightly at 46%, where subjects miss half of the changes.</div>
+    <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Upstairs</span><h2>The dorsal attention network climbs with load <span class="hemi-tag"></span></h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Every dorsal attention area rises as the ring gets harder (t = 4.6–8.1). The rise is largest in IPS2–IPS3 (about +1.2% signal from 10% to 46%) and smallest in FEF. Most areas peak at 44% and dip slightly at 46%, where subjects miss half of the flips.</div>
     <div class="multiples" id="ipsPanels"></div>
     <div class="legend" id="ipsLegend"></div>
-    <details><summary>Table view</summary><div id="ipsTable"></div></details>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Responses were averaged within Wang 2015 maximum-probability ROIs, with hemispheres averaged. Each subject's response was regressed on ratio, and the slopes were t-tested across subjects. The "fitted" value is slope × 0.36, the predicted change from 10% to 46%. Units are roughly % signal change vs fixation. X positions are evenly spaced but the ratios are not; the fits use the true ratios.</p>
+      <div id="ipsTable"></div>
+    </details>
   </section>
 
   <section class="card" id="forest">
-    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Second opinion</span><h2>Load effect by ROI, across atlases <span class="hemi-tag"></span></h2></div></div>
-    <p class="did"><b>What was done:</b> the same slope test was run for every ROI in each atlas, with FDR correction within each atlas. A filled dot means q &lt; .05; small dots are individual subjects. Click a row to plot its curve.</p>
-    <div class="tldr"><b>Short version</b> the increase in IPS, SPL and FEF holds in Glasser (IPS1, MIP, VIP, 7PL, LIP, FEF, PEF) and Schaefer (dorsal attention SPL and FEF, control PFCd, anterior insula). Default mode A decreases. MT shows no load effect.</div>
+    <div class="sec-head"><span class="sec-num">03b</span><div><span class="kicker">Second opinion</span><h2>Same answer in every atlas, and the default mode goes the other way <span class="hemi-tag"></span></h2></div></div>
+    <div class="tldr"><b>Takeaway</b> The rise in IPS, SPL and FEF doesn't depend on how the brain is parcellated. It holds in Glasser (IPS1, MIP, VIP, 7PL, LIP, FEF, PEF) and in Schaefer (dorsal attention SPL and FEF, control PFCd, anterior insula). Default mode A goes <em>down</em> with load. MT shows no load effect.</div>
     <div class="tabs" id="atlasTabs" role="group" aria-label="Atlas">
       <button type="button" data-atlas="wang2015" aria-pressed="true">Wang 2015</button>
       <button type="button" data-atlas="prf" aria-pressed="false">Subject pRF V1–V3</button>
@@ -410,26 +419,30 @@ td.hl { font-weight: 700; color: var(--text-primary); }
         <div class="legend" id="detailLegend"></div>
       </div>
     </div>
-    <details><summary>Table view</summary><div id="forestTable"></div></details>
+    <details class="method"><summary>How this was tested</summary>
+      <p>The same slope test was run for every ROI in each atlas, with FDR correction within each atlas. A filled dot means q &lt; .05; small dots are individual subjects. Click a row to plot its curve on the right.</p>
+      <div id="forestTable"></div>
+    </details>
   </section>
 
   <section class="card" id="visual">
-    <div class="sec-head"><span class="sec-num">05</span><div><span class="kicker">Center vs. surround</span><h2>Early visual cortex: fovea vs periphery <span class="hemi-tag"></span></h2></div></div>
-    <p class="did"><b>What was done:</b> each subject's pRF eccentricity, R² and V1–V3 labels were resampled to fsaverage with FreeSurfer 6. Each area was split into a fovea band (0.5–1.5°, the central task) and a periphery band (3–7.5°, the noise annulus), keeping vertices with pRF R² &gt; 10%. S9 has no pRF data, so the Benson 2014 template within Wang V1–V3 stands in for that subject. The "Template" tab uses the template for everyone.</p>
-    <div class="tldr"><b>Short version</b> foveal V1–V3 rise with load (p = .003–.007). Peripheral V1–V3 all trend down, but only V2 reaches p &lt; .05, and it doesn't survive FDR. Subject pRFs reproduce the template result.</div>
+    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Downstairs</span><h2>The center turns up; the periphery barely turns down <span class="hemi-tag"></span></h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Visual cortex representing the task ring (the fovea) rises with load in V1, V2 and V3 (p = .003–.007). Visual cortex representing the noise annulus (the periphery) trends down in all three areas. Only V2 reaches p &lt; .05, and it doesn't survive FDR. So the predicted suppression of the periphery is, at most, weak. Subject-specific pRF maps and the anatomical template give the same answer.</div>
     <div class="tabs" id="visTabs" role="group" aria-label="Eccentricity source">
       <button type="button" data-src="prf" aria-pressed="true">Subject pRF (S9: template)</button>
       <button type="button" data-src="wang2015" aria-pressed="false">Template (Benson 2014)</button>
     </div>
     <div class="multiples three" id="visPanels"></div>
     <div class="legend" id="visLegend"></div>
-    <details><summary>Table view</summary><div id="visTable"></div></details>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Each subject's pRF eccentricity, R² and V1–V3 labels were resampled to fsaverage with FreeSurfer 6. Each area was split into a fovea band (0.5–1.5°, the task ring) and a periphery band (3–7.5°, the noise annulus), keeping vertices with pRF R² &gt; 10%. S9 has no pRF data, so the Benson 2014 template within Wang V1–V3 stands in for that subject. The "Template" tab uses the template for everyone.</p>
+      <div id="visTable"></div>
+    </details>
   </section>
 
   <section class="card" id="models">
-    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">The shape of things</span><h2>Load-function models: monotonic vs flat <span class="hemi-tag"></span></h2></div></div>
-    <p class="did"><b>What was done:</b> the 7 load levels were refit with four models, with load rescaled to 0–1 across 10%→46%: <b>flat</b> (1 parameter); <b>linear</b> (2); <b>saturating exponential</b> a + s·(1−e<sup>−x/τ</sup>), a compressive function that becomes linear as τ grows (3); and <b>Naka-Rushton</b> a + s·xⁿ/(xⁿ+c50ⁿ) (4). The amplitude s can be negative, so decreases count too. Nonlinear parameters were grid-searched, and amplitude and offset solved by least squares. Models were compared with AICc, which penalizes parameters and matters with only 7 points. The fits ran (a) at every fsaverage vertex in each subject and (b) on each subject's ROI average and on the group-mean curve.</p>
-    <div class="tldr"><b>Short version</b> a load function beats a flat line decisively in IPS0–IPS4/5, SPL1, FEF, LO and dorsal attention A (summed ΔAICc 33–64; 5–8 of 8 subjects each). About 60–75% of their vertices prefer a load function, and about 95% increase with load. The winning shape is <b>linear, not compressive</b>: even the group-mean curves choose linear (exponential τ runs to the linear limit). Simulation shows 7 levels can reliably detect a load function, but can't separate compressive from linear unless noise is low, and never select Naka-Rushton.</div>
+    <div class="sec-head"><span class="sec-num">05</span><div><span class="kicker">The shape of things</span><h2>A steady ramp, not a ceiling <span class="hemi-tag"></span></h2></div></div>
+    <div class="tldr"><b>Takeaway</b> In IPS0–IPS4/5, SPL1, FEF, LO and dorsal attention A, a load function decisively beats a flat line (summed ΔAICc 33–64; 5–8 of 8 subjects each). About 60–75% of their vertices prefer a load function, and about 95% of those increase. The winning shape is <b>linear, not saturating</b>: even the group-average curves choose linear. One limit: with only 7 load levels, a saturating curve can't be reliably told apart from a straight line (see the simulation below).</div>
     <div class="tabs" id="modelTabs" role="group" aria-label="ROI set">
       <button type="button" data-set="wang2015" aria-pressed="true">Wang 2015</button>
       <button type="button" data-set="prf" aria-pressed="false">Subject pRF V1–V3</button>
@@ -443,7 +456,7 @@ td.hl { font-weight: 700; color: var(--text-primary); }
         <div id="modelBars"></div>
       </div>
       <div>
-        <h3>Vertex-wise: best model per vertex</h3>
+        <h3>Vertex by vertex: best model</h3>
         <p class="panel-stat">Share of each ROI's vertices best fit by each model, averaged over subjects and hemispheres. Same ROI order as on the left.</p>
         <div id="vertBars"></div>
       </div>
@@ -455,32 +468,64 @@ td.hl { font-weight: 700; color: var(--text-primary); }
       <span><i class="key-rect" style="background:var(--series-2)"></i>Saturating exponential</span>
       <span><i class="key-rect" style="background:var(--series-3)"></i>Naka-Rushton</span>
     </div>
-    <h3>How well can 7 load levels recover the true model? (simulation, amplitude 1% signal)</h3>
-    <div id="recovery"></div>
-    <details><summary>Table view (model comparison)</summary><div id="modelTable"></div></details>
+    <details class="method"><summary>How this was tested, and how far 7 load levels can be trusted</summary>
+      <p>The 7 load levels were fit with four models, with load rescaled to 0–1 across 10% → 46%: <b>flat</b> (1 parameter); <b>linear</b> (2); <b>saturating exponential</b> a + s·(1−e<sup>−x/τ</sup>), which becomes linear as τ grows (3); and <b>Naka-Rushton</b> a + s·xⁿ/(xⁿ+c50ⁿ) (4). The amplitude s can be negative, so decreases count too. Nonlinear parameters were grid-searched, and amplitude and offset solved by least squares. Models were compared with AICc, which penalizes extra parameters and matters with only 7 points. Fits ran (a) at every fsaverage vertex in each subject and (b) on each subject's ROI average and on the group-mean curve.</p>
+      <h3>Simulation: how often does each true shape get recovered? (amplitude 1% signal)</h3>
+      <div id="recovery"></div>
+      <h3>Model comparison table</h3>
+      <div id="modelTable"></div>
+    </details>
   </section>
 
   <section class="card" id="hemis">
-    <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">Left vs. right</span><h2>Hemispheric effects</h2></div></div>
-    <p class="did"><b>What was done:</b> each subject's load slope was computed separately for the left and right hemisphere of every ROI. Right vs left was tested with a paired t-test (the hemisphere × load interaction), with FDR within each atlas. Because single ROIs are noisy, composites average each subject's per-ROI effects first. For per-ROI views, use the hemisphere control above.</p>
-    <div class="tldr"><b>Short version</b> load effects are larger on the right in the dorsal attention network (+0.32%, p = .035, 6 of 8 subjects) and the control network (p = .017, where only the right side is significant on its own). Individually, IPS0 (q = .045) and Glasser IP2 (q = .046) survive FDR. Right-hemisphere responses are also about 35% larger overall, and as a fraction of each side's overall response the load effect is similar (0.76 vs 0.82), so this reads as stronger right-hemisphere engagement by the task, not a right-specific load mechanism. Default mode shows no asymmetry, and V1–V3 show only a tiny one.</div>
-    <h3>Load effect by hemisphere (fitted 10% → 46%, % signal), composites</h3>
+    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">Left vs. right</span><h2>The right hemisphere leads</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Load effects are larger on the right in the dorsal attention network (+0.32%, p = .035, 6 of 8 subjects) and the control network (p = .017; only the right side is significant on its own). The right hemisphere also responds about 35% more overall, and relative to that baseline the load effects are similar on both sides (0.76 vs 0.82). So this looks like the task engaging the right hemisphere more, not a right-only load mechanism. Default mode shows no asymmetry, and V1–V3 show only a tiny one.</div>
+    <h3>Load effect by hemisphere (fitted 10% → 46%, % signal), network composites</h3>
     <div id="hemiChart"></div>
     <div class="legend"><span><i class="key-dot" style="background:var(--series-1)"></i>Left hemisphere</span><span><i class="key-dot" style="background:var(--series-2)"></i>Right hemisphere</span></div>
-    <details><summary>Table view</summary><div id="hemiTable"></div></details>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Each subject's load slope was computed separately for the left and right hemisphere of every ROI. Right vs left was tested with a paired t-test (the hemisphere × load interaction), with FDR within each atlas. Individually, IPS0 (q = .045) and Glasser IP2 (q = .046) survive FDR. Because single ROIs are noisy, the composites average each subject's per-ROI effects first. For per-ROI views, use the hemisphere control above sections 03–05.</p>
+      <div id="hemiTable"></div>
+    </details>
   </section>
 
-  <section class="card notes">
-    <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Fine print</span><h2>Caveats &amp; provenance</h2></div></div>
+  <section class="card" id="meaning">
+    <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">The verdict</span><h2>What it adds up to, and what's still open</h2></div></div>
+    <div class="verdict">
+      <div>
+        <h3>Where things stand</h3>
+        <p>Making a small central judgment harder recruits the dorsal attention network in a graded, roughly linear way. It also raises activity in the visual cortex that represents the task ring and lowers activity in the default mode network. That fits the "upstairs" half of the story well.</p>
+        <p>The "downstairs" half, where the periphery is suppressed as the center demands more, is <b>weak in this dataset</b>. Peripheral V1–V3 trend down, but the effect is small and not reliable after correction. The task also loads the right hemisphere more than the left.</p>
+      </div>
+      <div>
+        <h3>What could still change the picture</h3>
+        <ul>
+          <li><b>Run order.</b> Each run used one ratio, and each subject repeated a single ratio order, so slow drift within a session could look like a load effect, or hide one. This is the biggest open issue.</li>
+          <li><b>Disengagement at 46%.</b> Subjects miss about half the flips at 46%, which may mean they partly give up. That could explain the dip at the hardest level.</li>
+          <li><b>Stimulus differences.</b> The foveal increase could partly reflect the different red/blue mixes or the number of button presses, not attention alone.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Next steps</h3>
+        <ul>
+          <li><b>Refit the GLMs with run position as a covariate</b> to separate load from run order. This is the next analysis; it needs a cluster batch job.</li>
+          <li><b>Link to behavior in the periphery.</b> An earlier psychophysics study used the same kind of central task with a peripheral tilt-discrimination task. It could show whether peripheral perception actually suffers as central load rises.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card notes" id="appendix">
+    <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Fine print</span><h2>Methods, data checks &amp; provenance</h2></div></div>
     <ul>
+      <li id="audit"><strong>Data &amp; label audit.</strong> Each scan run's condition file (<code>CAM.par</code>) was checked against the ratio stored in its behavioral file: <span id="auditN"></span> of <span id="auditN2"></span> runs match. Raw <code>f.nii</code>, motion-corrected and surface-sampled data exist for every run, so a full rerun from raw data is possible. Preprocessing and GLM settings were confirmed from the original FS-FAST configs: fsaverage surface, 5 mm FWHM smoothing, SPM HRF, 16 s blocks, TR 2 s.</li>
       <li><strong>Two display setups.</strong> S1–S11 were scanned in 2016–17 (41.9 cm screen at 104 cm), and S12 and S13 in 2018 on a newer setup (51.2 cm at 82 cm). The 2018 setup differs in square count (185 vs 173), red luminance (RGB 255 vs 185), noise refresh and orientation, and button mapping. Stimulus sizes in degrees match, but setup is confounded with these two subjects. Their load effects look like everyone else's, as the per-subject dots in the ROI chart show.</li>
-      <li><strong>Load is confounded with run position.</strong> Each run has one ratio, and each subject's ratio order repeats a single shuffle, so slow drift within a session could look like a load effect. Separating the two needs a GLM refit with run position as a covariate. That's the next step.</li>
-      <li><strong>Behavior drives some of the 46% dip.</strong> At 46%, subjects miss about half the changes, which may mean they disengage. That would explain why the attention ROIs peak at 44%.</li>
-      <li><strong>Foveal increases</strong> could partly reflect stimulus or motor differences between ratios (the red/blue mix, the number of responses).</li>
-      <li><strong>Model comparison power:</strong> with 7 levels and per-subject noise, AICc is conservative. Foveal V1–V3 pass the group slope test but are "flat" by per-subject AICc, because the effect is consistent across subjects but small relative to each subject's noise. Vertex maps (ΔAICc, τ, number of subjects with ΔAICc &gt; 2) are saved as fsaverage <code>.mgz</code> files on the cluster.</li>
-      <li><strong>Units:</strong> FS-FAST betas after normalization to a mean of 100, so roughly % signal change relative to fixation. Wang IPS4 and IPS5 are merged (IPS5 is only 18–53 vertices).</li>
-      <li><strong>Code:</strong> <code>scripts/</code> contains the label audit, ROI extraction, pRF resampling, model fits, recovery simulation and this page's data build.</li>
+      <li><strong>Units.</strong> FS-FAST betas after normalization to a mean of 100, so roughly % signal change relative to fixation. Wang IPS4 and IPS5 are merged (IPS5 is only 18–53 vertices).</li>
+      <li><strong>Model comparison power.</strong> With 7 levels and per-subject noise, AICc is conservative. Foveal V1–V3 pass the group slope test but count as "flat" by per-subject AICc, because the effect is consistent across subjects but small relative to each subject's noise. Vertex maps (ΔAICc, τ, number of subjects with ΔAICc &gt; 2) are saved as fsaverage <code>.mgz</code> files on the cluster.</li>
+      <li><strong>Task reconstruction.</strong> The animation in section 01 is built from the original experiment code and the parameters stored in the behavior files. The noise updates more slowly than in the scanner unless "Real noise speed" is on.</li>
+      <li><strong>Code.</strong> <code>scripts/</code> contains the label audit, ROI extraction, pRF resampling, model fits, recovery simulation and this page's data build.</li>
     </ul>
+    <div class="notice"><b>Correction (earlier version)</b> An earlier version said S12 and S13 had flat behavior across load. That was a scoring bug in this reanalysis: after reversing their key mapping, it counted missed flips as correct. Scored properly, both subjects show the same load effect as everyone else, so the "exclude S12/S13" filter has been removed. No fMRI result changed.</div>
   </section>
 </div>
 <div class="tip" id="tip" role="tooltip"></div>
