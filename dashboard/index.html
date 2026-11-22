@@ -320,6 +320,21 @@
     </details>
   </section>
 
+  <section class="card" id="thalamus">
+    <div class="sec-head"><span class="sec-num">06c</span><div><span class="kicker">Accessory · thalamus</span><h2>The LGN responds to the display but shows no reliable load effect</h2></div></div>
+    <div class="tldr" id="thTakeaway"></div>
+    <h3>Load effect by thalamic nucleus</h3>
+    <div id="thChart"></div>
+    <div class="legend" id="thLegend"></div>
+    <h3>How far to trust each ROI</h3>
+    <div id="thRel" style="overflow-x:auto"></div>
+    <p class="hint" style="font-family:var(--ui);font-size:12px;color:var(--text-muted)">Version Dice: overlap between this segmentation (FreeSurfer 8.2) and the 2019 one (FreeSurfer 6-era tool) in the 4 subjects who have both; 1 = identical. Atlas Dice: overlap with the Jülich histological atlas (probability ≥ 25%) after nonlinear registration. Split-half: correlation across subjects of the load effect from odd vs even runs. Localizer: response to the peripheral annulus vs fixation.</p>
+    <details class="method"><summary>How this was tested</summary>
+      <p>Each subject's thalamus was segmented into nuclei with FreeSurfer 8.2 (<code>segment_subregions thalamus</code>) and grouped into LGN, MGN, pulvinar, mediodorsal, lateral posterior, anterior, ventral and intralaminar groups. Nuclei were mapped into each run's motion-corrected, <b>unsmoothed</b> native 2 mm data through the session registration, computing for every functional voxel the fraction lying inside each nucleus; ROI time series average voxels at least 50% inside (alternatives: ≥ 25%, fraction-weighted, and for LGN/MGN the Jülich atlas probability instead of the segmentation). Each run was fit as in the run-order analysis (SPM HRF, quadratic drift, global mean 100), hemispheres averaged; the load effect is the per-subject slope × 0.36, t-tested across the 8 subjects, with and without run position. P values are not corrected across the 9 ROIs. The attentional-response-function fits (flat, linear and power-law on the three load axes) were repeated on each nucleus.</p>
+      <div id="thTable"></div>
+    </details>
+  </section>
+
   <section class="card" id="meaning">
     <div class="sec-head"><span class="sec-num">07</span><div><span class="kicker">Interpretation</span><h2>Interpretation and open questions</h2></div></div>
     <div class="verdict">
@@ -339,6 +354,7 @@
       <div>
         <h3>Next steps</h3>
         <ul>
+          <li><b>Thalamus at higher resolution.</b> The LGN is only about 28 functional voxels here and its boundary is uncertain; a dedicated LGN localizer and smaller voxels would be needed to test load effects there.</li>
           <li><b>Map the surround.</b> Use the full polar-angle and eccentricity pRF maps to test whether the peripheral decrease is uniform around the visual field or follows the attended ring's geometry.</li>
           <li><b>Test saturation directly</b> with more load levels between 44% and 50%, where a compressive attentional response function would flatten.</li>
           <li><b>Link to behavior in the periphery.</b> The earlier dual-task psychophysics study is now analyzed in the <a href="psychophysics.html">Psychophysics tab</a>: peripheral tilt thresholds rise modestly with central load, in line with the weak peripheral suppression here.</li>
@@ -1309,7 +1325,33 @@ function renderRunLevel() {
   tk.appendChild(document.createTextNode(` Within a load level, runs in which subjects detected more flips do not show more dorsal attention activity (${fmt(dorsal.mean, 3)}% per SD, p ${fmtP(dorsal.p)}; ${dorsal.n_pos} of ${dorsal.n} subjects positive), so the load effect reflects stimulus demand rather than how well a run went. Run-to-run fluctuations are shared widely across cortex. Once those are removed, runs with more dorsal attention activity than expected still have more, not less, peripheral V1–V3 activity (r = ${per.mean_r.toFixed(2)}, p ${fmtP(per.p)}), so there is no sign of a push-pull between the attention network and the periphery; only the default-mode network trends opposite (r = ${dm.mean_r.toFixed(2)}, p ${fmtP(dm.p)}).`));
   table("rlTable", ["Pair", "Raw r", "p", "Controlled r", "p", "Subjects negative (controlled)"], allRows.map(r => ({ ...r, label: r.dorsal ? "Dorsal attention ↔ " + r.label : r.label })).map(r => [r.label, r.raw.toFixed(2), fmtP(r.R.p), r.par.toFixed(2), fmtP(r.P.p), `${r.P.n_neg}/${r.P.n}`]));
 }
-const render = () => { renderRunOrder(); renderArf(); renderEcc(); renderRunLevel(); };
+// ---- 06c thalamus ----
+function renderThal() {
+  if (!E.thal) return;
+  const T = E.thal, ORDER = ["LGN", "MGN", "Pulvinar", "Mediodorsal", "Lateral posterior", "Anterior", "Ventral", "Intralaminar", "Whole thalamus"];
+  const st = (n, v, m = "load") => T.stats.find(r => r.nucleus === n && r.variant === v && r.measure === m), rel = n => T.rel.find(r => r.nucleus === n);
+  const rows = ORDER.map(n => { const g = st(n, "pv50"), o = { label: n, m: g.mean, se: g.sem, g, pv25: st(n, "pv25").mean, pvw: st(n, "pvw").mean, ctrl: st(n, "pv50", "load_ctrl_run") }; const j = st(n, "juelich"); o.jue = j ? j.mean : null; return o; });
+  dotRows(document.getElementById("thChart"), rows, { W: 760, ml: 170, xlo: -0.15, xhi: 0.2, ref: 0, xTitle: "Load effect (% signal, fitted 10% → 46%, unsmoothed native data)", yTitle: "Thalamic ROI",
+    marks: [{ key: "pv25", color: css("--context"), filled: true }, { key: "pvw", color: css("--context"), filled: true }, { key: "jue", color: css("--series-2"), filled: false },
+            { key: "m", err: "se", color: r => r.g.p < 0.05 ? css("--series-1") : css("--text-muted"), filled: r => r.g.p < 0.05 }],
+    tipFn: r => [{ label: "Load effect (≥ 50% inside)", value: `${fmt(r.m, 3)}% ± ${r.se.toFixed(3)}, p ${fmtP(r.g.p)} (${r.g.n_pos}/8 up)` }, { label: "Controlling run position", value: `${fmt(r.ctrl.mean, 3)}%, p ${fmtP(r.ctrl.p)}` },
+      { label: "Other ROI definitions", value: `${fmt(r.pv25, 3)} / ${fmt(r.pvw, 3)}${r.jue != null ? " / atlas " + fmt(r.jue, 3) : ""}` }] });
+  legend("thLegend", [{ color: css("--series-1"), label: "p < .05, uncorrected (± SEM)" }, { kind: "key-ring", label: "Not significant" }, { color: css("--context"), label: "Alternative voxel selections" }, { kind: "key-ring", border: `2px solid ${css("--series-2")}`, label: "Jülich atlas ROI (LGN, MGN)" }]);
+  const conf = n => { const r = rel(n);
+    if (n === "LGN") return "Moderate: location confirmed functionally, boundary uncertain";
+    if (n === "MGN") return "Low: versions barely overlap; too small";
+    if (r.func_vox < 15) return "Low–moderate: stable label, very few voxels";
+    return r.dice_version >= 0.85 ? "High for location; no functional check" : "Moderate"; };
+  const f2 = v => v == null ? "—" : v.toFixed(2);
+  table("thRel", ["ROI", "Volume / hemi (mm³)", "Functional voxels", "Version Dice", "Atlas Dice", "Centroid offset (mm)", "Localizer response", "Split-half r", "Spread across definitions", "ROI confidence"],
+    ORDER.map(n => { const r = rel(n); return [n, Math.round(r.vol_mm3), r.func_vox.toFixed(0), f2(r.dice_version), f2(r.dice_atlas25_nl), r.centroid_dist_mm_nl == null ? "—" : r.centroid_dist_mm_nl.toFixed(1), `${fmt(r.loc_beta)}% (p ${fmtP(r.loc_p)})`, f2(r.split_half_r), "±" + (r.load_effect_spread_across_variants / 2).toFixed(3) + "%", conf(n)]; }));
+  const L = st("LGN", "pv50"), I = st("Intralaminar", "pv50"), Ic = st("Intralaminar", "pv50", "load_ctrl_run"), W = st("Whole thalamus", "pv50"), rl = rel("LGN"), rm = rel("MGN");
+  const lgnArf = T.arf.filter(a => a.nucleus === "LGN"), best = Math.max(...T.arf.map(a => a.sum_dAICc_flat_minus_best));
+  const tk = document.getElementById("thTakeaway"); tk.replaceChildren(); h("b", { text: "Takeaway" }, tk);
+  tk.appendChild(document.createTextNode(` In unsmoothed native-space data, the segmented LGN responds to the peripheral annulus in all 8 subjects (localizer ${fmt(rl.loc_beta)}%, p ${fmtP(rl.loc_p)}), which confirms the ROI captures visually driven thalamus. Its load effect is small and not reliable (${fmt(L.mean, 3)}%, p ${fmtP(L.p)}; ${L.n_pos} of 8 subjects up), and no attentional response function can be fit: in every nucleus a flat line beats linear and power-law load functions by AICc (best summed ΔAICc ${best.toFixed(1)}). The only nominally significant load increases are in the intralaminar group (${fmt(I.mean, 3)}%, p ${fmtP(I.p)}; p ${fmtP(Ic.p)} with run position controlled) and the whole thalamus (${fmt(W.mean, 3)}%, p ${fmtP(W.p)}), uncorrected across 9 ROIs and with poor split-half reliability, so they are leads rather than findings. ROI certainty differs sharply by nucleus: large groups are stable across segmentation versions (Dice 0.79–0.94), the LGN only moderately (Dice ${f2(rl.dice_version)}; ${f2(rl.dice_atlas25_nl)} against the histological atlas, centroid ${rl.centroid_dist_mm_nl.toFixed(1)} mm away), and the MGN hardly at all (Dice ${f2(rm.dice_version)}).`));
+  table("thTable", ["ROI", "Axis", "Power exponent q", "Subjects q < 1", "Summed ΔAICc, flat − best load model"], T.arf.map(a => [a.nucleus, a.axis, a.q_geomean.toFixed(2), `${a.n_compressive}/${a.n}`, a.sum_dAICc_flat_minus_best.toFixed(1)]));
+}
+const render = () => { renderRunOrder(); renderArf(); renderEcc(); renderRunLevel(); renderThal(); };
 document.getElementById("themeBtn").addEventListener("click", render);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 render();

@@ -56,6 +56,11 @@ rl = os.path.join(DATA, "run_level")
 if os.path.exists(os.path.join(rl, "behavior_brain.csv")):
     bb = rows(os.path.join(rl, "behavior_brain.csv")); cc = rows(os.path.join(rl, "coupling.csv"))
     E["runlevel"] = {"beh": bb, "coup": cc}
+# thalamic nuclei (scripts/thal_analysis.py, cluster)
+th = os.path.join(DATA, "thalamus")
+if os.path.exists(os.path.join(th, "thal_stats.csv")):
+    E["thal"] = {"stats": rows(os.path.join(th, "thal_stats.csv")), "rel": rows(os.path.join(th, "thal_reliability.csv")),
+                 "arf": [r for r in rows(os.path.join(th, "thal_arf.csv")) if r["variant"] == "pv50"]}
 out = os.path.join(HERE, "..", "dashboard", "extra_data.js")
 with open(out, "w") as f:
     f.write("window.CAM_EXTRA = " + json.dumps(E, separators=(",", ":")) + ";\n")
