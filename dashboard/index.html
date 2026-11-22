@@ -261,6 +261,7 @@ td.hl { font-weight: 700; color: var(--text-primary); }
     <div class="sec-head"><span class="sec-num">00</span><div><span class="kicker">How it works</span><h2>The task: count the colors (fast)</h2></div></div>
     <div class="story-intro">
       <p>Keep your eyes on the black dot. Around it, a ring of 173 tiny squares sparkles red and blue, reshuffling to new positions about every half second. Your job: notice when the <b>majority color flips</b>, and press its key within 1.5 seconds. Every 5–6 reshuffles a coin is tossed for the majority color, so a flip comes along only every few seconds, about 2–3 times per block.</p>
+      <p style="font-size:12.5px; color: var(--text-muted)">The demo shows the 2016–17 setup used for 6 of the 8 subjects: 173 squares, red at RGB 185, 56 px per degree. S12 and S13 were scanned in 2018 on a newer display: 185 squares, red at RGB 255, and the noise texture fixed at 0° and refreshed at 15 Hz. Stimulus sizes in degrees match across setups.</p>
       <p>That's easy when only 10% of the squares are the odd color out. It gets brutal at 46%, where the ring is nearly a 50/50 mix. Meanwhile, out in the periphery, a crackling field of 1/f "pink" noise plays during every task block. It's the same in every condition and has nothing to do with the task. That's the "downstairs" this issue keeps coming back to.</p>
     </div>
     <div class="stage">
@@ -360,7 +361,7 @@ td.hl { font-weight: 700; color: var(--text-primary); }
 
   <section class="card" id="behavior">
     <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">The scorecard</span><h2>Behavior</h2></div></div>
-    <p class="did"><b>What was done:</b> after each majority-color flip, subjects had 1.5 s to press the key for the new majority color. The data were scored three ways: the original score (correct / all flips, so misses count as wrong), <b>detection</b> (% of flips answered), and <b>accuracy</b> (% correct among answered flips). S12 and S13 pressed reversed keys in every run (raw accuracy 0–46%), so their mapping is flipped. Misses stay wrong, as in the original code.</p>
+    <p class="did"><b>What was done:</b> after each majority-color flip, subjects had 1.5 s (1.0 s in the earliest script version, used for S4 and part of S3) to press the key for the new majority color. The data were scored three ways: the original score (correct / all flips, so misses count as wrong), <b>detection</b> (% of flips answered), and <b>accuracy</b> (% correct among answered flips). S12 and S13 pressed reversed keys in every run (raw accuracy 0–46%), so their mapping is flipped. They are also the only two subjects scanned in 2018 on a newer scanner display setup, so a different button-box mapping is the likely cause. Misses stay wrong, as in the original code.</p>
     <div class="tldr"><b>Short version</b> the load manipulation works. The original score falls from about 95% to 33% between the 30% and 46% ratios, mostly because subjects miss more changes (detection 100% → 53%). Accuracy on the changes they do catch drops less (96% → 66%).</div>
     <div class="grid-2" style="margin-top:8px">
       <div>
@@ -472,6 +473,7 @@ td.hl { font-weight: 700; color: var(--text-primary); }
   <section class="card notes">
     <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Fine print</span><h2>Caveats &amp; provenance</h2></div></div>
     <ul>
+      <li><strong>Two display setups.</strong> S1–S11 were scanned in 2016–17 (41.9 cm screen at 104 cm), and S12 and S13 in 2018 on a newer setup (51.2 cm at 82 cm). The 2018 setup differs in square count (185 vs 173), red luminance (RGB 255 vs 185), noise refresh and orientation, and button mapping. Stimulus sizes in degrees match, but setup is confounded with these two subjects. Their load effects look like everyone else's, as the per-subject dots in the ROI chart show.</li>
       <li><strong>Load is confounded with run position.</strong> Each run has one ratio, and each subject's ratio order repeats a single shuffle, so slow drift within a session could look like a load effect. Separating the two needs a GLM refit with run position as a covariate. That's the next step.</li>
       <li><strong>Behavior drives some of the 46% dip.</strong> At 46%, subjects miss about half the changes, which may mean they disengage. That would explain why the attention ROIs peak at 44%.</li>
       <li><strong>Foveal increases</strong> could partly reflect stimulus or motor differences between ratios (the red/blue mix, the number of responses).</li>
