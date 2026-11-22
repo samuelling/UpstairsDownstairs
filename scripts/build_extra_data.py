@@ -39,7 +39,8 @@ for s in S:
     corr.setdefault(int(s["subject"]), s["corr_ratio_run"])
 E = {"runpos": runpos, "corrRatioRun": corr,
      "runTermMc": {"nP05": sum(1 for g in G if g["measure"] == "runB_mc" and g["p"] < .05), "nRois": sum(1 for g in G if g["measure"] == "runB_mc"),
-                   "minQ": min(g["q"] for g in G if g["measure"] == "runB_mc")},
+                   "minQ": min(g["q"] for g in G if g["measure"] == "runB_mc"),
+                   "nNeg": sum(1 for g in G if g["measure"] == "runB_mc" and float(g["mean"]) < 0)},
      "runTerm": {"nP05": sum(1 for g in G if g["measure"] == "runB" and g["p"] < .05), "minQ": min(g["q"] for g in G if g["measure"] == "runB")},
      "arf": rows(os.path.join(DATA, "arf_demand.csv")), "arfAxes": rows(os.path.join(DATA, "arf_axes.csv"))}
 out = os.path.join(HERE, "..", "dashboard", "extra_data.js")
