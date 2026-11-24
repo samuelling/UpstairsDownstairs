@@ -45,17 +45,18 @@
       <a href="index.html">fMRI<span>central load × attention networks</span></a>
       <a href="maps.html">Brain maps<span>ROIs and load effects on the inflated cortex</span></a>
       <a href="psychophysics.html">Psychophysics<span>dual task: central load × peripheral tilt</span></a>
-      <a href="next.html" aria-current="page">What we should do<span>proposed hemifield design</span></a>
+      <a href="next.html" aria-current="page">What we should do<span>proposed follow-up designs</span></a>
     </nav>
     <h1 class="wordmark"><span class="up">Upstairs</span><span class="slash">/</span><span class="down">Downstairs</span></h1>
     <div class="mast-row">
       <div>
         <p class="tagline">What should the next experiment be?</p>
-        <p class="sub">A design sketch, not data. The task moves into one hemifield and becomes a judgment about orientation. The other hemifield holds an ignored stimulus that shares the task's features, and its contrast-response function is measured at each load, using the contrast-adaptation, rapid event-related procedure of Foster &amp; Ling (2022).</p>
+        <p class="sub">A design sketch, not data. The task moves into one hemifield and becomes a judgment about orientation. The other hemifield holds an ignored stimulus that shares the task's features, and its contrast-response function is measured at each load, using the contrast-adaptation, rapid event-related procedure of Foster &amp; Ling (2022). A <a href="#central">second version</a> keeps the task at fixation and puts the probe in a peripheral annulus.</p>
       </div>
       <ul class="cover-lines" aria-label="Contents">
         <li><a href="#why"><span class="cl-n">01</span><span class="cl-t">What the current design cannot tell us</span></a></li>
         <li><a href="#display"><span class="cl-n">02</span><span class="cl-t">The display, interactive</span></a></li>
+        <li><a href="#central"><span class="cl-n">02b</span><span class="cl-t">Variant: task at fixation, annulus probe</span></a></li>
         <li><a href="#run"><span class="cl-n">03</span><span class="cl-t">One run, one trial, and the trial budget</span></a></li>
         <li><a href="#predict"><span class="cl-n">04</span><span class="cl-t">What each account predicts</span></a></li>
         <li><a href="#open"><span class="cl-n">06</span><span class="cl-t">Decisions still open</span></a></li>
@@ -131,6 +132,56 @@
     </div>
   </section>
 
+  <section class="card" id="central">
+    <div class="sec-head"><span class="sec-num">02b</span><div><span class="kicker">Variant</span><h2>The task at fixation, a grating annulus as the probe</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> This version keeps the layout of the existing study: a minority judgment on a small ring of elements at fixation, with an ignored stimulus in the periphery. The elements become gaborlets and the noise annulus becomes a grating whose contrast-response function is measured at each load.</div>
+    <div class="story-intro">
+      <p>The majority judgment in the hemifield display is less intuitive than the color version was. One possible reason is that the elements sit in the periphery, where they crowd; another is that the report concerns a cued orientation and not the display as a whole. Here a ring of small Gabor patches between 0.4° and 2.2° of eccentricity replaces the red and blue squares. Each patch is tilted 45° or 135°, the ring reshuffles to new positions twice a second, and the observer reports which tilt is the minority. Load is the minority share, as in the existing study.</p>
+      <p>The probe is a 45° grating filling an annulus from 3° to 8.5°, and it is never relevant. As in the hemifield design it stays on at 16% contrast and steps to one of ten contrasts during each trial. In the plain minority task both tilts are relevant on every trial, so the probe is neither matched nor mismatched. Cueing one tilt and asking whether it is the majority or the minority restores that comparison. The demo offers both reports so they can be compared directly.</p>
+    </div>
+    <div class="stage two">
+      <div>
+        <div class="screen wide"><canvas id="stim2" role="img" aria-label="Schematic display: a ring of small gaborlets tilted 45 or 135 degrees around fixation, surrounded by a grating annulus in the periphery"></canvas><span class="bezel" id="bezel2"></span></div>
+        <div class="side-labels" id="sideLabels2"></div>
+        <p class="status" id="status2" aria-live="polite"></p>
+      </div>
+      <div>
+        <div class="ctl-group"><span class="lbl">Report</span><div class="ctl-row" id="modeRow2" role="group" aria-label="Report"></div></div>
+        <div class="ctl-group" id="cueGroup2"><span class="lbl">Cued tilt (probe is 45°)</span><div class="ctl-row" id="cueRow2" role="group" aria-label="Cued tilt"></div></div>
+        <div class="ctl-group"><span class="lbl">Load (minority share)</span><div class="ctl-row" id="loadRow2" role="group" aria-label="Load"></div></div>
+        <div class="ctl-group"><span class="lbl">Probe contrast</span><div class="ctl-row" id="conRow2" role="group" aria-label="Probe contrast"></div></div>
+        <div class="ctl-group"><span class="lbl">Display</span>
+          <div class="ctl-row">
+            <button type="button" class="pill big" id="trialBtn2">Run a trial (4 s)</button>
+            <button type="button" class="pill" id="holdBtn2" aria-pressed="true">Hold the display</button>
+            <button type="button" class="pill" id="zoomBtn2" aria-pressed="true">Zoom on the task</button>
+          </div>
+          <p class="flicker-note">A trial shows the ring for 4 s, reshuffled twice a second, while the annulus steps to a random contrast and its phase updates at 10 Hz. The zoomed view shows the central 7°; switch it off to see the whole display to scale, where the gaborlets are too small to judge on most screens.</p>
+        </div>
+        <div class="ctl-group"><span class="lbl" id="respLbl2"></span>
+          <div class="resp-pair"><button type="button" id="ans2a" disabled></button><button type="button" id="ans2b" disabled></button></div>
+          <div class="scorecard" id="score2" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+    <h3>What this version changes</h3>
+    <div class="two-col">
+      <ul class="plain">
+        <li><b>The task is at fixation.</b> Nothing pulls gaze to one side, and the elements sit where acuity is highest and crowding is weakest.</li>
+        <li><b>It continues the existing study.</b> The layout and the load variable are the same, so the new IPS and visual-cortex results can be set beside the old ones.</li>
+        <li><b>The probe drives both hemispheres.</b> The annulus doubles the number of probe voxels, and probe modulation can be compared between left and right visual cortex.</li>
+      </ul>
+      <ul class="plain">
+        <li><b>The task side cannot be alternated.</b> With the task at fixation there is no test of whether the IPS asymmetry follows the attended hemifield.</li>
+        <li><b>Task and probe differ in eccentricity, not hemifield.</b> A narrowing of the attended region with load would lower the probe response regardless of feature, so the load cost is partly a spatial effect.</li>
+        <li><b>The plain minority report has no matched probe.</b> Feature-based spread then has to be tested with a probe tilt inside the task set (45°) against one outside it (0° or 90°), a weaker contrast than matched against mismatched.</li>
+      </ul>
+    </div>
+    <details class="method"><summary>Values used in the sketch</summary>
+      <p>71 gaborlets on four jittered rings at 0.6°, 1.05°, 1.5° and 1.95°, about 0.45° apart, each with a Gaussian envelope of σ = 0.075° and a carrier near 5 cycles/deg, at 50% contrast. The minority shares are those of the hemifield sketch (10%, 30%, 42%), which gives 7, 21 and 30 minority elements. The annulus spans 3° to 8.5° with a 2.2 cycles/deg grating; the outer edge, spatial frequency, contrasts and timing are Foster &amp; Ling's, and the 3° inner edge is that of the existing noise annulus. The ring and element sizes are placeholders. The existing study used 173 squares between 0.5° and 1.5°; gaborlets need to be larger than those squares to carry a visible carrier, so there are fewer of them over a slightly larger ring.</p>
+    </details>
+  </section>
+
   <section class="card" id="run">
     <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Schedule</span><h2>One run: adapt for a minute, then forty 4-s trials</h2></div></div>
     <div class="tldr"><b>Takeaway</b> The timing is Foster &amp; Ling's: 60 s of adaptation to the probe at 16% contrast, then a 456-s rapid event-related sequence of 4-s trials separated by 6–17 s of top-up adaptation. Cue, load and probe contrast all change from trial to trial, so none of them is tied to run position.</div>
@@ -192,6 +243,7 @@
     <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">To decide</span><h2>Decisions still open</h2></div></div>
     <div class="two-col">
       <ul class="plain">
+        <li><b>Where the task goes.</b> The hemifield layout (section 02) follows Foster &amp; Ling and can test whether the IPS asymmetry follows the task side. The central layout (section 02b) is closer to the existing study and may be the easier task to do. Which report feels more natural is best settled by trying both demos and then piloting.</li>
         <li><b>Crowding.</b> Densely packed peripheral gaborlets crowd one another, and the majority judgment becomes hard even at lopsided mixtures. The sketch scales element size and spacing with eccentricity (radial spacing about 0.36 × eccentricity, 48 elements). The costs are fewer elements, so a coarser set of possible mixtures, and a spatial frequency that falls with eccentricity instead of a uniform 2.2 cycles/deg.</li>
         <li><b>What "match" means.</b> A plain majority judgment attends both orientations. The sketch cues one orientation per trial so that match and mismatch are defined. An alternative is a third probe orientation (0° or 90°) that is in neither set.</li>
         <li><b>Cueing a feature, not a place.</b> Foster &amp; Ling cued one of two gratings by location, and the attended feature followed from which grating that was. Here the two orientations are intermixed and the cue names the orientation directly.</li>
@@ -363,6 +415,96 @@ pills("cueRow", [{ label: "Attend 45° · probe matched", value: 45 }, { label: 
 pills("loadRow", LOADS.map((l, i) => ({ label: l.label, value: i })), () => S.load, v => { S.load = v; drawStim(); });
 syncCon = pills("conRow", CON.map(c => ({ label: c === ADAPT ? `${c}% adapter` : conLabel(c), value: c })), () => S.con, v => { S.con = v; drawStim(); });
 
+// ================= 02b · central variant: task at fixation, grating annulus as the probe =================
+// Placeholders: ring radii, element size and spacing. Annulus outer edge, spatial frequency and contrasts follow Foster & Ling; inner edge as the existing noise annulus.
+const C_RINGS = [0.6, 1.05, 1.5, 1.95], C_SPACE = 0.45, C_SIGMA = 0.075, ANN_IN = 3, ANN_OUT = 8.5, ANN_SF = 2.2, ZOOM_DEG = 7;
+const C_COUNTS = C_RINGS.map(r => Math.round(2 * Math.PI * r / C_SPACE)), C_N = C_COUNTS.reduce((a, b) => a + b, 0);
+const TILT = { 45: "right tilt (45°)", 135: "left tilt (135°)" };
+const C = { mode: QS.get("cmode") === "cued" ? "cued" : "free", cue: 45, load: Math.max(0, Math.min(2, +QS.get("cload") || 0)), con: ADAPT, zoom: QS.get("czoom") !== "0", hold: true, phase: "idle", minor: 135, seed: 5, gph: 0, n: 0, hits: 0, fb: null, timers: [], iv: null };
+const cv2 = $("stim2"), ctx2 = cv2.getContext("2d");
+let annBuf = null;   // per-size buffers: for each pixel, its position in the grating cycle (0–255), or −1 outside the annulus
+function drawAnnulus(W, H, ppd) {
+  if (C.con <= 0) { ctx2.fillStyle = "#7f7f7f"; ctx2.fillRect(0, 0, W, H); return; }
+  if (!annBuf || annBuf.W !== W || annBuf.H !== H || annBuf.ppd !== ppd) {
+    const im = ctx2.createImageData(W, H), idx = new Int16Array(W * H), a = PROBE_ORI * Math.PI / 180, sn = Math.sin(a), cs = Math.cos(a), k = 256 * ANN_SF / ppd, r0 = (ANN_IN * ppd) ** 2, r1 = (ANN_OUT * ppd) ** 2;
+    for (let y = 0, i = 0; y < H; y++) for (let x = 0; x < W; x++, i++) { const dx = x - W / 2, dy = y - H / 2, rr = dx * dx + dy * dy; idx[i] = rr < r0 || rr > r1 ? -1 : Math.floor((((dx * sn + dy * cs) * k) % 256 + 256) % 256); }
+    annBuf = { W, H, ppd, im, idx, px: new Uint32Array(im.data.buffer) };
+  }
+  const lut = new Uint32Array(256), { idx, px, im } = annBuf;
+  for (let i = 0; i < 256; i++) { const v = Math.round(127.5 + 127.5 * C.con / 100 * Math.cos(2 * Math.PI * (i + 0.5) / 256 + C.gph)); lut[i] = (0xff000000 | v << 16 | v << 8 | v) >>> 0; }
+  for (let i = 0; i < px.length; i++) px[i] = idx[i] < 0 ? 0xff7f7f7f : lut[idx[i]];
+  ctx2.putImageData(im, 0, 0);
+}
+function drawCentral() {
+  const dpr = Math.min(devicePixelRatio || 1, 2), w = cv2.clientWidth, hgt = cv2.clientHeight;
+  if (!w) return;
+  if (cv2.width !== Math.round(w * dpr)) { cv2.width = Math.round(w * dpr); cv2.height = Math.round(hgt * dpr); }
+  const W = cv2.width, H = cv2.height, ppd = W / (C.zoom ? ZOOM_DEG : 19), R = rng(C.seed);
+  drawAnnulus(W, H, ppd);   // also paints the gray background
+  const cued = C.mode === "cued", showTask = C.hold || C.phase === "stim", showCue = cued && (C.hold || C.phase === "cue" || C.phase === "stim");
+  const nMinor = Math.round((0.5 - LOADS[C.load].d) * C_N), major = C.minor === 45 ? 135 : 45;
+  if (showTask) {
+    const pos = [];   // new positions at every reshuffle: each ring gets a random rotation and a little jitter
+    C_RINGS.forEach((r, ri) => { const k = C_COUNTS[ri], off = R() * 2 * Math.PI; for (let j = 0; j < k; j++) { const a = off + (j + (R() - 0.5) * 0.3) * 2 * Math.PI / k, rr = r + (R() - 0.5) * 0.1; pos.push([rr * Math.cos(a), rr * Math.sin(a)]); } });
+    for (let i = pos.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [pos[i], pos[j]] = [pos[j], pos[i]]; }
+    const sigma = C_SIGMA * ppd, period = 2.6 * sigma;
+    pos.forEach((q, i) => { const tex = gabor(i < nMinor ? C.minor : major, TASK_CON, sigma, period); ctx2.drawImage(tex, Math.round(W / 2 + q[0] * ppd - tex.width / 2), Math.round(H / 2 + q[1] * ppd - tex.height / 2)); });
+  }
+  const a = C.cue * Math.PI / 180, L = 0.24 * ppd;
+  if (showCue) { ctx2.strokeStyle = "#ffffff"; ctx2.lineWidth = Math.max(2, 0.05 * ppd); ctx2.lineCap = "round"; ctx2.beginPath(); ctx2.moveTo(W / 2 - L * Math.cos(a), H / 2 + L * Math.sin(a)); ctx2.lineTo(W / 2 + L * Math.cos(a), H / 2 - L * Math.sin(a)); ctx2.stroke(); }
+  ctx2.fillStyle = C.phase === "fb" ? (C.fb ? "#39d98a" : "#ff5a5a") : "#000000"; ctx2.beginPath(); ctx2.arc(W / 2, H / 2, Math.max(2.5, 0.06 * ppd), 0, 2 * Math.PI); ctx2.fill();
+  C.nMinor = nMinor;
+  renderStatus2();
+}
+function renderStatus2() {
+  const cued = C.mode === "cued", sl = $("sideLabels2"); sl.replaceChildren();
+  const task = h("div", {}, sl), probe = h("div", {}, sl);
+  h("b", { text: "At fixation · attended" }, task); task.appendChild(document.createTextNode(`${C_N} gaborlets within 2.2°, 45° and 135° mixed${cued ? `; cue: attend ${C.cue}°` : ""}`));
+  h("b", { text: "Annulus · ignored" }, probe); probe.appendChild(document.createTextNode(`${PROBE_ORI}° grating, ${ANN_IN}–${ANN_OUT}°, ${ANN_SF} cycles/deg; ${cued ? (C.cue === PROBE_ORI ? "matched to" : "mismatched with") + " the cued tilt" : "both tilts are task-relevant"}`));
+  $("bezel2").textContent = C.zoom ? "Zoomed · central 7° × 6°" : "To scale · 19° × 17°";
+  const pr = C.con === ADAPT ? `annulus at the adapting contrast (${ADAPT}%)` : `annulus at ${conLabel(C.con)}`;
+  const reveal = `Minority: ${TILT[C.minor]}, ${C.nMinor} of ${C_N}`;
+  const ask = cued ? "Was the cued tilt the majority or the minority?" : "Which tilt was the minority?";
+  $("status2").textContent = C.hold ? `${reveal} · ${pr}` : C.phase === "cue" ? (cued ? `Cue: attend ${C.cue}°` : "Get ready") : C.phase === "stim" ? `Trial in progress · ${pr}` : C.phase === "resp" ? ask : C.phase === "fb" ? `${C.fb ? "Correct" : "Incorrect"}. ${reveal}; the annulus stepped to ${conLabel(C.trialCon)}.` : `Between trials: top-up adaptation, ${pr}`;
+}
+function renderScore2() {
+  const box = $("score2"); box.replaceChildren();
+  h("span", { class: "big", text: C.n ? `${C.hits} of ${C.n} correct` : "No trials yet" }, box);
+  h("span", { class: "vs", text: "Press “Run a trial”, keep your eyes on the fixation dot, then answer. The count restarts when the report changes." }, box);
+}
+function syncMode2() {
+  const cued = C.mode === "cued";
+  $("cueGroup2").hidden = !cued;
+  $("respLbl2").textContent = cued ? "Your answer: the cued tilt was the…" : "Your answer: the minority was…";
+  $("ans2a").textContent = cued ? "Majority" : "╲ Left tilt"; $("ans2b").textContent = cued ? "Minority" : "╱ Right tilt";
+}
+let syncCon2 = () => {};
+const syncHold2 = () => $("holdBtn2").setAttribute("aria-pressed", String(C.hold));
+const later2 = (fn, ms) => { C.timers.push(setTimeout(fn, ms)); };
+function stopTrial2() { C.timers.forEach(clearTimeout); C.timers = []; if (C.iv) clearInterval(C.iv); C.iv = null; C.phase = "idle"; C.con = ADAPT; C.gph = 0; $("ans2a").disabled = $("ans2b").disabled = true; $("trialBtn2").disabled = false; syncCon2(); }
+function runTrial2() {
+  stopTrial2(); C.hold = false; syncHold2();
+  C.minor = Math.random() < 0.5 ? 45 : 135; C.trialCon = CON[Math.floor(Math.random() * CON.length)]; C.seed = Math.floor(Math.random() * 1e9);
+  C.phase = "cue"; $("trialBtn2").disabled = true; drawCentral();
+  later2(() => { let tick = 0; C.phase = "stim"; C.con = C.trialCon; syncCon2(); drawCentral();
+    C.iv = setInterval(() => { tick++; C.gph = Math.random() * 2 * Math.PI; if (tick % 5 === 0) C.seed = (C.seed * 16807 + 11) % 2147483647; drawCentral(); }, 100); }, CUE_S * 1000);
+  later2(() => { clearInterval(C.iv); C.iv = null; C.phase = "resp"; C.con = ADAPT; C.gph = 0; syncCon2(); $("ans2a").disabled = $("ans2b").disabled = false; drawCentral(); }, (CUE_S + TRIAL_S) * 1000);
+}
+function answer2(first) {
+  if (C.phase !== "resp") return;
+  C.fb = C.mode === "cued" ? first === (C.minor !== C.cue) : (first ? 135 : 45) === C.minor;
+  C.n++; if (C.fb) C.hits++; C.phase = "fb"; $("ans2a").disabled = $("ans2b").disabled = true; renderScore2(); drawCentral();
+  later2(() => { C.phase = "idle"; $("trialBtn2").disabled = false; drawCentral(); }, 1800);
+}
+$("trialBtn2").addEventListener("click", runTrial2);
+$("holdBtn2").addEventListener("click", () => { stopTrial2(); C.hold = !C.hold; syncHold2(); drawCentral(); });
+$("zoomBtn2").addEventListener("click", () => { C.zoom = !C.zoom; $("zoomBtn2").setAttribute("aria-pressed", String(C.zoom)); drawCentral(); });
+$("ans2a").addEventListener("click", () => answer2(true)); $("ans2b").addEventListener("click", () => answer2(false));
+pills("modeRow2", [{ label: "Which tilt is the minority?", value: "free" }, { label: "Cued tilt: majority or minority?", value: "cued" }], () => C.mode, v => { stopTrial2(); C.mode = v; C.n = C.hits = 0; syncMode2(); renderScore2(); drawCentral(); });
+pills("cueRow2", [{ label: "Attend 45° · probe matched", value: 45 }, { label: "Attend 135° · probe mismatched", value: 135 }], () => C.cue, v => { C.cue = v; drawCentral(); });
+pills("loadRow2", LOADS.map((l, i) => ({ label: `${l.name} ${Math.round((0.5 - l.d) * 100)}%`, value: i })), () => C.load, v => { C.load = v; drawCentral(); });
+syncCon2 = pills("conRow2", CON.map(c => ({ label: c === ADAPT ? `${c}% adapter` : conLabel(c), value: c })), () => C.con, v => { C.con = v; drawCentral(); });
+
 // ================= 03 · run timeline, trial strip, budget =================
 function schedule() {
   const R = rng(20261123), conds = [];
@@ -527,9 +669,11 @@ const isDark = () => document.documentElement.dataset.theme === "dark" || (!docu
 const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "Light" : "Dark"; };
 themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncThemeBtn(); renderAll(); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { syncThemeBtn(); renderAll(); });
-addEventListener("resize", drawStim);
+addEventListener("resize", () => { drawStim(); drawCentral(); });
 if (QS.get("load")) S.load = Math.max(0, Math.min(2, +QS.get("load") || 0));
-syncThemeBtn(); drawStim(); renderScore(); renderAll();
+$("zoomBtn2").setAttribute("aria-pressed", String(C.zoom));
+syncThemeBtn(); drawStim(); renderScore(); syncMode2(); drawCentral(); renderScore2(); renderAll();
+if (QS.get("ctrial") === "1") { runTrial2(); setInterval(() => { if (C.phase === "resp") answer2(C.mode === "cued" ? C.minor !== C.cue : C.minor === 135); }, 300); }   // self-test hook
 if (QS.get("trial") === "1") { runTrial(); setInterval(() => { if (S.phase === "resp") answer(S.major); }, 300); }   // self-test hook
 })();
 </script>
