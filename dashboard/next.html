@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upstairs / Downstairs: what we should do</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.screen.wide { aspect-ratio: 2 / 1; }
+.side-labels { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; font-family: var(--ui); font-size: 12.5px; color: var(--text-secondary); }
+.side-labels div { border-top: 3px solid var(--rule); padding-top: 6px; }
+.side-labels b { display: block; color: var(--text-primary); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.resp-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.resp-pair button { font-family: var(--display); font-size: 17px; font-weight: 800; padding: 10px 8px; border: 3px solid var(--rule); border-radius: 6px; cursor: pointer; box-shadow: 3px 3px 0 var(--rule); background: var(--surface-1); color: var(--text-primary); }
+.resp-pair button:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--rule); }
+.resp-pair button:disabled { opacity: .35; cursor: not-allowed; }
+.stage.two { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+.hyp-note { font-size: 16px; color: var(--text-secondary); max-width: 860px; margin: 6px 0 4px; min-height: 3em; }
+.hyp-note b { color: var(--text-primary); }
+.schematic { font-family: var(--ui); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin: 4px 0 0; }
+.budget { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 12px; }
+.budget .tile:first-child { padding-left: 0; }
+.plain { font-size: 16.5px; color: var(--text-secondary); max-width: 860px; }
+.plain li { margin-bottom: 8px; } .plain b { color: var(--text-primary); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 36px; }
+.refs { font-size: 14.5px; color: var(--text-secondary); padding-left: 18px; } .refs li { margin-bottom: 6px; }
+@media (max-width: 900px) { .stage.two, .two-col { grid-template-columns: 1fr; } .budget { grid-template-columns: 1fr 1fr; } .budget .tile:nth-child(3) { border-left: 0; padding-left: 0; } }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+  <header class="masthead">
+    <div class="mast-strip">
+      <span>Central load × attention</span><span>Proposed experiment</span><span>Drafted November 2026</span><span class="grow"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Dark</button>
+    </div>
+    <nav class="study-tabs" aria-label="Studies">
+      <a href="index.html">fMRI<span>central load × attention networks</span></a>
+      <a href="maps.html">Brain maps<span>ROIs and load effects on the inflated cortex</span></a>
+      <a href="psychophysics.html">Psychophysics<span>dual task: central load × peripheral tilt</span></a>
+      <a href="next.html" aria-current="page">What we should do<span>proposed hemifield design</span></a>
+    </nav>
+    <h1 class="wordmark"><span class="up">Upstairs</span><span class="slash">/</span><span class="down">Downstairs</span></h1>
+    <div class="mast-row">
+      <div>
+        <p class="tagline">What should the next experiment be?</p>
+        <p class="sub">A design sketch, not data. The task moves into one hemifield and becomes a judgment about orientation. The other hemifield holds an ignored stimulus that shares the task's features, and its contrast-response function is measured at each load. Every number on this page is a placeholder to be argued over.</p>
+      </div>
+      <ul class="cover-lines" aria-label="Contents">
+        <li><a href="#why"><span class="cl-n">01</span><span class="cl-t">What the current design cannot tell us</span></a></li>
+        <li><a href="#display"><span class="cl-n">02</span><span class="cl-t">The display, interactive</span></a></li>
+        <li><a href="#run"><span class="cl-n">03</span><span class="cl-t">One run, and the trial budget</span></a></li>
+        <li><a href="#predict"><span class="cl-n">04</span><span class="cl-t">What each account predicts</span></a></li>
+        <li><a href="#open"><span class="cl-n">06</span><span class="cl-t">Decisions still open</span></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="headline" aria-label="The proposal in brief">
+    <div class="hl-left">
+      <span class="kicker">Proposal</span>
+      <h2>Put the task in one hemifield and measure an ignored, feature-matched probe in the other</h2>
+      <p class="caveat">Modelled on the hemifield design of Foster &amp; Ling (2022). Stimulus sizes, contrasts, timings and load levels shown here are illustrative and have not been checked against that paper's Methods.</p>
+    </div>
+    <ol class="takeaways">
+      <li><a href="#display"><span><b>Task side: a field of gaborlets at 45° and 135°.</b> The observer judges whether the cued orientation is in the majority, the orientation analogue of the red/blue numerosity task. Load is the mixture: the closer to 50/50, the harder.</span></a></li>
+      <li><a href="#display"><span><b>Probe side: the same elements, one orientation, never relevant.</b> Its orientation either matches the cued orientation or is orthogonal to it, and its contrast varies from event to event.</span></a></li>
+      <li><a href="#predict"><span><b>One probe, two measurements.</b> The mismatched probe gives the cost of load on an ignored stimulus. Match minus mismatch gives the spread of feature-based attention.</span></a></li>
+      <li><a href="#predict"><span><b>The two accounts predict opposite signs.</b> Load theory predicts a smaller probe response as load rises; a stronger feature template predicts a larger match advantage.</span></a></li>
+      <li><a href="#why"><span><b>The stimulus in the measured cortex never changes with load.</b> Load order is randomized within a run, and the hardest level is titrated to stay above floor.</span></a></li>
+    </ol>
+  </section>
+
+  <div class="part-head"><span class="kicker">Part one</span><h2 class="part-title">The reason</h2><p>The existing study answers whether the attention network scales with load. It is poorly placed to say what that does to visual cortex.</p></div>
+
+  <section class="card" id="why">
+    <div class="sec-head"><span class="sec-num">01</span><div><span class="kicker">Motivation</span><h2>What the current design cannot tell us</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> In the existing task the ignored stimulus shares nothing with the attended one, so the only effect it can show is a withdrawal of resources, and that effect is small. A design in which the ignored stimulus carries the attended feature can measure withdrawal and feature-based spread separately.</div>
+    <div class="two-col" style="margin-top:14px">
+      <ul class="plain">
+        <li><b>The noise annulus has no attended feature.</b> The central task is a color judgment; the peripheral noise carries no color signal. Feature-based attention has no route to the periphery, so the design tests only spatial or resource withdrawal.</li>
+        <li><b>The measured effect is modest and spatially broad.</b> On the <a href="index.html">fMRI tab</a>, peripheral responses fall by about 0.4% at 6–9°, extending beyond the annulus, and IPS activity does not trade off against the periphery from run to run.</li>
+        <li><b>Load changes the stimulus at fixation.</b> The red/blue ratio is both the difficulty manipulation and a change in the display, so foveal load effects cannot be attributed to attention alone.</li>
+      </ul>
+      <ul class="plain">
+        <li><b>One load per run, in a fixed order.</b> Load was confounded with run position and had to be separated after the fact.</li>
+        <li><b>The hardest loads sit near floor.</b> Responses dip at the 46% ratio in both the fMRI and the <a href="psychophysics.html">psychophysics</a>, which is difficult to distinguish from disengagement.</li>
+        <li><b>One number per load.</b> A single response amplitude cannot distinguish a baseline shift from a change in contrast gain or response gain. A contrast-response function can.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="part-head"><span class="kicker">Part two</span><h2 class="part-title">The design</h2><p>Attend one hemifield, measure the other.</p></div>
+
+  <section class="card" id="display">
+    <div class="sec-head"><span class="sec-num">02</span><div><span class="kicker">Paradigm</span><h2>A gaborlet majority task on one side, an ignored probe on the other</h2></div></div>
+    <div class="story-intro">
+      <p>On the task side, a field of small Gabor patches is redrawn several times a second. Each patch is tilted 45° or 135°. A line at fixation cues one orientation for the block, and the observer tracks whether that orientation is currently in the majority, reporting each time it changes. Load is set by the mixture: 30/70 is easy, 46/54 is hard. Because the cued share is balanced around 50%, the average display is the same at every load.</p>
+      <p>On the probe side, the same patches, at the same spatial frequency, all share one orientation. The probe is never a target. When the cued orientation equals the probe orientation the probe is <i>matched</i>; when the observer attends the other orientation it is <i>mismatched</i>. The probe sits at a steady adapting contrast and steps briefly to a different contrast every few seconds, so that a full contrast-response function is measured for each attention condition and load.</p>
+    </div>
+    <div class="stage two">
+      <div>
+        <div class="screen wide"><canvas id="stim" role="img" aria-label="Schematic display: a field of gaborlets tilted 45 or 135 degrees in the task hemifield and a field of gaborlets of one orientation in the probe hemifield, with a cue line at fixation"></canvas><span class="bezel">Schematic · 24° × 12°</span></div>
+        <div class="side-labels" id="sideLabels"></div>
+        <p class="status" id="status"></p>
+      </div>
+      <div>
+        <div class="ctl-group"><span class="lbl">Cued orientation (probe is 45°)</span><div class="ctl-row" id="cueRow" role="group" aria-label="Cued orientation"></div></div>
+        <div class="ctl-group"><span class="lbl">Load (mixture on the task side)</span><div class="ctl-row" id="loadRow" role="group" aria-label="Load"></div></div>
+        <div class="ctl-group"><span class="lbl">Probe contrast</span><div class="ctl-row" id="conRow" role="group" aria-label="Probe contrast"></div></div>
+        <div class="ctl-group"><span class="lbl">Display</span>
+          <div class="ctl-row">
+            <button type="button" class="pill big" id="playBtn" aria-pressed="false">Play a block</button>
+            <button type="button" class="pill" id="sideBtn">Swap sides</button>
+          </div>
+          <p class="flicker-note">Playing redraws the fields three times a second, switches the majority at unpredictable times, and steps the probe contrast every few seconds.</p>
+        </div>
+        <div class="ctl-group"><span class="lbl">Your answer: the cued orientation is now the…</span>
+          <div class="resp-pair"><button type="button" id="ansMaj" disabled>Majority</button><button type="button" id="ansMin" disabled>Minority</button></div>
+          <div class="scorecard" id="score" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="run">
+    <div class="sec-head"><span class="sec-num">03</span><div><span class="kicker">Schedule</span><h2>One run: load and cue change by block, probe contrast by event</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> Attention condition and load are blocked and shuffled within every run, so neither is tied to run position. Probe contrast is fast event-related: brief steps away from the adapting contrast at jittered intervals, with no-change events as the baseline.</div>
+    <div id="timeline" style="margin-top:14px;overflow-x:auto"></div>
+    <div class="legend" id="lgTimeline"></div>
+    <h3>Trial budget</h3>
+    <div class="ctl-row" style="gap:18px 26px">
+      <div class="ctl-group"><span class="lbl">Load levels</span><div class="ctl-row" id="bLoad" role="group" aria-label="Load levels"></div></div>
+      <div class="ctl-group"><span class="lbl">Probe contrasts</span><div class="ctl-row" id="bCon" role="group" aria-label="Probe contrasts"></div></div>
+      <div class="ctl-group"><span class="lbl">Mean time between events</span><div class="ctl-row" id="bSoa" role="group" aria-label="Mean time between events"></div></div>
+      <div class="ctl-group"><span class="lbl">Runs per session</span><div class="ctl-row" id="bRuns" role="group" aria-label="Runs per session"></div></div>
+      <div class="ctl-group"><span class="lbl">Sessions</span><div class="ctl-row" id="bSess" role="group" aria-label="Sessions"></div></div>
+    </div>
+    <div class="budget" id="budget"></div>
+    <details class="method"><summary>How the budget is counted</summary>
+      <p>A run is twelve 24-s blocks after a 12-s lead-in (5 minutes). Each block is one combination of cued orientation (matched or mismatched to the probe) and load, and every combination appears equally often. Probe events fall at the chosen mean spacing throughout the task blocks and are divided equally among the probe contrasts, one of which is a no-change event. "Events per cell" is the number of events at one probe contrast, in one attention condition, at one load. Cells with fewer than about 20 events will give noisy contrast-response fits for single subjects.</p>
+    </details>
+  </section>
+
+  <div class="part-head"><span class="kicker">Part three</span><h2 class="part-title">The predictions</h2><p>What the probe's contrast-response function should do under each account.</p></div>
+
+  <section class="card" id="predict">
+    <div class="sec-head"><span class="sec-num">04</span><div><span class="kicker">Downstairs</span><h2>Load cost and feature spread come apart in the same probe</h2></div></div>
+    <div class="tldr"><b>Takeaway</b> A load cost moves the matched and mismatched curves together. A change in feature-based spread moves them apart. The two can be read independently, which the current single-amplitude design does not allow.</div>
+    <div class="ctl-group" style="margin-top:14px"><span class="lbl">Account</span><div class="ctl-row" id="hypRow" role="group" aria-label="Account"></div></div>
+    <div class="ctl-group"><span class="lbl">Form of the load cost</span><div class="ctl-row" id="formRow" role="group" aria-label="Form of the load cost"></div></div>
+    <p class="hyp-note" id="hypNote"></p>
+    <p class="schematic">Schematic predictions from a Naka–Rushton function · not data</p>
+    <div class="multiples three" id="crfPanels"></div>
+    <div class="legend" id="lgCrf"></div>
+    <h3>The two derived measures, by load</h3>
+    <div class="charts-2">
+      <div><p class="panel-title">Load cost</p><p class="panel-stat">Mismatched probe, mean across contrasts</p><div id="chCost"></div></div>
+      <div><p class="panel-title">Feature-based spread</p><p class="panel-stat">Matched minus mismatched probe, mean across contrasts</p><div id="chSpread"></div></div>
+    </div>
+    <div class="legend" id="lgDerived"></div>
+    <details class="method"><summary>Values plotted for the selected account</summary><div id="crfTable"></div></details>
+    <details class="method"><summary>How the schematic is built</summary>
+      <p>Each curve is R(c) = b + R<sub>max</sub>·c²/(c² + c<sub>50</sub>²), with c<sub>50</sub> = 20% and R<sub>max</sub> = 1 for the mismatched probe at easy load. Matching the cued orientation lowers c<sub>50</sub> (a contrast-gain increase, the form Foster &amp; Ling reported in V1–V3). A load cost is applied to both curves as a lower R<sub>max</sub>, a higher c<sub>50</sub>, or a lower baseline, depending on the selected form. The sizes of these changes are arbitrary and chosen for legibility.</p>
+    </details>
+  </section>
+
+  <section class="card" id="upstairs">
+    <div class="sec-head"><span class="sec-num">05</span><div><span class="kicker">Upstairs</span><h2>What the same experiment asks of IPS</h2></div></div>
+    <div class="two-col">
+      <ul class="plain">
+        <li><b>Does IPS amplitude follow load when the task is an orientation judgment?</b> In the existing data IPS rises with load in a color task. The same function here would show it is not specific to that stimulus.</li>
+        <li><b>Does the feature signal in IPS strengthen with load?</b> The cued orientation can be decoded from IPS activity patterns at each load. Amplitude and decoding need not move together, and it is decoding that should predict the size of the match advantage in V1–V3.</li>
+      </ul>
+      <ul class="plain">
+        <li><b>Does the IPS asymmetry follow the task side?</b> The existing load effect is larger in right IPS. With the task in one hemifield, and the side alternated across sessions, a lateralized control signal can be separated from a fixed right-hemisphere bias.</li>
+        <li><b>Does IPS predict the probe, block by block?</b> With load shuffled within runs, block-to-block coupling between IPS and the probe response is free of run-order effects by design.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card" id="open">
+    <div class="sec-head"><span class="sec-num">06</span><div><span class="kicker">To decide</span><h2>Decisions still open</h2></div></div>
+    <div class="two-col">
+      <ul class="plain">
+        <li><b>What "match" means.</b> A plain majority judgment attends both orientations. The sketch above cues one orientation per block so that match and mismatch are defined. An alternative is a third probe orientation (0° or 90°) that is in neither set.</li>
+        <li><b>Load levels.</b> Three levels are proposed in place of seven, with the hardest titrated per subject to roughly 70–75% correct so that it is not confounded with giving up.</li>
+        <li><b>Task side.</b> Fixed within a session so that the probe location is never somewhere the observer has recently attended; alternated across sessions.</li>
+        <li><b>Probe form.</b> A gaborlet field mirrors the task side and matches it in spatial frequency. A single grating patch would be closer to Foster &amp; Ling and gives a cleaner retinotopic footprint.</li>
+      </ul>
+      <ul class="plain">
+        <li><b>Adaptation parameters.</b> The adapting contrast, the probe contrasts, the event duration and the top-up scheme should be taken from Foster &amp; Ling's Methods. The values shown here (16% adapter; 2–96% probes; 1-s events) are stand-ins.</li>
+        <li><b>Surround effects on the task side.</b> A 30/70 field is more uniform in orientation than a 46/54 field, so iso-orientation surround suppression differs with load there. This does not reach the probe hemisphere, which is why the probe, not the task field, is the measurement.</li>
+        <li><b>Fine versus coarse discrimination.</b> Scolari et al. (2012) found that hard fine discriminations move gain to off-target orientations. Keeping the judgment at 45° versus 135° at every load avoids this.</li>
+        <li><b>Fixation.</b> A lateralized task pulls gaze toward the task side. Eye tracking in the scanner is required, and trials with gaze shifts should be excluded.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card notes" id="appendix">
+    <div class="sec-head"><span class="sec-num">§</span><div><span class="kicker">Appendix</span><h2>Prior work this draws on</h2></div></div>
+    <p>From PubMed abstracts. No study was found that varies load over several levels and measures feature-based spread to an ignored location in visual cortex; the search was brief, not systematic.</p>
+    <ul class="refs">
+      <li>Foster &amp; Ling (2022). Feature-based attention multiplicatively scales the fMRI-BOLD contrast-response function. <i>J Neurosci</i>. Probe in one hemifield, attention to the probe orientation or the orthogonal one in the other; contrast gain in V1–V3, added response gain in V2–V3. <a href="https://doi.org/10.1523/JNEUROSCI.0513-22.2022">doi:10.1523/JNEUROSCI.0513-22.2022</a></li>
+      <li>Taya, Adams &amp; Graf (2009). The fate of task-irrelevant visual motion: perceptual load versus feature-based attention. <i>J Vis</i>. Load reduced irrelevant-motion processing only when it was spatially separated from the attended location. <a href="https://doi.org/10.1167/9.12.12">doi:10.1167/9.12.12</a></li>
+      <li>Bartsch et al. (2018). Enhanced spatial focusing increases feature-based selection in unattended locations. <i>Sci Rep</i>. Harder target discrimination did not reduce the global feature-based response. <a href="https://doi.org/10.1038/s41598-018-34424-5">doi:10.1038/s41598-018-34424-5</a></li>
+      <li>Scolari, Byers &amp; Serences (2012). Optimal deployment of attentional gain during fine discriminations. <i>J Neurosci</i>. <a href="https://doi.org/10.1523/JNEUROSCI.5558-11.2012">doi:10.1523/JNEUROSCI.5558-11.2012</a></li>
+      <li>Spitzer, Desimone &amp; Moran (1988). Increased attention enhances both behavioral and neuronal performance. <i>Science</i>. <a href="https://doi.org/10.1126/science.3353728">doi:10.1126/science.3353728</a></li>
+      <li>Liu, Hospadaruk, Zhu &amp; Gardner (2011). Feature-specific attentional priority signals in human cortex. <i>J Neurosci</i>. The attended feature can be decoded from IPS1–IPS4 and FEF. <a href="https://doi.org/10.1523/JNEUROSCI.5745-10.2011">doi:10.1523/JNEUROSCI.5745-10.2011</a></li>
+    </ul>
+  </section>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+</div>
+
+<script>
+(() => {
+"use strict";
+const NS = "http://www.w3.org/2000/svg";
+const qTheme = new URLSearchParams(location.search).get("theme");
+if (qTheme === "light" || qTheme === "dark") document.documentElement.dataset.theme = qTheme;
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(n).trim();
+const el = (tag, a = {}, p) => { const n = document.createElementNS(NS, tag); for (const k in a) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
+const txt = (p, x, y, s, a = {}) => { const t = el("text", { x, y, ...a }, p); t.textContent = s; return t; };
+const h = (tag, props = {}, p) => { const n = document.createElement(tag); for (const k in props) { if (k === "text") n.textContent = props[k]; else n.setAttribute(k, props[k]); } if (p) p.appendChild(n); return n; };
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function pills(id, items, get, set) {
+  const box = $(id); box.replaceChildren();
+  for (const it of items) { const b = h("button", { type: "button", class: "pill", text: it.label, "aria-pressed": String(get() === it.value) }, box); b.addEventListener("click", () => { set(it.value); for (const c of box.children) c.setAttribute("aria-pressed", "false"); b.setAttribute("aria-pressed", "true"); }); }
+  return () => { [...box.children].forEach((c, i) => c.setAttribute("aria-pressed", String(get() === items[i].value))); };
+}
+const tip = $("tip");
+function showTip(e, head, rows) {
+  tip.replaceChildren(); h("div", { class: "t-head", text: head }, tip);
+  for (const r of rows) { const row = h("div", { class: "t-row" }, tip), k = h("span", { class: "k" }, row); if (r.color) { const sw = h("i", { class: "key-line" }, k); sw.style.background = r.color; } k.appendChild(document.createTextNode(r.label)); h("strong", { text: r.value }, row); }
+  tip.style.display = "block";
+  let x = e.clientX + 14, y = e.clientY + 14; if (x + tip.offsetWidth > innerWidth - 8) x = e.clientX - tip.offsetWidth - 14; if (y + tip.offsetHeight > innerHeight - 8) y = e.clientY - tip.offsetHeight - 14;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => { tip.style.display = "none"; };
+function legend(id, items) { const b = $(id); b.replaceChildren(); for (const it of items) { const s = h("span", {}, b), k = h("i", { class: it.kind || "key-line" }, s); if (it.color) k.style.background = it.color; if (it.opacity) k.style.opacity = it.opacity; if (it.dash) { k.style.background = "none"; k.style.borderTop = `2px dashed ${it.color}`; k.style.height = "0"; } s.appendChild(document.createTextNode(it.label)); } }
+function table(id, head, rows) { const c = $(id); c.replaceChildren(); const t = h("table", {}, c), tr = h("tr", {}, h("thead", {}, t)); head.forEach(x => h("th", { text: x }, tr)); const tb = h("tbody", {}, t); rows.forEach(r => { const row = h("tr", {}, tb); r.forEach(x => h("td", { text: x }, row)); }); }
+
+// ================= shared design constants (all placeholders) =================
+const LOADS = [{ key: "easy", label: "Easy 30/70", name: "Easy", d: 0.20 }, { key: "med", label: "Medium 42/58", name: "Medium", d: 0.08 }, { key: "hard", label: "Hard 46/54", name: "Hard", d: 0.04 }];
+const ADAPT = 16, CON = [2, 4, 8, 16, 32, 64, 96];
+const PROBE_ORI = 45;
+
+// ================= 02 · display =================
+const S = { cue: 45, load: 1, con: ADAPT, taskLeft: true, playing: false, major: true, seed: 7, hits: 0, errs: 0, miss: 0, fa: 0, win: null, nextFlip: 0, nextEvent: 0, eventEnd: 0, lastDraw: 0 };
+const cv = $("stim"), ctx = cv.getContext("2d");
+const texCache = new Map();
+function gabor(ori, contrast, size, period, sigma) {
+  const key = [ori, contrast, size].join("|"); if (texCache.has(key)) return texCache.get(key);
+  const c = document.createElement("canvas"); c.width = c.height = size;
+  const g = c.getContext("2d"), im = g.createImageData(size, size), a = ori * Math.PI / 180, cx = (size - 1) / 2, sn = Math.sin(a), cs = Math.cos(a);
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const dx = x - cx, dy = y - cx, u = dx * sn + dy * cs, env = Math.exp(-(dx * dx + dy * dy) / (2 * sigma * sigma));
+    const v = 127.5 + 127.5 * contrast * Math.cos(2 * Math.PI * u / period), i = (y * size + x) * 4;
+    im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = env < 0.02 ? 0 : env * 255;
+  }
+  g.putImageData(im, 0, 0); texCache.set(key, c); return c;
+}
+function drawStim() {
+  const dpr = Math.min(devicePixelRatio || 1, 2), w = cv.clientWidth, hgt = cv.clientHeight;
+  if (!w) return;
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(hgt * dpr); texCache.clear(); }
+  const W = cv.width, H = cv.height, ppd = W / 24, R = rng(S.seed);
+  ctx.fillStyle = "#7f7f7f"; ctx.fillRect(0, 0, W, H);
+  const sigma = 0.17 * ppd, period = ppd / 2.5, size = Math.max(9, Math.round(sigma * 6) | 1), step = 0.74, rad = 4.3, cxDeg = 6.2;
+  const cells = [];
+  for (let gy = -rad; gy <= rad; gy += step) for (let gx = -rad; gx <= rad; gx += step) if (gx * gx + gy * gy <= rad * rad) cells.push([gx, gy]);
+  const n = cells.length, share = 0.5 + (S.major ? 1 : -1) * LOADS[S.load].d, nCued = Math.round(share * n);
+  const order = cells.map((_, i) => i); for (let i = n - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  const isCued = new Array(n).fill(false); for (let i = 0; i < nCued; i++) isCued[order[i]] = true;
+  const other = S.cue === 45 ? 135 : 45, sgnTask = S.taskLeft ? -1 : 1;
+  for (let i = 0; i < n; i++) {
+    const jx = (R() - 0.5) * 0.3, jy = (R() - 0.5) * 0.3;
+    const tx = W / 2 + (sgnTask * cxDeg + cells[i][0] + jx) * ppd, ty = H / 2 + (cells[i][1] + jy) * ppd;
+    ctx.drawImage(gabor(isCued[i] ? S.cue : other, 0.8, size, period, sigma), Math.round(tx - size / 2), Math.round(ty - size / 2));
+    if (S.con > 0) { const px = W / 2 + (-sgnTask * cxDeg + cells[i][0] + (R() - 0.5) * 0.3) * ppd, py = H / 2 + (cells[i][1] + (R() - 0.5) * 0.3) * ppd;
+      ctx.drawImage(gabor(PROBE_ORI, S.con / 100, size, period, sigma), Math.round(px - size / 2), Math.round(py - size / 2)); }
+  }
+  // fixation and cue line
+  const a = S.cue * Math.PI / 180, L = 0.45 * ppd;
+  ctx.strokeStyle = "#ffffff"; ctx.lineWidth = Math.max(2, 0.07 * ppd); ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(W / 2 - L * Math.cos(a), H / 2 + L * Math.sin(a)); ctx.lineTo(W / 2 + L * Math.cos(a), H / 2 - L * Math.sin(a)); ctx.stroke();
+  ctx.fillStyle = "#000000"; ctx.beginPath(); ctx.arc(W / 2, H / 2, Math.max(2, 0.09 * ppd), 0, 2 * Math.PI); ctx.fill();
+  S.nElem = n; S.nCued = nCued;
+  renderStatus();
+}
+function renderStatus() {
+  const match = S.cue === PROBE_ORI, sl = $("sideLabels"); sl.replaceChildren();
+  const task = h("div", {}), probe = h("div", {});
+  h("b", { text: "Task side · attended" }, task); task.appendChild(document.createTextNode(`${S.nElem} gaborlets, 45° and 135° mixed; cue: attend ${S.cue}°`));
+  h("b", { text: "Probe side · ignored" }, probe); probe.appendChild(document.createTextNode(`All ${PROBE_ORI}°, same spatial frequency; ${match ? "matched to" : "mismatched with"} the cued orientation`));
+  sl.append(...(S.taskLeft ? [task, probe] : [probe, task]));
+  const ev = S.con === ADAPT ? `adapting contrast (${ADAPT}%)` : `contrast event (${S.con}%)`;
+  $("status").textContent = `Cued ${S.cue}° elements: ${S.nCued} of ${S.nElem} (${S.major ? "majority" : "minority"}) · probe at ${ev}`;
+}
+function renderScore() {
+  const box = $("score"); box.replaceChildren();
+  const n = S.hits + S.errs + S.miss;
+  h("span", { class: "big", text: n ? `${S.hits} of ${n} changes` : "No changes yet" }, box);
+  h("span", { class: "vs", text: S.playing ? "Report each change of the cued orientation's status within 2.5 s." : "Press “Play a block”, then report each time the cued orientation becomes the majority or the minority." }, box);
+  if (n || S.fa) h("span", { class: "vs", text: `Wrong answer ${S.errs} · missed ${S.miss} · presses with no change ${S.fa}` }, box);
+}
+let syncCon = () => {};
+function tick(now) {
+  if (!S.playing) return;
+  if (now >= S.nextFlip) { if (S.win) { S.miss++; } S.major = !S.major; S.win = { until: now + 2500, major: S.major }; S.nextFlip = now + 3200 + Math.random() * 3200; renderScore(); }
+  if (S.win && now > S.win.until) { S.miss++; S.win = null; renderScore(); }
+  if (S.eventEnd && now >= S.eventEnd) { S.con = ADAPT; S.eventEnd = 0; syncCon(); }
+  if (now >= S.nextEvent) { const lv = CON.filter(c => c !== ADAPT); S.con = lv[Math.floor(Math.random() * lv.length)]; S.eventEnd = now + 1000; S.nextEvent = now + 3000 + Math.random() * 2000; syncCon(); }
+  if (now - S.lastDraw >= 333) { S.seed = (S.seed * 16807 + 11) % 2147483647; S.lastDraw = now; drawStim(); }
+  requestAnimationFrame(tick);
+}
+function setPlaying(p) {
+  S.playing = p; const b = $("playBtn"); b.setAttribute("aria-pressed", String(p)); b.textContent = p ? "Pause" : "Play a block";
+  $("ansMaj").disabled = $("ansMin").disabled = !p;
+  if (p) { const now = performance.now(); S.nextFlip = now + 2500 + Math.random() * 2500; S.nextEvent = now + 1500; S.win = null; requestAnimationFrame(tick); }
+  else { S.con = ADAPT; S.eventEnd = 0; syncCon(); drawStim(); }
+  renderScore();
+}
+function answer(major) { if (!S.playing) return; if (S.win) { if (S.win.major === major) S.hits++; else S.errs++; S.win = null; } else S.fa++; renderScore(); }
+$("playBtn").addEventListener("click", () => setPlaying(!S.playing));
+$("sideBtn").addEventListener("click", () => { S.taskLeft = !S.taskLeft; drawStim(); });
+$("ansMaj").addEventListener("click", () => answer(true)); $("ansMin").addEventListener("click", () => answer(false));
+pills("cueRow", [{ label: "Attend 45° · probe matched", value: 45 }, { label: "Attend 135° · probe mismatched", value: 135 }], () => S.cue, v => { S.cue = v; drawStim(); });
+pills("loadRow", LOADS.map((l, i) => ({ label: l.label, value: i })), () => S.load, v => { S.load = v; drawStim(); });
+syncCon = pills("conRow", [{ label: "Blank", value: 0 }, ...CON.map(c => ({ label: c === ADAPT ? `${c}% adapter` : `${c}%`, value: c }))], () => S.con, v => { S.con = v; if (S.playing) { S.eventEnd = performance.now() + 1000; S.nextEvent = S.eventEnd + 2500; } drawStim(); });
+
+// ================= 03 · run timeline + budget =================
+function schedule() {
+  const R = rng(20261123), cells = [];
+  for (const m of [true, false]) for (let l = 0; l < 3; l++) cells.push({ match: m, load: l }, { match: m, load: l });
+  for (let i = cells.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [cells[i], cells[j]] = [cells[j], cells[i]]; }
+  const blocks = cells.map((c, i) => ({ ...c, t0: 12 + i * 24, t1: 36 + i * 24 })), events = [];
+  let t = 14;
+  while (t < 298) { events.push({ t, c: CON[Math.floor(R() * CON.length)] }); t += 3 + R() * 2; }
+  return { blocks, events };
+}
+function renderTimeline() {
+  const box = $("timeline"); box.replaceChildren();
+  const { blocks, events } = schedule();
+  const W = 1100, M = { l: 132, r: 18 }, iw = W - M.l - M.r, H = 280, X = t => M.l + t / 300 * iw;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Schedule of one five-minute run", style: "min-width:760px;max-width:none;width:100%" }, box);
+  const c1 = css("--series-1"), c2 = css("--series-2"), op = [0.3, 0.58, 0.9];
+  // row 1: blocks
+  for (const b of blocks) {
+    const g = el("g", { tabindex: 0 }, svg);
+    el("rect", { x: X(b.t0) + 1, y: 16, width: X(b.t1) - X(b.t0) - 2, height: 40, rx: 3, fill: b.match ? c1 : c2, "fill-opacity": op[b.load] }, g);
+    txt(svg, (X(b.t0) + X(b.t1)) / 2, 72, `${b.match ? 45 : 135}°`, { "text-anchor": "middle", "font-size": 12.5 });
+    txt(svg, (X(b.t0) + X(b.t1)) / 2, 87, LOADS[b.load].name.toLowerCase(), { "text-anchor": "middle", "font-size": 12 });
+    const tipFn = e => showTip(e, `Block at ${b.t0}–${b.t1} s`, [{ label: "Cued orientation", value: `${b.match ? 45 : 135}°` }, { label: "Probe", value: b.match ? "matched" : "mismatched" }, { label: "Load", value: LOADS[b.load].label }]);
+    g.addEventListener("pointermove", tipFn); g.addEventListener("pointerleave", hideTip);
+  }
+  txt(svg, M.l - 12, 34, "Task side", { "text-anchor": "end", class: "axt" }); txt(svg, M.l - 12, 52, "cue · load", { "text-anchor": "end", "font-size": 12 });
+  // row 2: probe contrast (log scale about the adapter)
+  const y0 = 110, y1 = 222, Y = c => y1 - (Math.log2(c) - 1) / (Math.log2(96) - 1) * (y1 - y0);
+  for (const tv of [2, 16, 96]) { el("line", { x1: M.l, x2: M.l + iw, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }, svg); txt(svg, M.l - 12, Y(tv) + 4, tv + "%", { "text-anchor": "end" }); }
+  el("line", { x1: M.l, x2: M.l + iw, y1: Y(ADAPT), y2: Y(ADAPT), stroke: css("--text-secondary"), "stroke-width": 2 }, svg);
+  for (const e of events) {
+    if (e.c === ADAPT) { el("circle", { cx: X(e.t + 0.5), cy: Y(ADAPT), r: 3, fill: css("--surface-1"), stroke: css("--text-secondary"), "stroke-width": 1.5 }, svg); continue; }
+    const ya = Y(ADAPT), yc = Y(e.c), g = el("g", {}, svg);
+    el("rect", { x: X(e.t), y: Math.min(ya, yc), width: Math.max(2.5, X(e.t + 1) - X(e.t)), height: Math.abs(ya - yc), fill: css("--text-primary") }, g);
+    el("rect", { x: X(e.t) - 4, y: y0 - 4, width: 12, height: y1 - y0 + 8, fill: "transparent" }, g);
+    g.addEventListener("pointermove", ev => showTip(ev, `Probe event at ${e.t.toFixed(1)} s`, [{ label: "Contrast", value: e.c + "%" }, { label: "Duration", value: "1 s" }]));
+    g.addEventListener("pointerleave", hideTip);
+  }
+  const ym = (y0 + y1) / 2; txt(svg, 22, ym, "Probe contrast (%)", { "text-anchor": "middle", class: "axt", transform: `rotate(-90 22 ${ym})` });
+  // x axis
+  el("line", { x1: M.l, x2: M.l + iw, y1: 232, y2: 232, stroke: css("--axis") }, svg);
+  for (let t = 0; t <= 300; t += 30) { el("line", { x1: X(t), x2: X(t), y1: 232, y2: 237, stroke: css("--axis") }, svg); txt(svg, X(t), 252, String(t), { "text-anchor": "middle" }); }
+  txt(svg, M.l + iw / 2, H - 4, "Time in run (s)", { "text-anchor": "middle", class: "axt" });
+  legend("lgTimeline", [{ kind: "key-rect", color: c1, label: "Attend 45° (probe matched)" }, { kind: "key-rect", color: c2, label: "Attend 135° (probe mismatched)" }, { kind: "key-rect", color: css("--text-muted"), label: "Deeper fill = higher load" }, { kind: "key-rect", color: css("--text-primary"), label: "Probe contrast step, 1 s" }, { kind: "key-ring", label: "No-change event" }]);
+}
+const B = { load: 3, con: 7, soa: 4, runs: 10, sess: 2 };
+function renderBudget() {
+  const taskSec = 288, evRun = Math.floor(taskSec / B.soa), cells = 2 * B.load * B.con, perRun = evRun / cells, total = perRun * B.runs * B.sess, mins = B.runs * B.sess * 5;
+  const box = $("budget"); box.replaceChildren();
+  const tiles = [
+    { label: "Events per cell, whole experiment", value: total.toFixed(0), note: total < 20 ? "low for single-subject fits" : "per contrast × attention × load" },
+    { label: "Cells", value: String(cells), note: `2 attention × ${B.load} load × ${B.con} contrast` },
+    { label: "Probe events per run", value: String(evRun), note: `${perRun.toFixed(1)} per cell per run` },
+    { label: "Task scanning", value: `${mins} min`, note: `${B.runs} runs × ${B.sess} session${B.sess > 1 ? "s" : ""}, 5 min each` },
+  ];
+  for (const t of tiles) { const d = h("div", { class: "tile" }, box); h("div", { class: "label", text: t.label }, d); h("div", { class: "value", text: t.value }, d); h("div", { class: "note", text: t.note }, d); }
+}
+const opt = (arr, f = String) => arr.map(v => ({ label: f(v), value: v }));
+pills("bLoad", opt([2, 3]), () => B.load, v => { B.load = v; renderBudget(); });
+pills("bCon", opt([5, 7]), () => B.con, v => { B.con = v; renderBudget(); });
+pills("bSoa", opt([3, 4, 6], v => v + " s"), () => B.soa, v => { B.soa = v; renderBudget(); });
+pills("bRuns", opt([8, 10, 12]), () => B.runs, v => { B.runs = v; renderBudget(); });
+pills("bSess", opt([1, 2, 3]), () => B.sess, v => { B.sess = v; renderBudget(); });
+
+// ================= 04 · predictions =================
+const HYPS = [
+  { key: "null", label: "Load changes nothing", cost: 0, spread: [0.25, 0.25, 0.25], note: "<b>No effect of load on the ignored side.</b> The matched probe is boosted by a fixed amount at every load. This is what a strictly spatial reading of load, combined with an obligatory feature spread, would give." },
+  { key: "cost", label: "Load cost only", cost: 1, spread: [0.25, 0.25, 0.25], note: "<b>Load theory.</b> A harder task leaves less for anything ignored, so both curves fall together as load rises. The match advantage is unchanged." },
+  { key: "grow", label: "Spread grows with load", cost: 0, spread: [0.12, 0.25, 0.40], note: "<b>A stronger feature template.</b> A harder discrimination demands more feature gain, and that gain spreads. The mismatched curve stays put; the matched curve pulls away from it." },
+  { key: "shrink", label: "Spread shrinks with load", cost: 0, spread: [0.40, 0.25, 0.10], note: "<b>The spread is itself a resource.</b> Under high load the feature gain is confined to the task location, so the match advantage on the ignored side fades." },
+  { key: "both", label: "Cost and growing spread", cost: 1, spread: [0.12, 0.25, 0.40], note: "<b>Both mechanisms at once.</b> The curves fall together and separate from each other. In a single response amplitude these would partly cancel; here they are read from different contrasts of the same data." },
+];
+const FORMS = [{ value: "response", label: "Response gain" }, { value: "contrast", label: "Contrast gain" }, { value: "baseline", label: "Baseline shift" }];
+const P = { hyp: "both", form: "response" };
+function crf(c, hyp, form, li, match) {
+  let rmax = 1, c50 = 20, b = 0.12; const k = hyp.cost * [0, 0.5, 1][li];
+  if (form === "response") rmax *= 1 - 0.3 * k; else if (form === "contrast") c50 *= 1 + 0.7 * k; else b -= 0.12 * k;
+  if (match) c50 *= 1 - hyp.spread[li];
+  return b + rmax * c * c / (c * c + c50 * c50);
+}
+const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+const derived = (hyp, form) => LOADS.map((_, li) => { const mm = mean(CON.map(c => crf(c, hyp, form, li, false))), m = mean(CON.map(c => crf(c, hyp, form, li, true))); return { cost: mm, spread: m - mm }; });
+function chart(container, { W = 440, M = { t: 14, r: 76, b: 58, l: 70 }, x, y, draw, hover }) {
+  container.replaceChildren();
+  const iw = W - M.l - M.r, ih = iw, H = M.t + ih + M.b;
+  const svg = el("svg", { width: W, viewBox: `0 0 ${W} ${H}`, role: "img" }, container);
+  const sc = (ax, lo0, span) => v => ax.log ? lo0 + (Math.log10(v) - Math.log10(ax.lo)) / (Math.log10(ax.hi) - Math.log10(ax.lo)) * span : lo0 + (v - ax.lo) / (ax.hi - ax.lo) * span;
+  const X = sc(x, M.l, iw), Yr = sc(y, 0, ih), Y = v => M.t + ih - Yr(v);
+  for (const tv of y.ticks) { el("line", { x1: M.l, x2: M.l + iw, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }, svg); txt(svg, M.l - 8, Y(tv) + 4, (y.fmt || String)(tv), { "text-anchor": "end" }); }
+  for (const tv of x.ticks) { el("line", { x1: X(tv), x2: X(tv), y1: M.t + ih, y2: M.t + ih + 5, stroke: css("--axis") }, svg); txt(svg, X(tv), M.t + ih + 20, (x.fmt || String)(tv), { "text-anchor": "middle" }); }
+  el("line", { x1: M.l, x2: M.l + iw, y1: M.t + ih, y2: M.t + ih, stroke: css("--axis") }, svg);
+  txt(svg, M.l + iw / 2, H - 8, x.title, { "text-anchor": "middle", class: "axt" });
+  const yt = M.t + ih / 2; txt(svg, 18, yt, y.title, { "text-anchor": "middle", class: "axt", transform: `rotate(-90 18 ${yt})` });
+  draw(svg, X, Y, { M, iw, ih });
+  if (hover && hover.length) {
+    const cross = el("line", { y1: M.t, y2: M.t + ih, stroke: css("--axis"), visibility: "hidden" }, svg);
+    const hit = el("rect", { x: M.l, y: M.t, width: iw, height: ih, fill: "transparent", tabindex: 0 }, svg);
+    const pick = e => { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const p = pt.matrixTransform(svg.getScreenCTM().inverse()); let best = hover[0]; for (const hv of hover) if (Math.abs(X(hv.x) - p.x) < Math.abs(X(best.x) - p.x)) best = hv; return best; };
+    hit.addEventListener("pointermove", e => { const hv = pick(e); cross.setAttribute("x1", X(hv.x)); cross.setAttribute("x2", X(hv.x)); cross.setAttribute("visibility", "visible"); showTip(e, hv.head, hv.rows); });
+    hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+  }
+  return svg;
+}
+const pathOf = (pts, X, Y) => pts.map((p, i) => `${i ? "L" : "M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join("");
+function renderPredict() {
+  const hyp = HYPS.find(x => x.key === P.hyp), c1 = css("--series-1"), c2 = css("--series-2"), surf = css("--page");
+  $("hypNote").innerHTML = hyp.note;
+  const box = $("crfPanels"); box.replaceChildren();
+  const fine = []; for (let lc = Math.log10(1.5); lc <= 2.0001; lc += 0.02) fine.push(Math.pow(10, lc));
+  LOADS.forEach((L, li) => {
+    const d = h("div", {}, box); h("p", { class: "panel-title", text: `${L.name} load` }, d); h("p", { class: "panel-stat", text: `cued share ${L.label.split(" ")[1]}` }, d);
+    const holder = h("div", {}, d);
+    chart(holder, { W: 360, M: { t: 12, r: 16, b: 58, l: 62 },
+      x: { lo: 1.5, hi: 100, log: true, ticks: [2, 4, 8, 16, 32, 64], title: "Probe contrast (%)" },
+      y: { lo: 0, hi: 1.2, ticks: [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fmt: v => v.toFixed(1), title: "Probe response (a.u.)" },
+      hover: CON.map(c => ({ x: c, head: `${L.name} load · probe at ${c}%${c === ADAPT ? " (adapter)" : ""}`, rows: [{ color: c1, label: "Matched", value: crf(c, hyp, P.form, li, true).toFixed(2) }, { color: c2, label: "Mismatched", value: crf(c, hyp, P.form, li, false).toFixed(2) }, { label: "Difference", value: (crf(c, hyp, P.form, li, true) - crf(c, hyp, P.form, li, false)).toFixed(2) }] })),
+      draw(svg, X, Y, { M, ih }) {
+        el("line", { x1: X(ADAPT), x2: X(ADAPT), y1: M.t, y2: M.t + ih, stroke: css("--axis"), "stroke-dasharray": "3 4" }, svg);
+        txt(svg, X(ADAPT) + 5, M.t + 12, "adapter", { "font-size": 12 });
+        if (li > 0) el("path", { d: pathOf(fine.map(c => [c, crf(c, hyp, P.form, 0, false)]), X, Y), fill: "none", stroke: css("--context"), "stroke-width": 1.5 }, svg);
+        for (const [m, col, dash] of [[false, c2, "6 4"], [true, c1, null]]) {
+          const a = { d: pathOf(fine.map(c => [c, crf(c, hyp, P.form, li, m)]), X, Y), fill: "none", stroke: col, "stroke-width": 2 }; if (dash) a["stroke-dasharray"] = dash; el("path", a, svg);
+          for (const c of CON) el("circle", { cx: X(c), cy: Y(crf(c, hyp, P.form, li, m)), r: 4, fill: col, stroke: surf, "stroke-width": 2 }, svg);
+        }
+        if (li === 0) { txt(svg, X(5.2), Y(crf(9, hyp, P.form, 0, true)) - 12, "matched", { "text-anchor": "end", "font-size": 12.5 }); txt(svg, X(30), Y(crf(17, hyp, P.form, 0, false)) + 20, "mismatched", { "font-size": 12.5 }); }
+      } });
+  });
+  legend("lgCrf", [{ color: c1, label: "Probe matches the cued orientation" }, { color: c2, dash: true, label: "Probe mismatched" }, { color: css("--context"), label: "Mismatched curve at easy load, for reference" }]);
+  // derived measures
+  const all = HYPS.map(x => ({ h: x, d: derived(x, P.form) }));
+  const LX = { lo: 0.6, hi: 3.4, ticks: [1, 2, 3], fmt: v => LOADS[v - 1].name, title: "Load" };
+  for (const [id, key, yax] of [["chCost", "cost", { lo: 0.2, hi: 0.7, ticks: [0.2, 0.3, 0.4, 0.5, 0.6, 0.7], fmt: v => v.toFixed(1), title: "Mismatched response (a.u.)" }], ["chSpread", "spread", { lo: 0, hi: 0.2, ticks: [0, 0.05, 0.1, 0.15, 0.2], fmt: v => v.toFixed(2), title: "Matched − mismatched (a.u.)" }]]) {
+    const sel = all.find(a => a.h.key === P.hyp);
+    chart($(id), { W: 400, M: { t: 14, r: 30, b: 58, l: 72 }, x: LX, y: yax,
+      hover: [1, 2, 3].map(i => ({ x: i, head: `${LOADS[i - 1].name} load`, rows: all.map(a => ({ color: a.h.key === P.hyp ? css("--text-primary") : css("--context"), label: a.h.label, value: a.d[i - 1][key].toFixed(3) })) })),
+      draw(svg, X, Y) {
+        for (const a of all) if (a.h.key !== P.hyp) el("path", { d: pathOf(a.d.map((v, i) => [i + 1, v[key]]), X, Y), fill: "none", stroke: css("--context"), "stroke-width": 1.5 }, svg);
+        el("path", { d: pathOf(sel.d.map((v, i) => [i + 1, v[key]]), X, Y), fill: "none", stroke: css("--text-primary"), "stroke-width": 2.5 }, svg);
+        sel.d.forEach((v, i) => el("circle", { cx: X(i + 1), cy: Y(v[key]), r: 5, fill: css("--text-primary"), stroke: surf, "stroke-width": 2 }, svg));
+      } });
+  }
+  legend("lgDerived", [{ color: css("--text-primary"), label: `Selected: ${hyp.label.toLowerCase()}` }, { color: css("--context"), label: "The other accounts" }]);
+  const rows = []; LOADS.forEach((L, li) => CON.forEach(c => { const m = crf(c, hyp, P.form, li, true), mm = crf(c, hyp, P.form, li, false); rows.push([L.name, c + "%", m.toFixed(3), mm.toFixed(3), (m - mm).toFixed(3)]); }));
+  table("crfTable", ["Load", "Probe contrast", "Matched", "Mismatched", "Difference"], rows);
+}
+pills("hypRow", HYPS.map(x => ({ label: x.label, value: x.key })), () => P.hyp, v => { P.hyp = v; renderPredict(); });
+pills("formRow", FORMS, () => P.form, v => { P.form = v; renderPredict(); });
+
+// ================= theme + boot =================
+const renderAll = () => { renderTimeline(); renderBudget(); renderPredict(); };
+const themeBtn = $("themeBtn");
+const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "Light" : "Dark"; };
+themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncThemeBtn(); renderAll(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { syncThemeBtn(); renderAll(); });
+addEventListener("resize", drawStim);
+syncThemeBtn(); drawStim(); renderScore(); renderAll();
+if (new URLSearchParams(location.search).get("play") === "1") setPlaying(true);
+})();
+</script>
+</body>
+</html>
